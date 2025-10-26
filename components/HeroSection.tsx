@@ -1,0 +1,157 @@
+"use client"
+
+import { useState } from "react"
+import { VisualPlaceholder } from "./VisualPlaceholder"
+import { config } from "@/src/config/landingPageConfig"
+import { Loader2, CheckCircle2 } from "lucide-react"
+
+export function HeroSection() {
+  const [showPopup, setShowPopup] = useState(false)
+  const [formData, setFormData] = useState({ name: "", whatsapp: "" })
+  const [formState, setFormState] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState("")
+
+  const handleSubmit = async () => {
+    // التحقق من الحقول
+    if (!formData.name.trim() || !formData.whatsapp.trim()) {
+      setFormState("error")
+      setErrorMessage("الرجاء ملء جميع الحقول")
+      return
+    }
+
+    // حالة التحميل
+    setFormState("loading")
+    setErrorMessage("")
+
+    // محاكاة طلب الشبكة
+    setTimeout(() => {
+      setFormState("success")
+    }, 2000)
+  }
+
+  const activeTitle = config.hero.title[config.hero.title.active]
+
+  return (
+    <section className="relative min-h-screen flex flex-col">
+      {/* الخلفية */}
+      <div className="absolute inset-0 -z-10">
+        <VisualPlaceholder text="خلفية GIF متحركة: محادثة AI على جوال" className="w-full h-full rounded-none" />
+      </div>
+
+      {/* الشريط العلوي */}
+      <header className="w-full py-4 px-6 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* اليمين: الشعار */}
+          <div className="flex items-center gap-3">
+            <VisualPlaceholder text="شعار" shape="circle" className="w-12 h-12 text-xs" />
+            <span className="text-sm text-[var(--color-text-light)] font-medium">{config.header.logo.tagline}</span>
+          </div>
+
+          {/* اليسار: زر تسجيل الدخول */}
+          <a
+            href={config.header.loginButton.link}
+            className="px-6 py-2 border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-lg hover:bg-[var(--color-primary)] hover:text-white transition-all duration-300 font-medium"
+          >
+            {config.header.loginButton.text}
+          </a>
+        </div>
+      </header>
+
+      {/* المحتوى الرئيسي */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          {/* العنوان الرئيسي */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-main)] leading-tight text-balance">
+            {activeTitle}
+          </h1>
+
+          {/* العنوان الفرعي */}
+          <p className="text-lg md:text-xl text-[var(--color-text-light)] leading-relaxed max-w-3xl mx-auto text-pretty">
+            {config.hero.subtitle}
+          </p>
+
+          {/* شريط Scarcity */}
+          <div className="inline-block bg-[var(--color-secondary)] text-white px-6 py-3 rounded-full font-medium animate-pulse-dot">
+            {config.hero.scarcityBanner.text}
+          </div>
+
+          {/* زر CTA */}
+          <button
+            onClick={() => setShowPopup(true)}
+            className="px-8 py-4 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-xl font-bold text-lg hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-xl"
+          >
+            {config.hero.ctaButton.text}
+          </button>
+        </div>
+      </div>
+
+      {/* Popup لجمع البيانات */}
+      {showPopup && (
+        <>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={() => setShowPopup(false)} />
+
+          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-md bg-white rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in duration-300">
+            {formState === "success" ? (
+              <div className="text-center space-y-4 py-8">
+                <CheckCircle2 className="w-16 h-16 text-[var(--color-secondary)] mx-auto" />
+                <h3 className="text-2xl font-bold text-[var(--color-text-main)]">شكرًا لك!</h3>
+                <p className="text-[var(--color-text-light)] leading-relaxed">
+                  تم استلام طلبك بنجاح وسنتواصل معك قريبًا.
+                </p>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold text-[var(--color-text-main)] mb-6 text-center">ابدأ رحلتك الآن</h3>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2 text-right">
+                      الاسم
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] text-right"
+                      placeholder="أدخل اسمك"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-[var(--color-text-main)] mb-2 text-right">
+                      رقم الواتساب
+                    </label>
+                    <input
+                      type="tel"
+                      value={formData.whatsapp}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] text-right"
+                      placeholder="05xxxxxxxx"
+                    />
+                  </div>
+
+                  {formState === "error" && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
+
+                  <button
+                    onClick={handleSubmit}
+                    disabled={formState === "loading"}
+                    className="w-full px-6 py-3 bg-[var(--color-primary)] text-white rounded-lg hover:bg-[var(--color-primary)]/90 disabled:opacity-50 transition-all duration-200 font-medium flex items-center justify-center gap-2"
+                  >
+                    {formState === "loading" ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        جاري الإرسال...
+                      </>
+                    ) : (
+                      "إرسال"
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </section>
+  )
+}
