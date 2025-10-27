@@ -1,6 +1,7 @@
 import { VisualPlaceholder } from "./VisualPlaceholder"
 import { config } from "@/src/config/landingPageConfig"
 import { Mail, Send } from "lucide-react"
+import Image from "next/image" // 1. إضافة استيراد مكون الصورة
 
 export function Footer() {
   return (
@@ -8,7 +9,8 @@ export function Footer() {
       <div className="max-w-6xl mx-auto">
         {/* الشعار */}
         <div className="flex justify-center mb-6">
-          <VisualPlaceholder text="شعار" shape="square" className="w-20 h-20" />
+          {/* 2. استبدال العنصر النائب بصورة الشعار الحقيقية */}
+          <Image src="/images/logo.png" alt="AI-Uncode Logo" width={80} height={80} className="w-20 h-20" />
         </div>
 
         {/* النص التسويقي */}
@@ -20,7 +22,8 @@ export function Footer() {
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-6">
             {/* QR Code */}
-            <VisualPlaceholder text="QR Code" shape="square" className="w-32 h-32" />
+            {/* 3. استبدال العنصر النائب بصورة QR الحقيقية */}
+            <Image src="/images/qr-telegram.png" alt="Telegram QR Code" width={128} height={128} className="w-32 h-32" />
 
             {/* معلومات الاتصال */}
             <div className="space-y-3 text-center md:text-right">
