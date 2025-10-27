@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { X, Volume2, VolumeX, RotateCcw, Send } from "lucide-react"
 import { VisualPlaceholder } from "./VisualPlaceholder"
 import { config } from "@/src/config/landingPageConfig"
+import Image from "next/image" // 1. إضافة استيراد مكون الصورة
 
 interface Message {
   type: "user" | "bot"
@@ -127,8 +128,8 @@ export function SmartAmbassador() {
         {/* نقطة نابضة في الزاوية العلوية اليمنى */}
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-secondary)] rounded-full animate-pulse-dot" />
 
-        {/* العنصر النائب للشعار */}
-        <VisualPlaceholder text="شعار" shape="square" className="w-12 h-12 text-xs" />
+        {/* 2. استبدال العنصر النائب بصورة الشعار الحقيقية */}
+        <Image src="/images/logo.png" alt="AI-Uncode Smart Ambassador" width={48} height={48} className="w-12 h-12" />
       </button>
 
       {/* نافذة المحادثة */}
