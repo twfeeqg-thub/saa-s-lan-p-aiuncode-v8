@@ -4,6 +4,7 @@ import { useState } from "react"
 import { VisualPlaceholder } from "./VisualPlaceholder"
 import { config } from "@/src/config/landingPageConfig"
 import { Loader2, CheckCircle2 } from "lucide-react"
+import Image from "next/image" // 1. إضافة استيراد مكون الصورة
 
 export function HeroSection() {
   const [showPopup, setShowPopup] = useState(false)
@@ -43,7 +44,8 @@ export function HeroSection() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* اليمين: الشعار */}
           <div className="flex items-center gap-3">
-            <VisualPlaceholder text="شعار" shape="circle" className="w-12 h-12 text-xs" />
+            {/* 2. استبدال العنصر النائب بصورة الشعار الحقيقية */}
+            <Image src="/images/logo.png" alt="AI-Uncode Logo" width={48} height={48} className="w-12 h-12" />
             <span className="text-sm text-[var(--color-text-light)] font-medium">{config.header.logo.tagline}</span>
           </div>
 
