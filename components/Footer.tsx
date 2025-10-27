@@ -42,7 +42,7 @@ export function Footer() {
           {/* القسم الثالث: تحميل التطبيق */}
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <h3 className="text-xl font-bold">حمل التطبيق</h3>
-            <p className="text-white/80">لإدارة وكيلك الذكي من أي مكان.</p>
+            <p className="text-white/80">لإدارة مواقعك ووكيلك الذكي عبر هاتفك وبلمسة زر .</p>
             <button 
               onClick={() => setShowAppPopup(true)}
               className="mt-2 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-lg font-bold flex items-center gap-2 hover:scale-105 transition-transform"
