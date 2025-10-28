@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { X, Volume2, VolumeX, RotateCcw, Send } from "lucide-react"
+import { X, Volume2, VolumeX, RotateCcw, Send, LoaderCircle } from "lucide-react" // تم إضافة LoaderCircle
 import { config } from "@/src/config/landingPageConfig"
 import Image from "next/image"
 
@@ -18,6 +18,7 @@ export function SmartAmbassador() {
   ])
   const [inputValue, setInputValue] = useState("")
   const [isMuted, setIsMuted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // حالة جديدة لتتبع التحميل
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
 
@@ -61,25 +62,62 @@ export function SmartAmbassador() {
     oscillator.stop(ctx.currentTime + 0.15)
   }
 
-  const handleWebhookTrigger = () => {
-    if (!inputValue.trim()) return
-    playSendSound()
+  // --- بداية التعديل المطلوب ---
+  const handleWebhookTrigger = async () => {
+    if (!inputValue.trim() || isLoading) return; // منع الإرسال أثناء التحميل
+    playSendSound();
+    setIsLoading(true); // بدء التحميل
+
     const userMessage: Message = {
       type: "user",
       text: inputValue,
       timestamp: new Date(),
-    }
-    setMessages((prev) => [...prev, userMessage])
-    setInputValue("")
-    setTimeout(() => {
+    };
+    setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputValue;
+    setInputValue("");
+
+    try {
+      // رابط الـ Webhook التجريبي. سنقوم بتغييره لاحقًا إلى رابط الإنتاج.
+      const webhookUrl = 'https://n8n-main-service.onrender.com/webhook-test/c5d5b8ed-70f8-41ee-b0cc-e7ee8216addd';
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: currentInput,
+          sessionId: 'user-123-test', // قيمة مؤقتة للاختبار
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Network response was not ok, status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
       const botMessage: Message = {
         type: "bot",
-        text: config.smartAmbassador.defaultResponse,
+        text: data.reply || "عذرًا، لم أستلم ردًا مفهومًا. حاول مرة أخرى.",
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, botMessage])
-    }, 1000)
-  }
+      };
+      setMessages((prev) => [...prev, botMessage]);
+
+    } catch (error) {
+      console.error("Error fetching from n8n:", error);
+      const errorMessage: Message = {
+        type: "bot",
+        text: "أعتذر، أواجه صعوبة في الاتصال بالخادم الآن. الرجاء المحاولة لاحقًا.",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false); // إيقاف التحميل
+    }
+  };
+  // --- نهاية التعديل المطلوب ---
 
   const handleClearChat = () => {
     playClickSound()
@@ -103,19 +141,15 @@ export function SmartAmbassador() {
         </div>
 
         <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-2xl transition-transform duration-300 group-hover:scale-110 animate-pulse-shadow">
-          {/* --- بداية التعديل --- */}
-          {/* النقطة النابضة الداخلية - تم تعديل الموضع والحجم */}
           <span className="absolute top-0 right-0 flex h-3 w-3">
             <span className="relative inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent)] opacity-75"></span>
             <span className="relative inline-flex h-3 w-3 rounded-full bg-[var(--color-accent)]"></span>
           </span>
-          {/* --- نهاية التعديل --- */}
 
           <Image src="/images/logo.png" alt="AI-Uncode Smart Ambassador" width={48} height={48} className="w-12 h-12" />
         </div>
       </div>
 
-      {/* نافذة المحادثة (بدون تغيير) */}
       {isOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={toggleChat} />
@@ -163,6 +197,15 @@ export function SmartAmbassador() {
                   </div>
                 </div>
               ))}
+              {/* مؤشر الكتابة */}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] p-3 rounded-2xl bg-[var(--color-primary)] text-white rounded-br-sm flex items-center gap-2">
+                    <span className="text-sm">يكتب الآن</span>
+                    <LoaderCircle size={16} className="animate-spin" />
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
             <div className="p-4 border-t bg-gray-50 rounded-b-2xl">
@@ -174,14 +217,15 @@ export function SmartAmbassador() {
                   onKeyPress={(e) => e.key === "Enter" && handleWebhookTrigger()}
                   placeholder={config.smartAmbassador.placeholder}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] text-right"
+                  disabled={isLoading} // تعطيل الإدخال أثناء التحميل
                 />
                 <button
                   onClick={handleWebhookTrigger}
-                  disabled={!inputValue.trim()}
+                  disabled={!inputValue.trim() || isLoading}
                   className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl hover:bg-[var(--color-primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
                   aria-label={config.smartAmbassador.sendButton}
                 >
-                  <Send size={20} />
+                  {isLoading ? <LoaderCircle size={20} className="animate-spin" /> : <Send size={20} />}
                 </button>
               </div>
             </div>
