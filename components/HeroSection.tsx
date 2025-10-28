@@ -60,18 +60,24 @@ export function HeroSection() {
             {config.hero.subtitle}
           </p>
 
-          {/* شريط Scarcity - تم تعديل الأنيميشن */}
-          <div className="inline-block bg-[var(--color-secondary)] text-white px-6 py-3 rounded-full font-medium animate-pulse-shadow">
-            {config.hero.scarcityBanner.text}
-          </div>
+          {/* --- بداية التعديل --- */}
+          {/* حاوية جديدة للأزرار لتطبيق المباعدة */}
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            {/* شريط Scarcity */}
+            <div className="inline-block bg-[var(--color-secondary)] text-white px-6 py-3 rounded-full font-medium animate-pulse-shadow">
+              {config.hero.scarcityBanner.text}
+            </div>
 
-          {/* زر CTA - تم تعديل الأنيميشن */}
-          <button
-            onClick={() => setShowPopup(true)}
-            className="px-8 py-4 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-xl font-bold text-lg transition-transform duration-300 shadow-lg animate-pulse-shadow"
-          >
-            {config.hero.ctaButton.text}
-          </button>
+            {/* زر CTA */}
+            <button
+              onClick={() => setShowPopup(true)}
+              className="px-8 py-4 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-xl font-bold text-lg transition-transform duration-300 shadow-lg animate-pulse-shadow"
+            >
+              {config.hero.ctaButton.text}
+            </button>
+          </div>
+          {/* --- نهاية التعديل --- */}
+          
         </div>
       </div>
 
