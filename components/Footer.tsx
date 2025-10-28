@@ -11,10 +11,7 @@ export function Footer() {
   return (
     <footer className="py-12 px-6 bg-[var(--color-text-main)] text-white">
       <div className="max-w-7xl mx-auto">
-        {/* الهيكل الشبكي الرئيسي للفوتر */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-right">
-          
-          {/* القسم الأول: الشعار والمعلومات الأساسية */}
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <div className="bg-white rounded-full p-2 inline-block">
               <Image src="/images/logo.png" alt="AI-Uncode Logo" width={80} height={80} className="w-20 h-20" />
@@ -22,8 +19,6 @@ export function Footer() {
             <p className="font-bold text-lg">{config.header.logo.tagline}</p>
             <p className="text-white/80 max-w-xs text-center md:text-right">{config.footer.tagline}</p>
           </div>
-
-          {/* القسم الثاني: وسائل التواصل */}
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <h3 className="text-xl font-bold">{config.footer.contact.title}</h3>
             <a href={`mailto:${config.footer.contact.email}`} className="flex items-center gap-2 hover:text-[var(--color-accent)] transition-colors duration-200">
@@ -38,22 +33,19 @@ export function Footer() {
               <Image src="/images/qr-telegram.png" alt="Telegram QR Code" width={100} height={100} className="w-24 h-24" />
             </div>
           </div>
-
-          {/* القسم الثالث: تحميل التطبيق */}
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <h3 className="text-xl font-bold">حمل التطبيق</h3>
             <p className="text-white/80">لإدارة مواقعك ووكيلك الذكي عبر هاتفك وبلمسة زر .</p>
+            {/* زر "قريباً" - تم تعديل الأنيميشن */}
             <button 
               onClick={() => setShowAppPopup(true)}
-              className="mt-2 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-lg font-bold flex items-center gap-2 hover:scale-105 transition-transform"
+              className="mt-2 px-6 py-3 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-lg font-bold flex items-center gap-2 transition-transform animate-pulse-shadow"
             >
               <Download size={20} />
               <span>قريباً</span>
             </button>
           </div>
         </div>
-
-        {/* الخط الفاصل والحقوق */}
         <div className="mt-12 pt-8 border-t border-white/20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-white/70">{config.footer.copyrightText}</p>
@@ -67,8 +59,6 @@ export function Footer() {
           </div>
         </div>
       </div>
-
-      {/* نافذة "التطبيق قيد الإنشاء" */}
       {showAppPopup && (
         <>
           <div className="fixed inset-0 bg-black/60 z-40" onClick={() => setShowAppPopup(false)} />
