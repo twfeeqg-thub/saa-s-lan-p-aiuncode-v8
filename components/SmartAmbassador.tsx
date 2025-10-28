@@ -93,31 +93,27 @@ export function SmartAmbassador() {
 
   return (
     <>
-      {/* --- بداية التعديلات --- */}
-      {/* الحاوية الرئيسية للزر العائم والنص */}
       <div
         onClick={toggleChat}
         className="group fixed bottom-6 left-6 z-50 flex cursor-pointer items-center gap-3"
         aria-label={config.smartAmbassador.buttonLabel}
       >
-        {/* مربع النص "شبيك لبيك" */}
         <div className="rounded-full bg-white px-4 py-2 text-[var(--color-text-main)] shadow-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <span className="font-bold">شبيك لبيك</span>
         </div>
 
-        {/* الزر العائم الجديد */}
         <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-2xl transition-transform duration-300 group-hover:scale-110 animate-pulse-shadow">
-          {/* النقطة النابضة الداخلية */}
-          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+          {/* --- بداية التعديل --- */}
+          {/* النقطة النابضة الداخلية - تم تعديل الموضع والحجم */}
+          <span className="absolute top-0 right-0 flex h-3 w-3">
             <span className="relative inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent)] opacity-75"></span>
-            <span className="relative inline-flex h-4 w-4 rounded-full bg-[var(--color-accent)]"></span>
+            <span className="relative inline-flex h-3 w-3 rounded-full bg-[var(--color-accent)]"></span>
           </span>
+          {/* --- نهاية التعديل --- */}
 
-          {/* صورة الشعار */}
           <Image src="/images/logo.png" alt="AI-Uncode Smart Ambassador" width={48} height={48} className="w-12 h-12" />
         </div>
       </div>
-      {/* --- نهاية التعديلات --- */}
 
       {/* نافذة المحادثة (بدون تغيير) */}
       {isOpen && (
