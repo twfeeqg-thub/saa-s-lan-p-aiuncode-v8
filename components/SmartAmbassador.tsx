@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { X, Volume2, VolumeX, RotateCcw, Send } from "lucide-react"
-import { VisualPlaceholder } from "./VisualPlaceholder"
 import { config } from "@/src/config/landingPageConfig"
-import Image from "next/image" // 1. إضافة استيراد مكون الصورة
+import Image from "next/image"
 
 interface Message {
   type: "user" | "bot"
@@ -22,67 +21,49 @@ export function SmartAmbassador() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
 
-  // تمرير تلقائي لآخر رسالة
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  // تهيئة Web Audio API
   useEffect(() => {
     if (typeof window !== "undefined") {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
     }
   }, [])
 
-  // تشغيل صوت النقر
   const playClickSound = () => {
     if (isMuted || !audioContextRef.current) return
-
     const ctx = audioContextRef.current
     const oscillator = ctx.createOscillator()
     const gainNode = ctx.createGain()
-
     oscillator.connect(gainNode)
     gainNode.connect(ctx.destination)
-
     oscillator.frequency.value = 800
     oscillator.type = "sine"
-
     gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
     gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1)
-
     oscillator.start(ctx.currentTime)
     oscillator.stop(ctx.currentTime + 0.1)
   }
 
-  // تشغيل صوت الإرسال
   const playSendSound = () => {
     if (isMuted || !audioContextRef.current) return
-
     const ctx = audioContextRef.current
     const oscillator = ctx.createOscillator()
     const gainNode = ctx.createGain()
-
     oscillator.connect(gainNode)
     gainNode.connect(ctx.destination)
-
     oscillator.frequency.value = 1200
     oscillator.type = "sine"
-
     gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
     gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15)
-
     oscillator.start(ctx.currentTime)
     oscillator.stop(ctx.currentTime + 0.15)
   }
 
-  // معالجة إرسال الرسالة
   const handleWebhookTrigger = () => {
     if (!inputValue.trim()) return
-
     playSendSound()
-
-    // إضافة رسالة المستخدم
     const userMessage: Message = {
       type: "user",
       text: inputValue,
@@ -90,8 +71,6 @@ export function SmartAmbassador() {
     }
     setMessages((prev) => [...prev, userMessage])
     setInputValue("")
-
-    // محاكاة رد البوت بعد ثانية
     setTimeout(() => {
       const botMessage: Message = {
         type: "bot",
@@ -102,13 +81,11 @@ export function SmartAmbassador() {
     }, 1000)
   }
 
-  // مسح المحادثة
   const handleClearChat = () => {
     playClickSound()
     setMessages([{ type: "bot", text: config.smartAmbassador.welcomeMessage, timestamp: new Date() }])
   }
 
-  // فتح/إغلاق النافذة
   const toggleChat = () => {
     playClickSound()
     setIsOpen(!isOpen)
@@ -116,31 +93,37 @@ export function SmartAmbassador() {
 
   return (
     <>
-      {/* الزر العائم */}
-      <button
+      {/* --- بداية التعديلات --- */}
+      {/* الحاوية الرئيسية للزر العائم والنص */}
+      <div
         onClick={toggleChat}
-        className="fixed bottom-6 left-6 z-50 w-16 h-16 bg-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300"
+        className="group fixed bottom-6 left-6 z-50 flex cursor-pointer items-center gap-3"
         aria-label={config.smartAmbassador.buttonLabel}
       >
-        {/* حلقة النبض الخارجية */}
-        <div className="absolute inset-0 rounded-full bg-[var(--color-primary)] opacity-20 animate-pulse-ring" />
+        {/* مربع النص "شبيك لبيك" */}
+        <div className="rounded-full bg-white px-4 py-2 text-[var(--color-text-main)] shadow-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="font-bold">شبيك لبيك</span>
+        </div>
 
-        {/* نقطة نابضة في الزاوية العلوية اليمنى */}
-        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-secondary)] rounded-full animate-pulse-dot" />
+        {/* الزر العائم الجديد */}
+        <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-2xl transition-transform duration-300 group-hover:scale-110 animate-pulse-shadow">
+          {/* النقطة النابضة الداخلية */}
+          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <span className="relative inline-flex h-full w-full animate-ping rounded-full bg-[var(--color-accent)] opacity-75"></span>
+            <span className="relative inline-flex h-4 w-4 rounded-full bg-[var(--color-accent)]"></span>
+          </span>
 
-        {/* 2. استبدال العنصر النائب بصورة الشعار الحقيقية */}
-        <Image src="/images/logo.png" alt="AI-Uncode Smart Ambassador" width={48} height={48} className="w-12 h-12" />
-      </button>
+          {/* صورة الشعار */}
+          <Image src="/images/logo.png" alt="AI-Uncode Smart Ambassador" width={48} height={48} className="w-12 h-12" />
+        </div>
+      </div>
+      {/* --- نهاية التعديلات --- */}
 
-      {/* نافذة المحادثة */}
+      {/* نافذة المحادثة (بدون تغيير) */}
       {isOpen && (
         <>
-          {/* Overlay ضبابي */}
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={toggleChat} />
-
-          {/* نافذة المحادثة */}
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-md h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
-            {/* رأس النافذة */}
             <div className="flex items-center justify-between p-4 border-b bg-[var(--color-primary)] text-white rounded-t-2xl">
               <h3 className="font-bold text-lg">{config.smartAmbassador.chatTitle}</h3>
               <div className="flex items-center gap-2">
@@ -170,16 +153,14 @@ export function SmartAmbassador() {
                 </button>
               </div>
             </div>
-
-            {/* جسم المحادثة */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
-                <div key={index} className={`flex ${message.type === "user" ? "justify-start" : "justify-end"}`}>
+                <div key={index} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`max-w-[80%] p-3 rounded-2xl ${
                       message.type === "user"
-                        ? "bg-[var(--color-primary)] text-white rounded-br-sm"
-                        : "bg-gray-100 text-[var(--color-text-main)] rounded-bl-sm"
+                        ? "bg-gray-100 text-[var(--color-text-main)] rounded-bl-sm"
+                        : "bg-[var(--color-primary)] text-white rounded-br-sm"
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{message.text}</p>
@@ -188,8 +169,6 @@ export function SmartAmbassador() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-
-            {/* شريط الإدخال */}
             <div className="p-4 border-t bg-gray-50 rounded-b-2xl">
               <div className="flex gap-2">
                 <input
