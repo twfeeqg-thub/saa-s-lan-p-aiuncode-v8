@@ -169,12 +169,29 @@ html[dir="rtl"] {
   }
 }
 
+/* --- ✅ إضافة جديدة --- */
+@keyframes pulse-shadow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 10px rgba(255, 193, 7, 0);
+  }
+}
+
 .animate-pulse-ring {
   animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .animate-pulse-dot {
   animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* --- ✅ إضافة جديدة --- */
+.animate-pulse-shadow {
+  animation: pulse-shadow 2s infinite;
 }
 
 /* تحسينات الأداء */
