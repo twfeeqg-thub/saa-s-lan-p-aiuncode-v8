@@ -1,5 +1,7 @@
-import { VisualPlaceholder } from "./VisualPlaceholder"
+"use client" // يجب أن يكون المكون من نوع Client Component لاستخدام lottie-react
+
 import { config } from "@/src/config/landingPageConfig"
+import Lottie from "lottie-react" // 1. استيراد مكتبة Lottie
 
 export function PainPointsSection() {
   return (
@@ -17,10 +19,16 @@ export function PainPointsSection() {
               key={index}
               className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
             >
-              {/* أيقونة */}
-              <div className="mb-4">
-                <VisualPlaceholder text="أيقونة" shape="square" className="w-16 h-16 mx-auto" />
+              {/* --- بداية التعديل --- */}
+              {/* 2. استبدال العنصر النائب بمكون Lottie */}
+              <div className="mb-4 h-40 flex items-center justify-center">
+                <Lottie 
+                  animationData={require(`../../public${point.lottieFile}`)} 
+                  loop={true} 
+                  style={{ width: 160, height: 160 }}
+                />
               </div>
+              {/* --- نهاية التعديل --- */}
 
               {/* نص الألم */}
               <p className="text-lg font-bold text-[var(--color-text-main)] text-center mb-2">{point.text}</p>
