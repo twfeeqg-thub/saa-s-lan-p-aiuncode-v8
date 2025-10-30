@@ -42,29 +42,27 @@ export const config = {
     },
   },
 
-  // --- بداية التعديل ---
-  // قسم نقاط الألم - تم تعديله ليشمل مسارات Lottie
+  // قسم نقاط الألم
   painPoints: {
     title: "هل تشعر بهذا كل يوم؟",
     points: [
       { 
         text: "تغرق في رسائل متكررة؟", 
         solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
-        lottieFile: "/lottie/wasted-time.json" // مسار ملف Lottie الأول
+        lottieFile: "/lottie/wasted-time.json"
       },
       { 
         text: "تخسر عملاء لعدم الرد الفوري؟", 
         solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
-        lottieFile: "/lottie/lost-customer.json" // مسار ملف Lottie الثاني (اسم افتراضي)
+        lottieFile: "/lottie/lost-customer.json" // تأكد من وجود هذا الملف
       },
       { 
         text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
         solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
-        lottieFile: "/lottie/tech-complexity.json" // مسار ملف Lottie الثالث (اسم افتراضي)
+        lottieFile: "/lottie/tech-complexity.json" // تأكد من وجود هذا الملف
       },
     ],
   },
-  // --- نهاية التعديل ---
 
   // قسم الحل والدليل الاجتماعي
   solution: {
@@ -89,11 +87,71 @@ export const config = {
     ],
   },
 
-  // ... باقي الملف يبقى كما هو ...
-  finalCta: { /* ... */ },
-  faq: { /* ... */ },
-  footer: { /* ... */ },
-  smartAmbassador: { /* ... */ },
+  // --- بداية الجزء الذي تم حذفه بالخطأ ---
+  // قسم الدعوة النهائية والأسعار
+  finalCta: {
+    title: "جرب الآن وابدأ رحلتك!",
+    pricing: {
+      plans: [
+        {
+          name: "باقة الانطلاق",
+          price: "500",
+          currency: "ريال/شهريًا",
+          features: ["صفحة هبوط احترافية", "وكيل AI أساسي"],
+        },
+        {
+          name: "باقة النمو",
+          price: "900",
+          currency: "ريال/شهريًا",
+          features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"],
+        },
+      ],
+      guaranteeText: "ضمان استرداد الأموال لمدة 30 يومًا",
+    },
+    finalCtaButton: {
+      text: "احجز عرضك المجاني قبل نفاذه",
+    },
+  },
+
+  // قسم الأسئلة الشائعة
+  faq: {
+    triggerText: "أسئلة تدور في ذهنك؟",
+    questions: [
+      { question: "هل أحتاج إلى خبرة تقنية؟", answer: "لا إطلاقًا. نحن نهتم بكل الجوانب التقنية." },
+      { question: "ما هي اللهجات التي يدعمها الوكيل؟", answer: "ندعم حاليًا اللهجة السعودية، الإماراتية، والكويتية." },
+      { question: "هل يمكنني تحديث المحتوى بنفسي؟", answer: "نعم، نوفر لك لوحة تحكم سهلة." },
+    ],
+  },
+
+  // الفوتر (الذيل)
+  footer: {
+    tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
+    contact: {
+      title: "اتصل بنا",
+      email: "info@aiuncode.com",
+      telegram: {
+        username: "@tsahma",
+        link: "https://t.me/tsahma",
+      },
+    },
+    legalLinks: [
+      { text: "سياسة الخصوصية", link: "/privacy" },
+      { text: "شروط الاستخدام", link: "/terms" },
+      { text: "إنشاء حساب", link: "/signup" },
+    ],
+    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
+  },
+
+  // إعدادات السفير الذكي
+  smartAmbassador: {
+    buttonLabel: "تحدث معنا",
+    chatTitle: "السفير الذكي",
+    placeholder: "اكتب رسالتك هنا...",
+    sendButton: "إرسال",
+    welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+    defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
+  },
+  // --- نهاية الجزء الذي تم حذفه بالخطأ ---
 }
 
 export type Config = typeof config
