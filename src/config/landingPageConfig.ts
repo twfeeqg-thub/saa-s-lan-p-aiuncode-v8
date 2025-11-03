@@ -3,6 +3,7 @@
 
 export const config = {
   // التحكم في إظهار وإخفاء الأقسام
+  // <--  هذه القيمة للتفعيل true ، وهذه القيمة للتعطيل false
   sections: {
     hero: true,
     painPoints: true,
@@ -43,26 +44,27 @@ export const config = {
   },
 
   // قسم نقاط الألم
-  painPoints: {
-    title: "هل تشعر بهذا كل يوم؟",
-    points: [
-      { 
-        text: "تغرق في رسائل متكررة؟", 
-        solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
-        lottieFile: "/lottie/wasted-time.json"
-      },
-      { 
-        text: "تخسر عملاء لعدم الرد الفوري؟", 
-        solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
-        lottieFile: "/lottie/lost-customer.json" // تأكد من وجود هذا الملف
-      },
-      { 
-        text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
-        solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
-        lottieFile: "/lottie/tech-complexity.json" // تأكد من وجود هذا الملف
-      },
-    ],
-  },
+ painPoints: {
+  title: "هل تشعر بهذا كل يوم؟",
+  points: [
+    { 
+      text: "تغرق في رسائل متكررة؟", 
+      solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
+      lottieFile: "/lottie/wasted-time.json" // <-- تم التصحيح
+    },
+    { 
+      text: "تخسر عملاء لعدم الرد الفوري؟", 
+      solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
+      lottieFile: "/lottie/lost-customer.json" // <-- تم التصحيح
+    },
+    { 
+      text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
+      solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
+      lottieFile: "/lottie/tech-complexity.json" // <-- تم التصحيح
+    },
+  ],
+},
+
 
   // قسم الحل والدليل الاجتماعي
   solution: {
