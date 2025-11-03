@@ -50,17 +50,17 @@ export const config = {
     { 
       text: "تغرق في رسائل متكررة؟", 
       solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
-      lottieFile: "/lottie/wasted-time.json" // <-- تم التصحيح
+      lottieFile: "/animations/wasted-time.json" // <-- تم التصحيح
     },
     { 
       text: "تخسر عملاء لعدم الرد الفوري؟", 
       solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
-      lottieFile: "/lottie/lost-customer.json" // <-- تم التصحيح
+      lottieFile: "/animations/lost-customer.json" // <-- تم التصحيح
     },
     { 
       text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
       solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
-      lottieFile: "/lottie/tech-complexity.json" // <-- تم التصحيح
+      lottieFile: "/animations/tech-complexity.json" // <-- تم التصحيح
     },
   ],
 },
