@@ -5,7 +5,7 @@ export const config = {
   // التحكم في إظهار وإخفاء الأقسام
   sections: {
     hero: true,
-    painPoints: false,
+    painPoints: true,
     solution: true,
     finalCta: true,
     faq: true,
