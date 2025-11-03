@@ -28,10 +28,10 @@ export function HeroSection() {
   const activeTitle = config.hero.title[config.hero.title.active]
 
   return (
-    // --- بداية التعديل ---
-    // تم تغيير min-h-screen لتكون أكثر مرونة على الشاشات الكبيرة
-    <section className="relative flex flex-col md:min-h-[calc(100vh-80px)] lg:min-h-[550px] py-10 md:py-20">
-    {/* --- نهاية التعديل --- */}
+    // --- بداية التعديل النهائي ---
+    // تطبيق مبدأ Mobile-First: ارتفاع كامل على الجوال، ثم تعديله للشاشات الأكبر
+    <section className="relative flex flex-col min-h-screen justify-center md:min-h-[550px] lg:min-h-[600px]">
+    {/* --- نهاية التعديل النهائي --- */}
 
       {/* الخلفية */}
       <div className="absolute inset-0 -z-10">
@@ -39,11 +39,11 @@ export function HeroSection() {
       </div>
 
       {/* الشريط العلوي */}
-      <header className="absolute top-0 left-0 right-0 w-full px-6 bg-white/95 backdrop-blur-sm shadow-sm">
+      <header className="absolute top-0 left-0 right-0 w-full px-6 py-2 bg-white/95 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-start gap-3 pt-2">
-            <Image src="/images/logo.png" alt="AI-Uncode Logo" width={64} height={64} className="w-16 h-16" />
-            <span className="text-sm text-[var(--color-text-light)] font-medium pt-4">{config.header.logo.tagline}</span>
+          <div className="flex items-center gap-3">
+            <Image src="/images/logo.png" alt="AI-Uncode Logo" width={56} height={56} className="w-14 h-14" />
+            <span className="text-sm text-[var(--color-text-light)] font-medium">{config.header.logo.tagline}</span>
           </div>
           <a
             href={config.header.loginButton.link}
@@ -55,7 +55,7 @@ export function HeroSection() {
       </header>
 
       {/* المحتوى الرئيسي */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 mt-20"> {/* تمت إضافة mt-20 لترك مساحة للهيدر */}
+      <div className="flex-1 flex items-center justify-center px-6 pt-20 pb-10"> {/* تعديل الـ padding ليتناسب مع جميع الشاشات */}
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-main)] leading-tight text-balance">
             {activeTitle}
