@@ -113,12 +113,12 @@ export const config = {
           price: "900",
           currency: "ريال/شهريًا",
           features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"],
-        },
+        }
       ],
 
         
         
-      ],
+      
       guaranteeText: "ضمان استرداد الأموال لمدة 30 يومًا",
     },
     finalCtaButton: {
