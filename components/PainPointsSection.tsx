@@ -4,28 +4,58 @@ import { config } from "@/src/config/landingPageConfig"
 import Lottie from "lottie-react"
 import { useState, useEffect } from "react"
 
+// --- بداية الكود المحصّن والآمن ---
 function LottieAnimation({ path }: { path: string }) {
-  const [animationData, setAnimationData] = useState(null)
+  const [animationData, setAnimationData] = useState<any | null>(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
-    // --- بداية التعديل ---
-    // 1. استخدام المسار المطلق من المجلد public مباشرة
-    //    Next.js يفهم أن المسارات التي تبدأ بـ '/' هي من داخل مجلد public
     fetch(path)
-      .then((response) => response.json())
-      .then((data) => {
-        setAnimationData(data)
+      .then((response) => {
+        if (!response.ok) {
+          // إذا كان هناك أي مشكلة في الاستجابة (مثل 404 أو 500)
+          throw new Error(`Failed to fetch Lottie file: ${response.statusText}`)
+        }
+        return response.json()
       })
-      .catch(console.error)
-    // --- نهاية التعديل ---
+      .then((data) => {
+        // تحقق إضافي: تأكد من أن البيانات تحتوي على خاصية أساسية (مثل 'v' للإصدار)
+        if (data && typeof data === 'object' && 'v' in data) {
+          setAnimationData(data)
+        } else {
+          throw new Error("Invalid Lottie JSON structure.")
+        }
+      })
+      .catch((e) => {
+        console.error("Lottie Load Error:", e)
+        setError(true) // تعيين حالة الخطأ
+      })
   }, [path])
 
-  if (!animationData) {
-    return <div className="h-40 w-40" />
+  if (error) {
+    // عرض عنصر نائب آمن في حال فشل التحميل لمنع انهيار الصفحة
+    return <div className="h-40 w-40 bg-red-100 flex items-center justify-center text-sm text-red-600 rounded-lg p-2 text-center">Error Loading Animation</div>
   }
 
-  return <Lottie animationData={animationData} loop={true} style={{ width: 160, height: 160 }} />
+  if (!animationData) {
+    // عرض عنصر نائب جميل أثناء التحميل
+    return <div className="h-40 w-40 animate-pulse bg-gray-100 rounded-lg" />
+  }
+
+  return (
+    <Lottie 
+      animationData={animationData} 
+      loop={true} 
+      style={{ width: 160, height: 160 }} 
+      // إضافة prop للتعامل مع الأخطاء التي تحدث أثناء العرض (Rendering)
+      onError={(err) => {
+        console.error("Lottie Render Error:", err)
+        setError(true)
+      }}
+    />
+  )
 }
+// --- نهاية الكود المحصّن والآمن ---
 
 
 export function PainPointsSection() {
