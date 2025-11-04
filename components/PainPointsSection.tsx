@@ -1,7 +1,7 @@
 'use client';
 
 import { config } from "@/src/config/landingPageConfig";
-// 1. حذف الاستيراد القديم واستبداله بالمكونات الجديدة
+// 1. استيراد المكونات الجديدة
 import TimeLossAnimation from './TimeLossAnimation';
 import CustomerLossAnimation from './CustomerLossAnimation';
 import ComplexityAnimation from './ComplexityAnimation';
@@ -14,10 +14,10 @@ const animationComponents = [
 ];
 
 export function PainPointsSection() {
-  // تم تعديل هذا السطر ليتوافق مع بنية config التي قدمتها
-  if (!config.painPoints.enabled) {
-    return null;
-  }
+  // تم حذف شرط الإخفاء لإظهار القسم دائمًا
+  // if (!config.painPoints.enabled) {
+  //   return null;
+  // }
 
   return (
     <section className="py-20 px-6 bg-[var(--color-background)]">
@@ -36,7 +36,7 @@ export function PainPointsSection() {
                 className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
               >
                 <div className="mb-4 h-40 flex items-center justify-center">
-                  {/* 3. عرض المكون البرمجي الجديد بدلاً من DotLottiePlayer */}
+                  {/* 3. عرض المكون البرمجي الجديد */}
                   {AnimationComponent && <AnimationComponent />}
                 </div>
                 <p className="text-lg font-bold text-[var(--color-text-main)] text-center mb-2">{point.text}</p>
