@@ -1,12 +1,21 @@
-"use client"
+'use client';
 
-import { config } from "@/src/config/landingPageConfig"
-// 1. استيراد المكتبة الجديدة
-import { DotLottiePlayer } from '@lottiefiles/dotlottie-react';
+import { config } from "@/src/config/landingPageConfig";
+// 1. حذف الاستيراد القديم واستبداله بالمكونات الجديدة
+import TimeLossAnimation from './TimeLossAnimation';
+import CustomerLossAnimation from './CustomerLossAnimation';
+import ComplexityAnimation from './ComplexityAnimation';
+
+// مصفوفة بسيطة لتسهيل الوصول إلى المكونات
+const animationComponents = [
+  TimeLossAnimation,
+  CustomerLossAnimation,
+  ComplexityAnimation
+];
 
 export function PainPointsSection() {
-  // تأكد من أن القسم مفعل قبل عرضه
-  if (!config.sections.painPoints) {
+  // تم تعديل هذا السطر ليتوافق مع بنية config التي قدمتها
+  if (!config.painPoints.enabled) {
     return null;
   }
 
@@ -17,26 +26,26 @@ export function PainPointsSection() {
           {config.painPoints.title}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {config.painPoints.points.map((point, index) => (
-            <div
-              key={index}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="mb-4 h-40 flex items-center justify-center">
-                {/* 2. استخدام المكون الجديد DotLottiePlayer */}
-                <DotLottiePlayer
-                  src={point.lottieFile} // المسار إلى ملف .json
-                  autoplay
-                  loop
-                  style={{ width: 160, height: 160 }}
-                />
+          {config.painPoints.points.map((point, index) => {
+            // 2. اختيار المكون الصحيح من المصفوفة بناءً على الـ index
+            const AnimationComponent = animationComponents[index];
+
+            return (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="mb-4 h-40 flex items-center justify-center">
+                  {/* 3. عرض المكون البرمجي الجديد بدلاً من DotLottiePlayer */}
+                  {AnimationComponent && <AnimationComponent />}
+                </div>
+                <p className="text-lg font-bold text-[var(--color-text-main)] text-center mb-2">{point.text}</p>
+                <p className="text-sm text-[var(--color-secondary)] text-center leading-relaxed">{point.solutionHint}</p>
               </div>
-              <p className="text-lg font-bold text-[var(--color-text-main)] text-center mb-2">{point.text}</p>
-              <p className="text-sm text-[var(--color-secondary)] text-center leading-relaxed">{point.solutionHint}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
-  )
+  );
 }
