@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { config } from "@/src/config/landingPageConfig"
 
-// 1. استيراد المكونات الفرعية التي أنشأناها (ستكون فارغة حاليًا)
-// import { FakeConversation } from "./FakeConversation"
+// 1. استيراد المكونات الفرعية - تم تفعيل أول مكون
+import { FakeConversation } from "./FakeConversation"
 // import { ScenarioSelector } from "./ScenarioSelector"
 // import { CustomizationForm } from "./CustomizationForm"
 // import { BuildingScreen } from "./BuildingScreen"
@@ -34,8 +34,10 @@ export function InteractiveDemoSection() {
   const renderCurrentStage = () => {
     switch (currentStage) {
       case "fakeConversation":
-        // return <FakeConversation setStage={setStage} />
-        return <div>مكون المحادثة الوهمية (قيد الإنشاء)</div> // عنصر نائب مؤقت
+        // --- بداية التعديل ---
+        // تم استبدال العنصر النائب بالمكون الحقيقي
+        return <FakeConversation setStage={setStage} />
+        // --- نهاية التعديل ---
       case "scenarioSelection":
         // return <ScenarioSelector setStage={setStage} setUserSelections={setUserSelections} />
         return <div>مكون اختيار السيناريو (قيد الإنشاء)</div> // عنصر نائب مؤقت
