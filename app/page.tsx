@@ -6,11 +6,7 @@ import { FinalCtaSection } from "@/components/FinalCtaSection"
 import { SmartFAQSection } from "@/components/SmartFAQSection"
 import { Footer } from "@/components/Footer"
 import { SmartAmbassador } from "@/components/SmartAmbassador"
-
-// --- بداية التعديل ---
-// استيراد المكون الجديد
 import { InteractiveDemoSection } from "@/components/interactive-demo/InteractiveDemoSection"
-// --- نهاية التعديل ---
 
 export default function Home() {
   return (
@@ -24,13 +20,11 @@ export default function Home() {
       {/* Solution Section */}
       {config.sections.solution && <SolutionSection />}
 
-      {/* --- بداية التعديل --- */}
       {/* القسم التفاعلي الجديد */}
       {config.sections.interactiveDemo && <InteractiveDemoSection />}
 
       {/* القسم القديم (سيتم إخفاؤه بناءً على ملف الإعدادات) */}
       {config.sections.finalCta && <FinalCtaSection />}
-      {/* --- نهاية التعديل --- */}
 
       {/* Smart FAQ Section */}
       {config.sections.faq && <SmartFAQSection />}
@@ -40,6 +34,16 @@ export default function Home() {
 
       {/* Smart Ambassador */}
       {config.sections.smartAmbassador && <SmartAmbassador />}
+
+      {/* --- بداية الإضافة الجديدة لحل مشكلة القفز --- */}
+      {/* 
+        هذا العنصر يعمل كمساحة فارغة في أسفل الصفحة.
+        وظيفته هي إعطاء الصفحة ارتفاعًا إضافيًا لمنع المتصفح
+        من القفز بشكل غير متوقع عند تحميل المكونات الديناميكية.
+        الارتفاع (h-96) يمكن تعديله إذا لزم الأمر، لكنه عادة ما يكون كافيًا.
+      */}
+      <div className="h-96" />
+      {/* --- نهاية الإضافة الجديدة --- */}
     </main>
   )
 }
