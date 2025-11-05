@@ -2,17 +2,16 @@
 
 import { useState, useRef, useEffect } from "react"
 import { X, Volume2, VolumeX, RotateCcw, Send, LoaderCircle } from "lucide-react"
-import { config } from "@/src/config/landingPageConfig"
 import Image from "next/image"
 
-// 1. تعريف أنواع الرسائل (تبقى كما هي)
+// 1. تعريف أنواع الرسائل
 interface Message {
   type: "user" | "bot"
   text: string
   timestamp: Date
 }
 
-// 2. تعريف أنواع Props: المكون سيستقبل اختيارات المستخدم
+// 2. تعريف أنواع Props
 interface DemoChatWindowProps {
   userSelections: {
     businessName: string;
@@ -40,8 +39,8 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
     }
   }
 
-  // 5. إدارة الحالة (State Management) مع استخدام البيانات المخصصة
-  const [isOpen, setIsOpen] = useState(false) // يبدأ مغلقًا
+  // 5. إدارة الحالة (State Management)
+  const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     { type: "bot", text: generateWelcomeMessage(), timestamp: new Date() },
   ])
@@ -51,7 +50,7 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const audioContextRef = useRef<AudioContext | null>(null)
 
-  // 6. دالة لتحديد لون الواجهة بناءً على اختيار المستخدم
+  // 6. دالة لتحديد لون الواجهة
   const getAccentColor = () => {
     const colorMap: { [key: string]: string } = {
       blue: "#3B82F6",
@@ -60,25 +59,41 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
       purple: "#8B5CF6",
       red: "#EF4444",
     }
-    return colorMap[userSelections.color] || colorMap.blue // لون أزرق افتراضي
+    return colorMap[userSelections.color] || colorMap.blue
   }
   const accentColor = getAccentColor()
 
-  // باقي الـ Hooks والمنطق (useEffect, playSound, etc.) تبقى كما هي...
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
-
+  // --- دوال الصوت الكاملة (بدون اختصار) ---
   useEffect(() => {
     if (typeof window !== "undefined") {
       audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
     }
   }, [])
 
-  const playClickSound = () => { /* ... نفس الكود ... */ }
-  const playSendSound = () => { /* ... نفس الكود ... */ }
+  const playSound = (frequency: number, duration: number) => {
+    if (isMuted || !audioContextRef.current) return;
+    const ctx = audioContextRef.current;
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.frequency.value = frequency;
+    oscillator.type = "sine";
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + duration);
+  }
 
-  // في هذه النسخة، سنجعل الردود وهمية وبسيطة
+  const playClickSound = () => playSound(800, 0.1);
+  const playSendSound = () => playSound(1200, 0.15);
+  // --- نهاية دوال الصوت ---
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
+
+  // منطق الردود الوهمية
   const handleSimpleBotResponse = (userInput: string) => {
     setIsLoading(true)
     setTimeout(() => {
@@ -120,7 +135,7 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
 
   return (
     <>
-      {/* الزر العائم (يبقى كما هو) */}
+      {/* الزر العائم */}
       <div
         onClick={toggleChat}
         className="group fixed bottom-6 left-6 z-50 flex cursor-pointer items-center gap-3"
@@ -138,19 +153,20 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
         </div>
       </div>
 
-      {/* نافذة المحادثة (مع التعديلات) */}
+      {/* نافذة المحادثة */}
       {isOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={toggleChat} />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-md h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
-            {/* 7. تطبيق اللون والعنوان المخصص على الشريط العلوي */}
+            {/* الشريط العلوي المخصص */}
             <div className="flex items-center justify-between p-4 border-b text-white rounded-t-2xl" style={{ backgroundColor: accentColor }}>
               <h3 className="font-bold text-lg">{userSelections.businessName || "محادثة تجريبية"}</h3>
               <div className="flex items-center gap-2">
-                {/* أزرار التحكم (تبقى كما هي) */}
-                <button onClick={() => { playClickSound(); setIsMuted(!isMuted); }} className="p-2 hover:bg-white/20 rounded-lg"><Volume2 size={20} /></button>
-                <button onClick={handleClearChat} className="p-2 hover:bg-white/20 rounded-lg"><RotateCcw size={20} /></button>
-                <button onClick={toggleChat} className="p-2 hover:bg-white/20 rounded-lg"><X size={20} /></button>
+                <button onClick={() => { playClickSound(); setIsMuted(!isMuted); }} className="p-2 hover:bg-white/20 rounded-lg" aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}>
+                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                </button>
+                <button onClick={handleClearChat} className="p-2 hover:bg-white/20 rounded-lg" aria-label="مسح المحادثة"><RotateCcw size={20} /></button>
+                <button onClick={toggleChat} className="p-2 hover:bg-white/20 rounded-lg" aria-label="إغلاق"><X size={20} /></button>
               </div>
             </div>
             
@@ -164,14 +180,20 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
                         ? "bg-gray-100 text-[var(--color-text-main)] rounded-bl-sm"
                         : "text-white rounded-br-sm"
                     }`}
-                    // 8. تطبيق اللون المخصص على رسائل البوت
                     style={message.type === 'bot' ? { backgroundColor: accentColor } : {}}
                   >
                     <p className="text-sm leading-relaxed">{message.text}</p>
                   </div>
                 </div>
               ))}
-              {isLoading && ( /* ... نفس كود مؤشر الكتابة ... */ )}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="max-w-[80%] p-3 rounded-2xl text-white rounded-br-sm flex items-center gap-2" style={{ backgroundColor: accentColor }}>
+                    <span className="text-sm">يكتب الآن</span>
+                    <LoaderCircle size={16} className="animate-spin" />
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
@@ -206,6 +228,3 @@ export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
     </>
   )
 }
-
-// ملاحظة: لقد أبقيت على دوال الصوت كما هي للاختصار، يجب نسخها بالكامل في الملف الفعلي.
-
