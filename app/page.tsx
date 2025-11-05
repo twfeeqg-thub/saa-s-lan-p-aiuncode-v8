@@ -7,6 +7,11 @@ import { SmartFAQSection } from "@/components/SmartFAQSection"
 import { Footer } from "@/components/Footer"
 import { SmartAmbassador } from "@/components/SmartAmbassador"
 
+// --- بداية التعديل ---
+// استيراد المكون الجديد
+import { InteractiveDemoSection } from "@/components/interactive-demo/InteractiveDemoSection"
+// --- نهاية التعديل ---
+
 export default function Home() {
   return (
     <main className="min-h-screen">
@@ -19,8 +24,13 @@ export default function Home() {
       {/* Solution Section */}
       {config.sections.solution && <SolutionSection />}
 
-      {/* Final CTA Section */}
+      {/* --- بداية التعديل --- */}
+      {/* القسم التفاعلي الجديد */}
+      {config.sections.interactiveDemo && <InteractiveDemoSection />}
+
+      {/* القسم القديم (سيتم إخفاؤه بناءً على ملف الإعدادات) */}
       {config.sections.finalCta && <FinalCtaSection />}
+      {/* --- نهاية التعديل --- */}
 
       {/* Smart FAQ Section */}
       {config.sections.faq && <SmartFAQSection />}
