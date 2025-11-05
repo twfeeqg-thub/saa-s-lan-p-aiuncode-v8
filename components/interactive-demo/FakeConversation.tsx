@@ -20,16 +20,14 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
   // قراءة البيانات من ملف الإعدادات
   const { title, script, ctaButton } = config.interactiveDemo.stageZero
 
-  // --- بداية التعديلات لحل مشكلة التوقيت ---
+  // --- بداية الحل الجديد والمبسط ---
 
-  // 1. حالة جديدة لتتبع ظهور المكون على الشاشة
-  const [isVisible, setIsVisible] = useState(false)
-  // 2. حالة جديدة لمنع إعادة تشغيل المحاكاة إذا خرج المستخدم ثم عاد
-  const [hasPlayed, setHasPlayed] = useState(false)
-  // 3. إنشاء مرجع (ref) للعنصر الذي نريد مراقبته
+  // 1. حالة واحدة فقط لتتبع ما إذا كانت المحاكاة قد بدأت
+  const [hasStarted, setHasStarted] = useState(false)
+  // 2. مرجع (ref) للعنصر الذي نريد مراقبته
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // --- نهاية التعديلات ---
+  // --- نهاية الحل الجديد ---
 
   // إدارة حالة المحاكاة
   const [displayedEvents, setDisplayedEvents] = useState<ScriptEvent[]>([])
@@ -37,20 +35,17 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
   const [isCtaVisible, setIsCtaVisible] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
 
-  // 4. التأثير (useEffect) الخاص بـ Intersection Observer
+  // 3. التأثير (useEffect) الخاص بـ Intersection Observer (تم تبسيطه)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // عندما يتقاطع العنصر مع منطقة العرض (يصبح مرئيًا)
-        if (entry.isIntersecting) {
-          setIsVisible(true)
+        // عندما يتقاطع العنصر مع منطقة العرض ولم تكن المحاكاة قد بدأت بعد
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true) // ابدأ المحاكاة
+          observer.disconnect() // أوقف المراقبة لأننا نحتاجها مرة واحدة فقط
         }
       },
-      {
-        root: null, // المراقبة بالنسبة لمنطقة عرض المتصفح
-        rootMargin: "0px",
-        threshold: 0.5, // ابدأ عندما يكون 50% من العنصر مرئيًا
-      }
+      { threshold: 0.5 } // ابدأ عندما يكون 50% من العنصر مرئيًا
     )
 
     const currentRef = containerRef.current
@@ -58,23 +53,20 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
       observer.observe(currentRef)
     }
 
-    // تنظيف المراقب عند تفكيك المكون
     return () => {
       if (currentRef) {
         observer.unobserve(currentRef)
       }
     }
-  }, [])
+  // مصفوفة الاعتماديات تحتوي على hasStarted لضمان عدم إعادة إنشاء المراقب دون داعٍ
+  }, [hasStarted])
 
-  // 5. التأثير الرئيسي لتشغيل المحاكاة (تم تعديله)
+  // 4. التأثير الرئيسي لتشغيل المحاكاة (تم تبسيطه)
   useEffect(() => {
-    // الشرط الجديد: لا تبدأ المحاكاة إلا إذا كان المكون مرئيًا ولم يتم تشغيلها من قبل
-    if (!isVisible || hasPlayed) {
+    // الشرط الجديد: لا تبدأ إلا إذا كانت hasStarted تساوي true
+    if (!hasStarted) {
       return
     }
-
-    // بمجرد أن تبدأ، نمنعها من العمل مرة أخرى
-    setHasPlayed(true)
 
     // باقي منطق المؤقت يبقى كما هو
     if (currentEventIndex >= script.length) {
@@ -93,8 +85,8 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
     }, delay)
 
     return () => clearTimeout(timer)
-  // تم إضافة isVisible و hasPlayed إلى مصفوفة الاعتماديات
-  }, [currentEventIndex, script, isVisible, hasPlayed])
+  // تم تبسيط مصفوفة الاعتماديات
+  }, [currentEventIndex, script, hasStarted])
 
   // تأثير التمرير التلقائي (يبقى كما هو)
   useEffect(() => {
@@ -102,7 +94,7 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
   }, [displayedEvents])
 
   return (
-    // 6. ربط المرجع (ref) بالحاوية الرئيسية للمكون
+    // 5. ربط المرجع (ref) بالحاوية الرئيسية للمكون
     <div ref={containerRef} className="max-w-2xl mx-auto text-center">
       <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-main)] mb-8 animate-fade-in">
         {title}
@@ -110,8 +102,8 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
       
       <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 space-y-4 border">
         <div className="space-y-4 h-[500px] overflow-y-auto p-2">
-          {/* إذا لم تبدأ المحاكاة بعد، يمكننا عرض رسالة أولية أو لا شيء */}
-          {displayedEvents.length === 0 && (
+          {/* عرض رسالة أولية باهتة قبل بدء المحاكاة */}
+          {!hasStarted && (
              <div className="flex justify-end animate-fade-in">
                 <div className="max-w-[85%] px-4 py-3 rounded-2xl text-right bg-gray-100 text-gray-400">
                   ...
