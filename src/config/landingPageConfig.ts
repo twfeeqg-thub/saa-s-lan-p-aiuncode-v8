@@ -1,23 +1,96 @@
 // ملف الإعدادات المركزي لصفحة الهبوط
 // يحتوي على جميع المحتوى والبيانات للصفحة
 
-export const config = {
+// --- بداية التعديل ---
+// تعريف نوع Config بشكل صريح لضمان سلامة الأنواع
+interface ConfigType {
+  sections: {
+    hero: boolean;
+    painPoints: boolean;
+    solution: boolean;
+    interactiveDemo: boolean;
+    finalCta: boolean;
+    faq: boolean;
+    footer: boolean;
+    smartAmbassador: boolean;
+  };
+  header: any; // يمكنك إضافة أنواع تفصيلية هنا لاحقًا
+  hero: any;
+  painPoints: any;
+  solution: any;
+  interactiveDemo: any;
+  finalCta: any;
+  faq: any;
+  footer: any;
+  smartAmbassador: any;
+}
+
+// استخدام النوع المعرف أعلاه
+export const config: ConfigType = {
+// --- نهاية التعديل ---
+
   // التحكم في إظهار وإخفاء الأقسام
-  // <--  هذه القيمة للتفعيل true ، وهذه القيمة للتعطيل false
   sections: {
     hero: true,
     painPoints: true,
     solution: true,
-    // --- بداية التعديل ---
     interactiveDemo: true, // تفعيل القسم الجديد
     finalCta: false,       // تعطيل القسم القديم مؤقتًا
-    // --- نهاية التعديل ---
     faq: true,
     footer: true,
     smartAmbassador: true,
   },
 
-  // ... باقي الكود يبقى كما هو ...
+  // الشريط العلوي
+  header: {
+    logo: {
+      tagline: "ذكاء صناعي بلا تعقيد",
+    },
+    loginButton: {
+      text: "تسجيل الدخول",
+      link: "/login",
+    },
+  },
+
+  // القسم العلوي (Hero)
+  hero: {
+    title: {
+      variantA: "توقف عن خسارة عملائك... أطلق موقعك الذكي في 7 أيام فقط!",
+      variantB: "هل أنت جاهز لمضاعفة مبيعاتك؟ موقعك الذكي جاهز في أسبوع!",
+      variantC: "حوّل زوارك إلى عملاء... بوكيل ذكاء اصطناعي يتحدث لهجتهم.",
+      active: "variantA" as "variantA" | "variantB" | "variantC",
+    },
+    subtitle:
+      "نبني لك صفحة احترافية مع وكيل AI يتحدث لهجتك الخليجية، يجيب 24/7، ويزيد مبيعاتك. لا تعقيد، فقط نتائج سريعة.",
+    ctaButton: {
+      text: "ابدأ مجانًا الآن",
+    },
+    scarcityBanner: {
+      text: "عرض محدود: أول 20 عميلًا هذا الأسبوع يحصلون على خصم 25%!",
+    },
+  },
+
+  // قسم نقاط الألم
+  painPoints: {
+    title: "هل تشعر بهذا كل يوم؟",
+    points: [
+      { 
+        text: "تغرق في رسائل متكررة؟", 
+        solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
+        lottieFile: "/animations/wasted-time.json"
+      },
+      { 
+        text: "تخسر عملاء لعدم الرد الفوري؟", 
+        solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
+        lottieFile: "/animations/lost-customer.json"
+      },
+      { 
+        text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
+        solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
+        lottieFile: "/animations/tech-complexity.json"
+      },
+    ],
+  },
 
   // قسم الحل والدليل الاجتماعي
   solution: {
@@ -131,7 +204,47 @@ export const config = {
     },
   },
 
-  // ... باقي الكود يبقى كما هو ...
-}
+  // قسم الأسئلة الشائعة
+  faq: {
+    triggerText: "أسئلة تدور في ذهنك؟",
+    questions: [
+      { question: "هل أحتاج إلى خبرة تقنية؟", answer: "لا إطلاقًا. نحن نهتم بكل الجوانب التقنية." },
+      { question: "ما هي اللهجات التي يدعمها الوكيل؟", answer: "ندعم حاليًا اللهجة السعودية، الإماراتية، والكويتية." },
+      { question: "هل يمكنني تحديث المحتوى بنفسي؟", answer: "نعم، نوفر لك لوحة تحكم سهلة." },
+    ],
+  },
 
-export type Config = typeof config
+  // الفوتر (الذيل)
+  footer: {
+    tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
+    contact: {
+      title: "اتصل بنا",
+      email: "info@aiuncode.com",
+      telegram: {
+        username: "@tsahma",
+        link: "https://t.me/tsahma",
+      },
+    },
+    legalLinks: [
+      { text: "سياسة الخصوصية", link: "/privacy" },
+      { text: "شروط الاستخدام", link: "/terms" },
+      { text: "إنشاء حساب", link: "/signup" },
+    ],
+    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
+  },
+
+  // إعدادات السفير الذكي
+  smartAmbassador: {
+    buttonLabel: "تحدث معنا",
+    chatTitle: "السفير الذكي",
+    placeholder: "اكتب رسالتك هنا...",
+    sendButton: "إرسال",
+    welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+    defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
+  },
+};
+
+// --- بداية التعديل ---
+// إزالة السطر القديم
+// export type Config = typeof config
+// --- نهاية التعديل ---
