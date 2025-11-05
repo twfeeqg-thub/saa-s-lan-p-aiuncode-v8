@@ -20,32 +20,23 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
   // قراءة البيانات من ملف الإعدادات
   const { title, script, ctaButton } = config.interactiveDemo.stageZero
 
-  // --- بداية الحل الجديد والمبسط ---
-
-  // 1. حالة واحدة فقط لتتبع ما إذا كانت المحاكاة قد بدأت
   const [hasStarted, setHasStarted] = useState(false)
-  // 2. مرجع (ref) للعنصر الذي نريد مراقبته
   const containerRef = useRef<HTMLDivElement>(null)
-
-  // --- نهاية الحل الجديد ---
-
-  // إدارة حالة المحاكاة
   const [displayedEvents, setDisplayedEvents] = useState<ScriptEvent[]>([])
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const [isCtaVisible, setIsCtaVisible] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
 
-  // 3. التأثير (useEffect) الخاص بـ Intersection Observer (تم تبسيطه)
+  // التأثير (useEffect) الخاص بـ Intersection Observer
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // عندما يتقاطع العنصر مع منطقة العرض ولم تكن المحاكاة قد بدأت بعد
         if (entry.isIntersecting && !hasStarted) {
-          setHasStarted(true) // ابدأ المحاكاة
-          observer.disconnect() // أوقف المراقبة لأننا نحتاجها مرة واحدة فقط
+          setHasStarted(true)
+          observer.disconnect()
         }
       },
-      { threshold: 0.5 } // ابدأ عندما يكون 50% من العنصر مرئيًا
+      { threshold: 0.5 }
     )
 
     const currentRef = containerRef.current
@@ -58,17 +49,14 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
         observer.unobserve(currentRef)
       }
     }
-  // مصفوفة الاعتماديات تحتوي على hasStarted لضمان عدم إعادة إنشاء المراقب دون داعٍ
   }, [hasStarted])
 
-  // 4. التأثير الرئيسي لتشغيل المحاكاة (تم تبسيطه)
+  // التأثير الرئيسي لتشغيل المحاكاة
   useEffect(() => {
-    // الشرط الجديد: لا تبدأ إلا إذا كانت hasStarted تساوي true
     if (!hasStarted) {
       return
     }
 
-    // باقي منطق المؤقت يبقى كما هو
     if (currentEventIndex >= script.length) {
       setTimeout(() => setIsCtaVisible(true), 1000)
       return
@@ -85,31 +73,30 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
     }, delay)
 
     return () => clearTimeout(timer)
-  // تم تبسيط مصفوفة الاعتماديات
   }, [currentEventIndex, script, hasStarted])
 
-  // تأثير التمرير التلقائي (يبقى كما هو)
+  // تأثير التمرير التلقائي
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [displayedEvents])
 
   return (
-    // 5. ربط المرجع (ref) بالحاوية الرئيسية للمكون
     <div ref={containerRef} className="max-w-2xl mx-auto text-center">
       <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-main)] mb-8 animate-fade-in">
         {title}
       </h2>
       
       <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 space-y-4 border">
+        {/* --- بداية التعديل الجذري --- */}
+        {/* 
+          هذا هو التعديل الأساسي لحل مشكلة القفز (CLS).
+          لقد قمنا بإزالة العرض الشرطي للعنصر النائب `...`.
+          الآن، هذا الـ `div` سيحتفظ دائمًا بارتفاعه الكامل (`h-[500px]`)
+          سواء كانت المحادثة قد بدأت أم لا.
+          هذا "يحجز المساحة" ويمنع الصفحة من تغيير تخطيطها فجأة.
+        */}
         <div className="space-y-4 h-[500px] overflow-y-auto p-2">
-          {/* عرض رسالة أولية باهتة قبل بدء المحاكاة */}
-          {!hasStarted && (
-             <div className="flex justify-end animate-fade-in">
-                <div className="max-w-[85%] px-4 py-3 rounded-2xl text-right bg-gray-100 text-gray-400">
-                  ...
-                </div>
-              </div>
-          )}
+        {/* --- نهاية التعديل الجذري --- */}
 
           {displayedEvents.map((event, index) => (
             <div key={index} className="animate-fade-in-up">
