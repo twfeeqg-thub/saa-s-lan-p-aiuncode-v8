@@ -2,76 +2,125 @@
 
 import { useState, useEffect, useRef } from "react"
 import { config } from "@/src/config/landingPageConfig"
-import { Check, Link as LinkIcon } from "lucide-react"
+import { Check } from "lucide-react"
 
-// 1. تعريف أنواع Props: المكون سيستقبل دالة setStage من الأب
+// تعريف أنواع Props
 type FakeConversationProps = {
   setStage: (stage: "scenarioSelection") => void
 }
 
-// 2. تعريف أنواع الأحداث في السيناريو لضمان سلامة الكود
+// تعريف أنواع الأحداث في السيناريو
 type ScriptEvent = {
   type: "bot" | "user" | "buttons" | "payment-link";
   text?: string;
   options?: string[];
 }
 
-// 3. إعادة بناء المكون بالكامل ليصبح "مشغّل سيناريو"
 export function FakeConversation({ setStage }: FakeConversationProps) {
-  // 4. قراءة البيانات من ملف الإعدادات المركزي
+  // قراءة البيانات من ملف الإعدادات
   const { title, script, ctaButton } = config.interactiveDemo.stageZero
 
-  // 5. إدارة الحالة (State Management)
-  // حالة لتخزين الأحداث التي ظهرت على الشاشة
-  const [displayedEvents, setDisplayedEvents] = useState<ScriptEvent[]>([])
-  // حالة لتتبع أي حدث في السيناريو نعرضه الآن
-  const [currentEventIndex, setCurrentEventIndex] = useState(0)
-  // حالة لإظهار زر CTA النهائي بعد انتهاء المحاكاة
-  const [isCtaVisible, setIsCtaVisible] = useState(false)
+  // --- بداية التعديلات لحل مشكلة التوقيت ---
 
+  // 1. حالة جديدة لتتبع ظهور المكون على الشاشة
+  const [isVisible, setIsVisible] = useState(false)
+  // 2. حالة جديدة لمنع إعادة تشغيل المحاكاة إذا خرج المستخدم ثم عاد
+  const [hasPlayed, setHasPlayed] = useState(false)
+  // 3. إنشاء مرجع (ref) للعنصر الذي نريد مراقبته
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // --- نهاية التعديلات ---
+
+  // إدارة حالة المحاكاة
+  const [displayedEvents, setDisplayedEvents] = useState<ScriptEvent[]>([])
+  const [currentEventIndex, setCurrentEventIndex] = useState(0)
+  const [isCtaVisible, setIsCtaVisible] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
 
-  // 6. التأثير الرئيسي (useEffect) لتشغيل المحاكاة
+  // 4. التأثير (useEffect) الخاص بـ Intersection Observer
   useEffect(() => {
-    // إذا عرضنا كل الأحداث، نوقف المؤقت ونظهر زر CTA
-    if (currentEventIndex >= script.length) {
-      setTimeout(() => setIsCtaVisible(true), 1000) // تأخير بسيط قبل ظهور الزر
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // عندما يتقاطع العنصر مع منطقة العرض (يصبح مرئيًا)
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      {
+        root: null, // المراقبة بالنسبة لمنطقة عرض المتصفح
+        rootMargin: "0px",
+        threshold: 0.5, // ابدأ عندما يكون 50% من العنصر مرئيًا
+      }
+    )
+
+    const currentRef = containerRef.current
+    if (currentRef) {
+      observer.observe(currentRef)
+    }
+
+    // تنظيف المراقب عند تفكيك المكون
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef)
+      }
+    }
+  }, [])
+
+  // 5. التأثير الرئيسي لتشغيل المحاكاة (تم تعديله)
+  useEffect(() => {
+    // الشرط الجديد: لا تبدأ المحاكاة إلا إذا كان المكون مرئيًا ولم يتم تشغيلها من قبل
+    if (!isVisible || hasPlayed) {
       return
     }
 
-    // تحديد مدة التأخير بناءً على نوع الحدث
-    const currentEvent = script[currentEventIndex]
-    let delay = 1500 // تأخير افتراضي بين الرسائل (1.5 ثانية)
-    if (currentEvent.type === "user") delay = 800 // رد المستخدم يكون أسرع
-    if (currentEvent.type === "buttons" || currentEvent.type === "payment-link") delay = 500 // الأزرار تظهر بسرعة
+    // بمجرد أن تبدأ، نمنعها من العمل مرة أخرى
+    setHasPlayed(true)
 
-    // إنشاء مؤقت لإضافة الحدث التالي إلى الشاشة
+    // باقي منطق المؤقت يبقى كما هو
+    if (currentEventIndex >= script.length) {
+      setTimeout(() => setIsCtaVisible(true), 1000)
+      return
+    }
+
+    const currentEvent = script[currentEventIndex]
+    let delay = 1500
+    if (currentEvent.type === "user") delay = 800
+    if (currentEvent.type === "buttons" || currentEvent.type === "payment-link") delay = 500
+
     const timer = setTimeout(() => {
       setDisplayedEvents(prev => [...prev, currentEvent])
       setCurrentEventIndex(prev => prev + 1)
     }, delay)
 
-    // تنظيف المؤقت عند تفكيك المكون لمنع تسريب الذاكرة
     return () => clearTimeout(timer)
-  }, [currentEventIndex, script])
+  // تم إضافة isVisible و hasPlayed إلى مصفوفة الاعتماديات
+  }, [currentEventIndex, script, isVisible, hasPlayed])
 
-  // 7. تأثير لضمان التمرير التلقائي للأسفل مع كل رسالة جديدة
+  // تأثير التمرير التلقائي (يبقى كما هو)
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [displayedEvents])
 
   return (
-    <div className="max-w-2xl mx-auto text-center">
+    // 6. ربط المرجع (ref) بالحاوية الرئيسية للمكون
+    <div ref={containerRef} className="max-w-2xl mx-auto text-center">
       <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-text-main)] mb-8 animate-fade-in">
         {title}
       </h2>
       
       <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6 space-y-4 border">
-        {/* حاوية المحادثة */}
         <div className="space-y-4 h-[500px] overflow-y-auto p-2">
+          {/* إذا لم تبدأ المحاكاة بعد، يمكننا عرض رسالة أولية أو لا شيء */}
+          {displayedEvents.length === 0 && (
+             <div className="flex justify-end animate-fade-in">
+                <div className="max-w-[85%] px-4 py-3 rounded-2xl text-right bg-gray-100 text-gray-400">
+                  ...
+                </div>
+              </div>
+          )}
+
           {displayedEvents.map((event, index) => (
             <div key={index} className="animate-fade-in-up">
-              {/* عرض رسائل البوت والمستخدم */}
               {(event.type === "bot" || event.type === "user") && (
                 <div className={`flex ${event.type === "user" ? "justify-start" : "justify-end"}`}>
                   <div
@@ -80,13 +129,10 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
                         ? "bg-[var(--color-primary)] text-white rounded-br-none"
                         : "bg-gray-100 text-[var(--color-text-main)] rounded-bl-none"
                     }`}
-                    // استخدام dangerouslySetInnerHTML للسماح بعرض الـ Markdown (مثل **bold**)
                     dangerouslySetInnerHTML={{ __html: event.text!.replace(/\n/g, '<br />') }}
                   />
                 </div>
               )}
-
-              {/* عرض أزرار الاقتراحات */}
               {event.type === "buttons" && (
                 <div className="flex flex-col sm:flex-row gap-2 justify-end pt-2">
                   {event.options?.map((option, i) => (
@@ -96,8 +142,6 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
                   ))}
                 </div>
               )}
-
-              {/* عرض رابط الدفع الوهمي */}
               {event.type === "payment-link" && (
                 <div className="flex justify-end pt-2">
                   <button className="bg-green-500 text-white font-bold px-6 py-3 rounded-lg flex items-center gap-2 shadow-md">
@@ -108,11 +152,9 @@ export function FakeConversation({ setStage }: FakeConversationProps) {
               )}
             </div>
           ))}
-          {/* عنصر وهمي لتحديد نهاية المحادثة للتمرير التلقائي */}
           <div ref={chatEndRef} />
         </div>
 
-        {/* زر CTA النهائي الذي يظهر بعد انتهاء المحاكاة */}
         {isCtaVisible && (
           <button
             onClick={() => setStage("scenarioSelection")}
