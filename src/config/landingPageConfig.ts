@@ -134,9 +134,9 @@ export const config: ConfigType = {
         { id: "dates-shop", name: "محل تمور", enabled: true },
         { id: "hotel", name: "فندق", enabled: true },
         { id: "real-estate", name: "عقارات", enabled: true },
-        { id: "restaurant", name: "مطعم", enabled: false },
-        { id: "clinic", name: "عيادة", enabled: false },
-        { id: "perfumes", name: "محل عطور", enabled: false },
+        { id: "restaurant", name: "مطعم", enabled: true },
+        { id: "clinic", name: "عيادة", enabled: true },
+        { id: "perfumes", name: "محل عطور", enabled: true },
       ],
     },
     stageTwo: {
