@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { config } from "@/src/config/landingPageConfig"
 
-// 1. استيراد المكونات الفرعية - تم تفعيل أول مكون
+// 1. استيراد المكونات الفرعية - تم تفعيل المكون الثاني
 import { FakeConversation } from "./FakeConversation"
-// import { ScenarioSelector } from "./ScenarioSelector"
+import { ScenarioSelector } from "./ScenarioSelector"
 // import { CustomizationForm } from "./CustomizationForm"
 // import { BuildingScreen } from "./BuildingScreen"
 // import { DemoChatWindow } from "./DemoChatWindow"
@@ -30,17 +30,25 @@ export function InteractiveDemoSection() {
     setCurrentStage(stage)
   }
 
+  // --- بداية الإضافة الجديدة ---
+  // دالة لتحديث اختيارات المستخدم من المكونات الفرعية
+  const updateUserSelection = (key: string, value: string) => {
+    setUserSelections(prev => ({ ...prev, [key]: value }))
+  }
+  // --- نهاية الإضافة الجديدة ---
+
   // 4. العرض الشرطي: بناءً على قيمة currentStage، نعرض المكون المناسب
   const renderCurrentStage = () => {
     switch (currentStage) {
       case "fakeConversation":
+        return <FakeConversation setStage={setStage} />
+      
+      case "scenarioSelection":
         // --- بداية التعديل ---
         // تم استبدال العنصر النائب بالمكون الحقيقي
-        return <FakeConversation setStage={setStage} />
+        return <ScenarioSelector setStage={setStage} updateUserSelection={updateUserSelection} />
         // --- نهاية التعديل ---
-      case "scenarioSelection":
-        // return <ScenarioSelector setStage={setStage} setUserSelections={setUserSelections} />
-        return <div>مكون اختيار السيناريو (قيد الإنشاء)</div> // عنصر نائب مؤقت
+
       case "customization":
         // return <CustomizationForm setStage={setStage} setUserSelections={setUserSelections} />
         return <div>مكون نموذج التخصيص (قيد الإنشاء)</div> // عنصر نائب مؤقت
