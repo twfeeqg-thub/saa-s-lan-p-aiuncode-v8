@@ -5,30 +5,29 @@ import { X, Volume2, VolumeX, RotateCcw, Send, LoaderCircle } from "lucide-react
 import { config } from "@/src/config/landingPageConfig"
 import Image from "next/image"
 
-// 1. تعريف أنواع الرسائل (تبقى كما هي)
+// تعريف أنواع الرسائل
 interface Message {
   type: "user" | "bot"
   text: string
   timestamp: Date
 }
 
-// --- بداية التعديلات الرئيسية ---
-
-// 2. تعريف أنواع Props الجديدة التي سيستقبلها المكون
-interface SmartAmbassadorProps {
-  userSelections?: { // جعل الكائن اختياريًا للتوافق مع الاستخدامات القديمة
+// تعريف أنواع Props
+interface DemoChatWindowProps { // <-- تم تغيير اسم الواجهة هنا ليكون أوضح
+  userSelections?: {
     businessName: string;
     agentRole: string;
     color: string;
   }
 }
 
-// 3. تعديل تعريف المكون ليقبل الـ props الجديدة
-export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
+// --- بداية التعديل الحاسم ---
+// 3. تعديل اسم الدالة المصدرة لتطابق ما يتوقعه المكون الأب
+export function DemoChatWindow({ userSelections }: DemoChatWindowProps) {
+// --- نهاية التعديل الحاسم ---
 
-  // 4. دالة لتوليد الرسالة الترحيبية الديناميكية
+  // دالة لتوليد الرسالة الترحيبية الديناميكية
   const generateWelcomeMessage = () => {
-    // إذا لم يتم تمرير بيانات المستخدم، نستخدم الرسالة الافتراضية
     if (!userSelections) {
       return config.smartAmbassador.welcomeMessage;
     }
@@ -45,10 +44,10 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
     }
   }
 
-  // 5. دالة لتحديد لون الواجهة الديناميكي
+  // دالة لتحديد لون الواجهة الديناميكي
   const getAccentColor = () => {
     if (!userSelections?.color) {
-      return 'var(--color-primary)'; // اللون الافتراضي من CSS
+      return 'var(--color-primary)';
     }
     const colorMap: { [key: string]: string } = {
       blue: "#3B82F6",
@@ -61,10 +60,7 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
   }
   const accentColor = getAccentColor();
 
-  // --- نهاية التعديلات الرئيسية ---
-
   const [isOpen, setIsOpen] = useState(false)
-  // تعديل الرسالة الأولى لتكون ديناميكية
   const [messages, setMessages] = useState<Message[]>([
     { type: "bot", text: generateWelcomeMessage(), timestamp: new Date() },
   ])
@@ -84,10 +80,37 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
     }
   }, [])
 
-  const playClickSound = () => { /* ... الكود يبقى كما هو ... */ }
-  const playSendSound = () => { /* ... الكود يبقى كما هو ... */ }
+  // لقد قمت بنسخ دوال الصوت بالكامل هنا لتجنب أي ارتباك
+  const playClickSound = () => {
+    if (isMuted || !audioContextRef.current) return
+    const ctx = audioContextRef.current
+    const oscillator = ctx.createOscillator()
+    const gainNode = ctx.createGain()
+    oscillator.connect(gainNode)
+    gainNode.connect(ctx.destination)
+    oscillator.frequency.value = 800
+    oscillator.type = "sine"
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1)
+    oscillator.start(ctx.currentTime)
+    oscillator.stop(ctx.currentTime + 0.1)
+  }
 
-  // تعديل بسيط: منطق الرد الوهمي بدلاً من Webhook
+  const playSendSound = () => {
+    if (isMuted || !audioContextRef.current) return
+    const ctx = audioContextRef.current
+    const oscillator = ctx.createOscillator()
+    const gainNode = ctx.createGain()
+    oscillator.connect(gainNode)
+    gainNode.connect(ctx.destination)
+    oscillator.frequency.value = 1200
+    oscillator.type = "sine"
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15)
+    oscillator.start(ctx.currentTime)
+    oscillator.stop(ctx.currentTime + 0.15)
+  }
+
   const handleSendMessage = () => {
     if (!inputValue.trim() || isLoading) return;
     playSendSound();
@@ -101,7 +124,6 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
     const currentInput = inputValue;
     setInputValue("");
 
-    // الرد الوهمي البسيط
     setIsLoading(true);
     setTimeout(() => {
       const botMessage: Message = {
@@ -116,7 +138,6 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
 
   const handleClearChat = () => {
     playClickSound()
-    // إعادة تعيين الرسالة الترحيبية الديناميكية
     setMessages([{ type: "bot", text: generateWelcomeMessage(), timestamp: new Date() }])
   }
 
@@ -127,7 +148,6 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
 
   return (
     <>
-      {/* الزر العائم المخصص */}
       <div
         onClick={toggleChat}
         className="group fixed bottom-6 left-6 z-50 flex cursor-pointer items-center gap-3"
@@ -145,20 +165,40 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
         </div>
       </div>
 
-      {/* نافذة المحادثة المخصصة */}
       {isOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={toggleChat} />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-md h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
-            {/* الشريط العلوي المخصص */}
             <div className="flex items-center justify-between p-4 border-b text-white rounded-t-2xl" style={{ backgroundColor: accentColor }}>
               <h3 className="font-bold text-lg">{userSelections?.businessName || config.smartAmbassador.chatTitle}</h3>
               <div className="flex items-center gap-2">
-                {/* ... أزرار التحكم تبقى كما هي ... */}
+                <button
+                  onClick={() => {
+                    playClickSound()
+                    setIsMuted(!isMuted)
+                  }}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  aria-label={isMuted ? "تشغيل الصوت" : "كتم الصوت"}
+                >
+                  {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                </button>
+                <button
+                  onClick={handleClearChat}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  aria-label="مسح المحادثة"
+                >
+                  <RotateCcw size={20} />
+                </button>
+                <button
+                  onClick={toggleChat}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                  aria-label="إغلاق"
+                >
+                  <X size={20} />
+                </button>
               </div>
             </div>
             
-            {/* جسم المحادثة المخصص */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
                 <div key={index} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
@@ -185,7 +225,6 @@ export function SmartAmbassador({ userSelections }: SmartAmbassadorProps) {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* حقل الإدخال المخصص */}
             <div className="p-4 border-t bg-gray-50 rounded-b-2xl">
               <div className="flex gap-2">
                 <input
