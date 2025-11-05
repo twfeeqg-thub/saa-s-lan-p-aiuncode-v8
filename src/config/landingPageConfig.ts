@@ -30,7 +30,7 @@ export const config: ConfigType = {
     painPoints: true,
     solution: true,
     interactiveDemo: true, // تفعيل القسم الجديد الذي نعمل عليه
-    finalCta: false,       // تعطيل القسم القديم مؤقتًا لتجنب التكرار
+    finalCta: true,       // تعطيل القسم القديم مؤقتًا لتجنب التكرار
     faq: true,
     footer: true,
     smartAmbassador: true,
