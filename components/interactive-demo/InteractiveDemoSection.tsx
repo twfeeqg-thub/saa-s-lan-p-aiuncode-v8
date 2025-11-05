@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { config } from "@/src/config/landingPageConfig"
 
-// 1. استيراد المكونات الفرعية - تم تفعيل المكون الثالث
+// --- بداية التعديل ---
+// 1. استيراد المكون الجديد
 import { FakeConversation } from "./FakeConversation"
 import { ScenarioSelector } from "./ScenarioSelector"
 import { CustomizationForm } from "./CustomizationForm"
-// import { BuildingScreen } from "./BuildingScreen"
+import { BuildingScreen } from "./BuildingScreen"
 // import { DemoChatWindow } from "./DemoChatWindow"
+// --- نهاية التعديل ---
 
 // تعريف أنواع المراحل لضمان عدم الوقوع في أخطاء إملائية
 type DemoStage = "fakeConversation" | "scenarioSelection" | "customization" | "building" | "finalChat"
@@ -45,14 +47,11 @@ export function InteractiveDemoSection() {
         return <ScenarioSelector setStage={setStage} updateUserSelection={updateUserSelection} />
 
       case "customization":
-        // --- بداية التعديل ---
-        // الآن نعرض المكونين معًا في هذه المرحلة
         return (
           <div className="space-y-10">
             <ScenarioSelector 
               setStage={setStage} 
               updateUserSelection={updateUserSelection} 
-              // تمرير الاختيار الحالي لإبقاء الزر مضاءً
               initialSelection={userSelections.scenario} 
             />
             <CustomizationForm 
@@ -61,11 +60,13 @@ export function InteractiveDemoSection() {
             />
           </div>
         )
-        // --- نهاية التعديل ---
 
+      // --- بداية التعديل ---
+      // 2. استبدال العنصر النائب بالمكون الحقيقي
       case "building":
-        // return <BuildingScreen setStage={setStage} />
-        return <div>مكون شاشة البناء (قيد الإنشاء)</div> // عنصر نائب مؤقت
+        return <BuildingScreen setStage={setStage} />
+      // --- نهاية التعديل ---
+        
       case "finalChat":
         // return <DemoChatWindow userSelections={userSelections} />
         return <div>مكون نافذة المحادثة النهائية (قيد الإنشاء)</div> // عنصر نائب مؤقت
