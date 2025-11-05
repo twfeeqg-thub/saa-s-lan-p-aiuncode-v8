@@ -4,27 +4,28 @@ import { useState } from "react"
 import { config } from "@/src/config/landingPageConfig"
 
 // --- بداية التعديل ---
-// 1. استيراد المكون الجديد
+// 1. استيراد كل المكونات، بما في ذلك المكون النهائي
 import { FakeConversation } from "./FakeConversation"
 import { ScenarioSelector } from "./ScenarioSelector"
 import { CustomizationForm } from "./CustomizationForm"
 import { BuildingScreen } from "./BuildingScreen"
-// import { DemoChatWindow } from "./DemoChatWindow"
+import { DemoChatWindow } from "./DemoChatWindow" // <-- تم تفعيل الاستيراد الأخير
 // --- نهاية التعديل ---
 
 // تعريف أنواع المراحل لضمان عدم الوقوع في أخطاء إملائية
 type DemoStage = "fakeConversation" | "scenarioSelection" | "customization" | "building" | "finalChat"
 
 export function InteractiveDemoSection() {
-  // 2. إدارة الحالة الرئيسية
+  // إدارة الحالة الرئيسية
   const [currentStage, setCurrentStage] = useState<DemoStage>("fakeConversation")
 
-  // 3. إدارة بيانات المستخدم
+  // إدارة بيانات المستخدم
   const [userSelections, setUserSelections] = useState({
     scenario: "",
     businessName: "",
     agentRole: "",
-    color: "blue", // لون افتراضي
+    color: "blue",
+    additionalInfo: "", // تمت إضافة هذا الحقل
   })
 
   // دالة لتغيير المرحلة
@@ -37,7 +38,7 @@ export function InteractiveDemoSection() {
     setUserSelections(prev => ({ ...prev, [key]: value }))
   }
 
-  // 4. العرض الشرطي
+  // العرض الشرطي
   const renderCurrentStage = () => {
     switch (currentStage) {
       case "fakeConversation":
@@ -61,22 +62,25 @@ export function InteractiveDemoSection() {
           </div>
         )
 
-      // --- بداية التعديل ---
-      // 2. استبدال العنصر النائب بالمكون الحقيقي
       case "building":
         return <BuildingScreen setStage={setStage} />
+        
+      // --- بداية التعديل ---
+      // 2. استبدال العنصر النائب بالمكون الحقيقي والنهائي
+      case "finalChat":
+        return <DemoChatWindow userSelections={userSelections} />
       // --- نهاية التعديل ---
         
-      case "finalChat":
-        // return <DemoChatWindow userSelections={userSelections} />
-        return <div>مكون نافذة المحادثة النهائية (قيد الإنشاء)</div> // عنصر نائب مؤقت
       default:
         return <div>مرحلة غير معروفة</div>
     }
   }
 
   return (
-    <section className="py-12 md:py-20 bg-gray-50">
+    <section 
+      id="interactive-demo" // إضافة ID للقسم لتسهيل الوصول إليه
+      className="py-12 md:py-20 bg-gray-50 min-h-screen flex items-center" // تعديل التصميم ليأخذ مساحة أكبر
+    >
       <div className="container mx-auto px-4">
         {renderCurrentStage()}
       </div>
