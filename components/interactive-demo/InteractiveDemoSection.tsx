@@ -1,46 +1,88 @@
-
 "use client"
 
-// تم تعطيل كل حالات useState مؤقتًا للاختبار
-// import { useState } from "react"
-// import { config } from "@/src/config/landingPageConfig"
+import { useState } from "react"
+import { config } from "@/src/config/landingPageConfig"
 
-// تم تعطيل استيراد كل المكونات الأخرى مؤقتًا
-// import { FakeConversation } from "./FakeConversation"
-// import { ScenarioSelector } from "./ScenarioSelector"
-// import { CustomizationForm } from "./CustomizationForm"
-// import { BuildingScreen } from "./BuildingScreen"
+// --- بداية التعديل ---
+// 1. استيراد كل المكونات، بما في ذلك المكون النهائي
+import { FakeConversation } from "./FakeConversation"
+import { ScenarioSelector } from "./ScenarioSelector"
+import { CustomizationForm } from "./CustomizationForm"
+import { BuildingScreen } from "./BuildingScreen"
+import { DemoChatWindow } from "./DemoChatWindow" // <-- تم تفعيل الاستيراد الأخير
+// --- نهاية التعديل ---
 
-// 1. الإبقاء فقط على استيراد المكون الذي نريد اختباره
-import { DemoChatWindow } from "./DemoChatWindow"
-
-// تم تعطيل كل شيء آخر مؤقتًا
-// type DemoStage = "fakeConversation" | "scenarioSelection" | "customization" | "building" | "finalChat"
+// تعريف أنواع المراحل لضمان عدم الوقوع في أخطاء إملائية
+type DemoStage = "fakeConversation" | "scenarioSelection" | "customization" | "building" | "finalChat"
 
 export function InteractiveDemoSection() {
-  // تم تعطيل كل منطق إدارة الحالة والتنقل
-  // const [currentStage, setCurrentStage] = useState<DemoStage>("fakeConversation")
-  // const [userSelections, setUserSelections] = useState({ ... })
-  // const setStage = (stage: DemoStage) => { ... }
-  // const updateUserSelection = (key: string, value: string) => { ... }
-  // const renderCurrentStage = () => { ... }
+  // إدارة الحالة الرئيسية
+  const [currentStage, setCurrentStage] = useState<DemoStage>("fakeConversation")
 
-  // 2. إجبار المكون على عرض DemoChatWindow مباشرة مع بيانات وهمية ثابتة
+  // إدارة بيانات المستخدم
+  const [userSelections, setUserSelections] = useState({
+    scenario: "",
+    businessName: "",
+    agentRole: "",
+    color: "blue",
+    additionalInfo: "", // تمت إضافة هذا الحقل
+  })
+
+  // دالة لتغيير المرحلة
+  const setStage = (stage: DemoStage) => {
+    setCurrentStage(stage)
+  }
+
+  // دالة لتحديث اختيارات المستخدم
+  const updateUserSelection = (key: string, value: string) => {
+    setUserSelections(prev => ({ ...prev, [key]: value }))
+  }
+
+  // العرض الشرطي
+  const renderCurrentStage = () => {
+    switch (currentStage) {
+      case "fakeConversation":
+        return <FakeConversation setStage={setStage} />
+      
+      case "scenarioSelection":
+        return <ScenarioSelector setStage={setStage} updateUserSelection={updateUserSelection} />
+
+      case "customization":
+        return (
+          <div className="space-y-10">
+            <ScenarioSelector 
+              setStage={setStage} 
+              updateUserSelection={updateUserSelection} 
+              initialSelection={userSelections.scenario} 
+            />
+            <CustomizationForm 
+              setStage={setStage} 
+              updateUserSelection={updateUserSelection} 
+            />
+          </div>
+        )
+
+      case "building":
+        return <BuildingScreen setStage={setStage} />
+        
+      // --- بداية التعديل ---
+      // 2. استبدال العنصر النائب بالمكون الحقيقي والنهائي
+      case "finalChat":
+        return <DemoChatWindow userSelections={userSelections} />
+      // --- نهاية التعديل ---
+        
+      default:
+        return <div>مرحلة غير معروفة</div>
+    }
+  }
+
   return (
     <section 
-      id="interactive-demo"
-      className="py-12 md:py-20 bg-gray-50 min-h-screen flex items-center"
+      id="interactive-demo" // إضافة ID للقسم لتسهيل الوصول إليه
+      className="py-12 md:py-20 bg-gray-50 min-h-screen flex items-center" // تعديل التصميم ليأخذ مساحة أكبر
     >
       <div className="container mx-auto px-4">
-        <p className="text-center text-red-500 font-bold mb-4">--- وضع الاختبار التشخيصي مفعل ---</p>
-        <DemoChatWindow 
-          userSelections={{
-            businessName: "متجر الاختبار التشخيصي",
-            agentRole: "store-manager",
-            color: "purple",
-            additionalInfo: "هذه بيانات وهمية للاختبار"
-          }} 
-        />
+        {renderCurrentStage()}
       </div>
     </section>
   )
