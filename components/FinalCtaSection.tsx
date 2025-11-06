@@ -8,10 +8,14 @@ export function FinalCtaSection() {
         {/* العنوان */}
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-balance">{config.finalCta.title}</h2>
 
-        {/* iframe للعرض التفاعلي */}
+        {/* --- بداية الحذف --- */}
+        {/* تم حذف العنصر النائب بالكامل من هنا */}
+        {/* 
         <div className="mb-12">
           <VisualPlaceholder text="iframe للعرض التفاعلي" className="w-full mx-auto max-w-4xl" aspectRatio="16/9" />
         </div>
+        */}
+        {/* --- نهاية الحذف --- */}
 
         {/* خطط الأسعار */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
