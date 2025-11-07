@@ -6,7 +6,11 @@ import { FinalCtaSection } from "@/components/FinalCtaSection"
 import { SmartFAQSection } from "@/components/SmartFAQSection"
 import { Footer } from "@/components/Footer"
 import { SmartAmbassador } from "@/components/SmartAmbassador"
-import { InteractiveDemoSection } from "@/components/interactive-demo/InteractiveDemoSection"
+// --- بداية التعديل ---
+// 1. تم استيراد المكون الجديد
+import { SmartAgentScenarios } from "@/components/SmartAgentScenarios" 
+// 2. تم حذف استيراد المكون القديم `InteractiveDemoSection`
+// --- نهاية التعديل ---
 
 export default function Home() {
   return (
@@ -20,10 +24,12 @@ export default function Home() {
       {/* Solution Section */}
       {config.sections.solution && <SolutionSection />}
 
-      {/* القسم التفاعلي الجديد */}
-      {config.sections.interactiveDemo && <InteractiveDemoSection />}
+      {/* --- بداية التعديل --- */}
+      {/* 3. تم استبدال المكون القديم بالجديد مع استخدام المؤشر الصحيح من ملف الإعدادات */}
+      {config.sections.smartAgentScenarios && <SmartAgentScenarios />}
+      {/* --- نهاية التعديل --- */}
 
-      {/* القسم القديم (سيتم إخفاؤه بناءً على ملف الإعدادات) */}
+      {/* قسم الدعوة النهائية (كان اسمه القسم القديم في تعليقك) */}
       {config.sections.finalCta && <FinalCtaSection />}
 
       {/* Smart FAQ Section */}
@@ -35,15 +41,9 @@ export default function Home() {
       {/* Smart Ambassador */}
       {config.sections.smartAmbassador && <SmartAmbassador />}
 
-      {/* --- بداية الإضافة الجديدة لحل مشكلة القفز --- */}
-      {/* 
-        هذا العنصر يعمل كمساحة فارغة في أسفل الصفحة.
-        وظيفته هي إعطاء الصفحة ارتفاعًا إضافيًا لمنع المتصفح
-        من القفز بشكل غير متوقع عند تحميل المكونات الديناميكية.
-        الارتفاع (h-96) يمكن تعديله إذا لزم الأمر، لكنه عادة ما يكون كافيًا.
-      */}
-      <div className="h-96" />
-      {/* --- نهاية الإضافة الجديدة --- */}
+      {/* --- بداية التعديل --- */}
+      {/* 4. تم حذف العنصر المؤقت الذي كان يمنع قفز الصفحة، لم نعد بحاجة إليه */}
+      {/* --- نهاية التعديل --- */}
     </main>
   )
 }
