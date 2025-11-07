@@ -3,19 +3,7 @@
 import { useState, useEffect } from 'react';
 import { config } from '@/src/config/landingPageConfig';
 
-// --- بداية التعديل ---
-// 1. تم حذف استيراد مكتبة react-icons بالكامل لحل مشاكل البناء.
-// --- نهاية التعديل ---
-
-// استيراد أنواع البيانات لضمان التوافق الكامل
-type Scenario = typeof config.smartAgentScenarios.scenarios[0];
-type AgentRole = Scenario['agentRoles'][0];
-type ChatMessage = AgentRole['chat'][0];
-
-// --- بداية التعديل ---
-// 2. تعريف أيقونات SVG مباشرة داخل المكون لتجنب الاعتماد على مكتبات خارجية.
-
-// أيقونة البوت (الروبوت)
+// الأيقونات المضمنة كـ SVG
 const BotIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
     <path d="M12 8V4H8" />
@@ -27,17 +15,18 @@ const BotIcon = () => (
   </svg>
 );
 
-// أيقونة المستخدم
 const UserIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
     <circle cx="12" cy="7" r="4" />
   </svg>
 );
-// --- نهاية التعديل ---
 
+// استيراد أنواع البيانات
+type Scenario = typeof config.smartAgentScenarios.scenarios[0];
+type AgentRole = Scenario['agentRoles'][0];
+type ChatMessage = AgentRole['chat'][0];
 
-// تعريف واجهة الخصائص (Props) التي سيستقبلها المكون
 interface FakeScenarioChatProps {
   scenario: Scenario;
 }
@@ -45,13 +34,28 @@ interface FakeScenarioChatProps {
 /**
  * FakeScenarioChat Component
  * ... (التعليقات السابقة تبقى كما هي) ...
+ * 8. تمت ترقيته ليفهم خاصية `enabled` للأدوار ولفلترة الأدوار المعطلة.
+ * 9. تم تكبير حجم خط المحادثة لتحسين القراءة.
  */
 export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
   const { finalActions } = config.smartAgentScenarios;
-  const [activeRole, setActiveRole] = useState<AgentRole>(scenario.agentRoles[0]);
+
+  // --- بداية التعديل ---
+  // 1. نقوم بفلترة الأدوار الوظيفية لنحصل فقط على المفعّلة منها
+  const enabledRoles = scenario.agentRoles.filter(role => role.enabled);
+  // --- نهاية التعديل ---
+
+  // --- بداية التعديل ---
+  // 2. نضبط الحالة الأولية لتكون أول دور "مفعّل" في القائمة
+  const [activeRole, setActiveRole] = useState<AgentRole | undefined>(enabledRoles[0]);
+  // --- نهاية التعديل ---
 
   useEffect(() => {
-    setActiveRole(scenario.agentRoles[0]);
+    // --- بداية التعديل ---
+    // 3. نضمن تحديث الدور النشط ليكون أول دور "مفعّل" عند تغيير السيناريو
+    const firstEnabledRole = scenario.agentRoles.find(role => role.enabled);
+    setActiveRole(firstEnabledRole);
+    // --- نهاية التعديل ---
   }, [scenario]);
 
   const handleRoleClick = (role: AgentRole) => {
@@ -64,13 +68,13 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
         return (
           <div key={index} className="flex items-start gap-3 my-4 animate-fade-in">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              {/* --- بداية التعديل --- */}
-              {/* 3. استخدام مكون أيقونة الـ SVG المحلي */}
               <BotIcon />
-              {/* --- نهاية التعديل --- */}
             </div>
             <div className="bg-gray-100 rounded-lg p-3 max-w-xs md:max-w-md">
-              <p className="text-sm text-gray-800 whitespace-pre-wrap">{message.text}</p>
+              {/* --- بداية التعديل --- */}
+              {/* 4. تكبير حجم الخط */}
+              <p className="text-base text-gray-800 whitespace-pre-wrap">{message.text}</p>
+              {/* --- نهاية التعديل --- */}
             </div>
           </div>
         );
@@ -78,13 +82,13 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
         return (
           <div key={index} className="flex items-start gap-3 my-4 justify-end animate-fade-in">
             <div className="bg-[var(--color-primary)] text-white rounded-lg p-3 max-w-xs md:max-w-md">
-              <p className="text-sm">{message.text}</p>
+              {/* --- بداية التعديل --- */}
+              {/* 4. تكبير حجم الخط */}
+              <p className="text-base">{message.text}</p>
+              {/* --- نهاية التعديل --- */}
             </div>
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              {/* --- بداية التعديل --- */}
-              {/* 3. استخدام مكون أيقونة الـ SVG المحلي */}
               <UserIcon />
-              {/* --- نهاية التعديل --- */}
             </div>
           </div>
         );
@@ -102,13 +106,20 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
         return null;
     }
   };
+  
+  // إذا لم يكن هناك دور نشط (لأن كل الأدوار معطلة مثلاً)، لا نعرض شيئاً
+  if (!activeRole) {
+    return <div className="p-4 text-center text-gray-500">لا توجد أدوار مفعّلة لهذا السيناريو.</div>;
+  }
 
   return (
     <div className="w-full h-full flex flex-col bg-white rounded-xl">
       {/* 1. شريط أزرار الأدوار الوظيفية */}
       <div className="p-3 border-b border-gray-200">
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          {scenario.agentRoles.map((role) => (
+          {/* --- بداية التعديل --- */}
+          {/* 5. نعرض أزرار الأدوار المفعّلة فقط */}
+          {enabledRoles.map((role) => (
             <button
               key={role.id}
               onClick={() => handleRoleClick(role)}
@@ -124,6 +135,7 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
               {role.name}
             </button>
           ))}
+          {/* --- نهاية التعديل --- */}
         </div>
       </div>
 
