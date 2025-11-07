@@ -195,7 +195,9 @@ export const config: ConfigType = {
         thumbnailUrl: "/images/thumbnails/barber-shop-chat.png",
         agentRoles: [
           { id: "secretary", name: "👨‍🔧 سكرتيرك", enabled: true, chat: [{ type: "bot", text: "محادثة سكرتير الصالون..." }] },
-          { id_customer-service: "customer-service", name: "📞 خدمة العملاء", enabled: true, chat: [{ type: "bot", text: "محادثة خدمة عملاء الصالون..." }] },
+          // --- بداية التصحيح ---
+          { id: "customer-service", name: "📞 خدمة العملاء", enabled: true, chat: [{ type: "bot", text: "محادثة خدمة عملاء الصالون..." }] },
+          // --- نهاية التصحيح ---
           { id: "store-manager", name: "🛍️ مدير متجرك", enabled: true, chat: [{ type: "bot", text: "محادثة مدير الصالون..." }] },
           { id: "marketer", name: "📣 مسوقك الذكي", enabled: true, chat: [{ type: "bot", text: "محادثة مسوق الصالون..." }] },
           { id: "data-analyst", name: "📊 محلل بياناتك", enabled: false, chat: [{ type: "bot", text: "محادثة محلل بيانات الصالون..." }] },
