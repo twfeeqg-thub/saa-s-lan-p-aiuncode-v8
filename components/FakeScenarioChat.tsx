@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { config } from '@/src/config/landingPageConfig';
+
 // --- بداية التعديل ---
-// تم تغيير طريقة استيراد الأيقونات لحل مشكلة البناء على Vercel
-// بدلاً من 'react-icons/fi'، نستورد من 'react-icons/fa' التي تكون عادةً أكثر استقرارًا في حزم البناء
-import { FaUser, FaRobot } from 'react-icons/fa'; 
+// 1. تم حذف استيراد مكتبة react-icons بالكامل لحل مشاكل البناء.
 // --- نهاية التعديل ---
 
 // استيراد أنواع البيانات لضمان التوافق الكامل
@@ -13,9 +12,34 @@ type Scenario = typeof config.smartAgentScenarios.scenarios[0];
 type AgentRole = Scenario['agentRoles'][0];
 type ChatMessage = AgentRole['chat'][0];
 
+// --- بداية التعديل ---
+// 2. تعريف أيقونات SVG مباشرة داخل المكون لتجنب الاعتماد على مكتبات خارجية.
+
+// أيقونة البوت (الروبوت)
+const BotIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
+    <path d="M12 8V4H8" />
+    <rect width="16" height="12" x="4" y="8" rx="2" />
+    <path d="M2 14h2" />
+    <path d="M20 14h2" />
+    <path d="M15 13v2" />
+    <path d="M9 13v2" />
+  </svg>
+);
+
+// أيقونة المستخدم
+const UserIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+// --- نهاية التعديل ---
+
+
 // تعريف واجهة الخصائص (Props) التي سيستقبلها المكون
 interface FakeScenarioChatProps {
-  scenario: Scenario; // المكون يستقبل بيانات السيناريو النشط بالكامل
+  scenario: Scenario;
 }
 
 /**
@@ -23,23 +47,17 @@ interface FakeScenarioChatProps {
  * ... (التعليقات السابقة تبقى كما هي) ...
  */
 export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
-  // استخراج نصوص الأزرار النهائية من ملف الإعدادات
   const { finalActions } = config.smartAgentScenarios;
-
-  // حالة لتخزين الدور النشط حاليًا (مثلاً: سكرتير، مسوق)
   const [activeRole, setActiveRole] = useState<AgentRole>(scenario.agentRoles[0]);
 
-  // هذا التأثير (Effect) يضمن تحديث الدور النشط إذا تغير السيناريو نفسه
   useEffect(() => {
     setActiveRole(scenario.agentRoles[0]);
   }, [scenario]);
 
-  // دالة لمعالجة النقر على زر دور وظيفي مختلف
   const handleRoleClick = (role: AgentRole) => {
     setActiveRole(role);
   };
 
-  // دالة لتنسيق وعرض كل رسالة في المحادثة
   const renderMessage = (message: ChatMessage, index: number) => {
     switch (message.type) {
       case 'bot':
@@ -47,7 +65,8 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
           <div key={index} className="flex items-start gap-3 my-4 animate-fade-in">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
               {/* --- بداية التعديل --- */}
-              <FaRobot className="text-gray-600" /> {/* تم تغيير الأيقونة إلى FaRobot */}
+              {/* 3. استخدام مكون أيقونة الـ SVG المحلي */}
+              <BotIcon />
               {/* --- نهاية التعديل --- */}
             </div>
             <div className="bg-gray-100 rounded-lg p-3 max-w-xs md:max-w-md">
@@ -63,7 +82,8 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
             </div>
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
               {/* --- بداية التعديل --- */}
-              <FaUser className="text-gray-600" /> {/* تم تغيير الأيقونة إلى FaUser */}
+              {/* 3. استخدام مكون أيقونة الـ SVG المحلي */}
+              <UserIcon />
               {/* --- نهاية التعديل --- */}
             </div>
           </div>
