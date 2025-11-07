@@ -3,10 +3,7 @@
 import { useState, useEffect } from 'react';
 import { config } from '@/src/config/landingPageConfig';
 import Image from 'next/image';
-// --- بداية التعديل ---
-// 1. استيراد مكون المحادثة الوهمية الذي أنشأناه
 import { FakeScenarioChat } from './FakeScenarioChat'; 
-// --- نهاية التعديل ---
 
 // استيراد أنواع البيانات من ملف الإعدادات لضمان التوافق
 type Scenario = typeof config.smartAgentScenarios.scenarios[0];
@@ -14,37 +11,38 @@ type Scenario = typeof config.smartAgentScenarios.scenarios[0];
 /**
  * SmartAgentScenarios Component
  * ... (التعليقات السابقة تبقى كما هي) ...
- * 7. أصبح الآن مسؤولاً عن إظهار مكون المحادثة الوهمية عند طلب المستخدم.
+ * 8. تمت ترقيته ليفهم خاصية `enabled` ويقوم بفلترة السيناريوهات المعطلة.
  */
 export function SmartAgentScenarios() {
-  // استخراج البيانات من ملف الإعدادات المركزي لتسهيل القراءة
   const { title, subtitle, scenarios } = config.smartAgentScenarios;
 
-  // حالة لتخزين السيناريو الذي تم اختياره حاليًا
-  const [activeScenario, setActiveScenario] = useState<Scenario | null>(null);
-
   // --- بداية التعديل ---
-  // 2. حالة جديدة لتحديد ما إذا كنا سنعرض المحادثة التفاعلية أم الصورة المصغرة
-  const [showChat, setShowChat] = useState(false);
+  // 1. نقوم بفلترة السيناريوهات لنحصل فقط على المفعّلة منها
+  const enabledScenarios = scenarios.filter(scenario => scenario.enabled);
   // --- نهاية التعديل ---
 
-  // هذا التأثير (Effect) يعمل مرة واحدة فقط عند تحميل المكون لأول مرة
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * scenarios.length);
-    const randomScenario = scenarios[randomIndex];
-    setActiveScenario(randomScenario);
-    // عند التحميل الأول، نعرض دائمًا الصورة المصغرة
-    setShowChat(false); 
-  }, [scenarios]);
+  const [activeScenario, setActiveScenario] = useState<Scenario | null>(null);
+  const [showChat, setShowChat] = useState(false);
 
-  // دالة لمعالجة النقر على أي زر سيناريو
+  useEffect(() => {
+    // --- بداية التعديل ---
+    // 2. نتأكد من وجود سيناريوهات مفعّلة قبل محاولة الاختيار العشوائي
+    if (enabledScenarios.length > 0) {
+      // نختار عشوائياً فقط من قائمة السيناريوهات المفعّلة
+      const randomIndex = Math.floor(Math.random() * enabledScenarios.length);
+      const randomScenario = enabledScenarios[randomIndex];
+      setActiveScenario(randomScenario);
+    }
+    // --- نهاية التعديل ---
+    setShowChat(false); 
+  }, [scenarios]); // نبقي الاعتماد على `scenarios` الأصلي لإعادة التشغيل عند أي تغيير في الإعدادات
+
   const handleScenarioClick = (scenario: Scenario) => {
     setActiveScenario(scenario);
-    // عند تغيير السيناريو، نعود دائمًا إلى عرض الصورة المصغرة أولاً
     setShowChat(false); 
   };
 
-  // إذا لم يتم تحميل السيناريوهات بعد، نعرض لا شيء لتجنب الأخطاء
+  // إذا لم يتم تحميل أي سيناريو مفعّل، لا نعرض القسم بأكمله
   if (!activeScenario) {
     return null;
   }
@@ -53,7 +51,6 @@ export function SmartAgentScenarios() {
     <section className="py-16 md:py-24 bg-gray-50 text-center">
       <div className="container mx-auto px-4">
         
-        {/* 1. العناوين الرئيسية للقسم */}
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
           {title}
         </h2>
@@ -61,9 +58,10 @@ export function SmartAgentScenarios() {
           {subtitle}
         </p>
 
-        {/* 2. شريط أزرار سيناريوهات الأعمال */}
+        {/* --- بداية التعديل --- */}
+        {/* 3. نعرض أزرار السيناريوهات المفعّلة فقط */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {scenarios.map((scenario) => (
+          {enabledScenarios.map((scenario) => (
             <button
               key={scenario.id}
               onClick={() => handleScenarioClick(scenario)}
@@ -82,21 +80,13 @@ export function SmartAgentScenarios() {
             </button>
           ))}
         </div>
+        {/* --- نهاية التعديل --- */}
 
-        {/* --- بداية التعديل --- */}
-        {/* 3. حاوية العرض الديناميكية (إما صورة أو محادثة) */}
         <div className="w-full max-w-4xl mx-auto min-h-[550px] md:min-h-[600px] bg-white rounded-xl shadow-2xl">
-          {/* 
-            نستخدم `key` لإجبار React على إعادة إنشاء المكونات عند تغيير السيناريو،
-            مما يعطينا تأثير الانتقال (fade-in) مجانًا.
-          */}
           <div key={activeScenario.id} className="animate-fade-in h-full">
-            {/* نستخدم الشرط `showChat` لتحديد ماذا سنعرض */}
             {showChat ? (
-              // 4. في حالة `true`، نعرض المحادثة التفاعلية ونمرر لها البيانات
               <FakeScenarioChat scenario={activeScenario} />
             ) : (
-              // في حالة `false`، نعرض الصورة المصغرة مع زر التفعيل
               <div className="p-4 flex flex-col items-center justify-center h-full">
                 <p className="text-sm text-gray-500 mb-4">
                   مثال حي لمحادثة في سيناريو: <strong>{activeScenario.name}</strong>
@@ -119,7 +109,6 @@ export function SmartAgentScenarios() {
             )}
           </div>
         </div>
-        {/* --- نهاية التعديل --- */}
 
       </div>
     </section>
