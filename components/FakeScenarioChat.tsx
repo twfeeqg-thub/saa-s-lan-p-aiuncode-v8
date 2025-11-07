@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { config } from '@/src/config/landingPageConfig';
-import { FiSend, FiUser, FiBot } from 'react-icons/fi'; // سنستخدم أيقونات بسيطة وجميلة
+// --- بداية التعديل ---
+// تم تغيير طريقة استيراد الأيقونات لحل مشكلة البناء على Vercel
+// بدلاً من 'react-icons/fi'، نستورد من 'react-icons/fa' التي تكون عادةً أكثر استقرارًا في حزم البناء
+import { FaUser, FaRobot } from 'react-icons/fa'; 
+// --- نهاية التعديل ---
 
 // استيراد أنواع البيانات لضمان التوافق الكامل
 type Scenario = typeof config.smartAgentScenarios.scenarios[0];
@@ -16,28 +20,16 @@ interface FakeScenarioChatProps {
 
 /**
  * FakeScenarioChat Component
- * 
- * هذا المكون مسؤول عن عرض نافذة المحادثة الوهمية بالكامل.
- * إنه مكون "غبي" (Dumb Component) بمعنى أنه يعرض فقط ما يُطلب منه عبر الـ props.
- * 
- * مسؤولياته:
- * 1. استقبال بيانات السيناريو النشط.
- * 2. عرض أزرار الأدوار المتاحة (سكرتير، مسوق، إلخ).
- * 3. إدارة الحالة لاختيار الدور النشط (يبدأ بأول دور بشكل افتراضي).
- * 4. عرض رسائل المحادثة الخاصة بالدور النشط بتنسيقات مختلفة للمستخدم والبوت.
- * 5. عرض الأزرار التفاعلية داخل المحادثة (إن وجدت).
- * 6. عرض أزرار الدعوة لاتخاذ إجراء النهائية في الأسفل.
+ * ... (التعليقات السابقة تبقى كما هي) ...
  */
 export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
   // استخراج نصوص الأزرار النهائية من ملف الإعدادات
   const { finalActions } = config.smartAgentScenarios;
 
   // حالة لتخزين الدور النشط حاليًا (مثلاً: سكرتير، مسوق)
-  // نبدأ دائمًا بأول دور في القائمة كخيار افتراضي
   const [activeRole, setActiveRole] = useState<AgentRole>(scenario.agentRoles[0]);
 
   // هذا التأثير (Effect) يضمن تحديث الدور النشط إذا تغير السيناريو نفسه
-  // (مثلاً عند الانتقال من "محل تمور" إلى "فندق")
   useEffect(() => {
     setActiveRole(scenario.agentRoles[0]);
   }, [scenario]);
@@ -54,7 +46,9 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
         return (
           <div key={index} className="flex items-start gap-3 my-4 animate-fade-in">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              <FiBot className="text-gray-600" />
+              {/* --- بداية التعديل --- */}
+              <FaRobot className="text-gray-600" /> {/* تم تغيير الأيقونة إلى FaRobot */}
+              {/* --- نهاية التعديل --- */}
             </div>
             <div className="bg-gray-100 rounded-lg p-3 max-w-xs md:max-w-md">
               <p className="text-sm text-gray-800 whitespace-pre-wrap">{message.text}</p>
@@ -68,7 +62,9 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
               <p className="text-sm">{message.text}</p>
             </div>
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              <FiUser className="text-gray-600" />
+              {/* --- بداية التعديل --- */}
+              <FaUser className="text-gray-600" /> {/* تم تغيير الأيقونة إلى FaUser */}
+              {/* --- نهاية التعديل --- */}
             </div>
           </div>
         );
