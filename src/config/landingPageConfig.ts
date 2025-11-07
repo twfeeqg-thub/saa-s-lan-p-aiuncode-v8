@@ -6,7 +6,7 @@ interface ConfigType {
     hero: boolean;
     painPoints: boolean;
     solution: boolean;
-    smartAgentScenarios: boolean; // تم تغيير الاسم إلى القسم الجديد
+    smartAgentScenarios: boolean;
     finalCta: boolean;
     faq: boolean;
     footer: boolean;
@@ -16,7 +16,7 @@ interface ConfigType {
   hero: any;
   painPoints: any;
   solution: any;
-  smartAgentScenarios: any; // تم تغيير الاسم هنا أيضًا
+  smartAgentScenarios: any;
   finalCta: any;
   faq: any;
   footer: any;
@@ -29,7 +29,7 @@ export const config: ConfigType = {
     hero: true,
     painPoints: true,
     solution: true,
-    smartAgentScenarios: true, // تفعيل القسم الجديد الذي نعمل عليه
+    smartAgentScenarios: true,
     finalCta: true,
     faq: true,
     footer: true,
@@ -115,29 +115,49 @@ export const config: ConfigType = {
   // =================================================================
   smartAgentScenarios: {
     // --- 1. العناوين الرئيسية للقسم ---
-    // هذه هي النصوص التي ستظهر في أعلى القسم لتجذب انتباه الزائر.
     title: "شف وكيلنا الذكي ويش يمكن يسوي بدالك",
     subtitle: "اضغط على أي بزنس تحت وشوف بنفسك كيف يرد على العملاء ويزيد مبيعاتك!",
 
     // --- 2. قائمة سيناريوهات الأعمال ---
-    // كل "سيناريو" يمثل زر سيضغط عليه المستخدم.
-    // `id`: معرف فريد لكل سيناريو.
-    // `name`: النص الذي يظهر على الزر.
-    // `thumbnailUrl`: رابط الصورة المصغرة التي تظهر تحت الأزرار.
-    // `agentRoles`: مصفوفة تحتوي على الأدوار المختلفة للوكيل داخل هذا السيناريو.
+    // تم تعبئة المصفوفة بالسيناريوهات الأساسية.
+    // `thumbnailUrl` هو مسار الصورة المصغرة التي ستظهر لكل سيناريو.
     scenarios: [
-      // سيتم تعبئة هذه المصفوفة بالبيانات في الخطوة التالية.
-      // مثال على الهيكل الذي سنبنيه:
-      /*
       {
         id: "dates-shop",
         name: "محل تمور",
-        thumbnailUrl: "/images/thumbnails/dates-shop.png",
-        agentRoles: [
-          // ... بيانات الأدوار والمحادثات هنا
-        ]
+        thumbnailUrl: "/images/thumbnails/dates-shop-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
       },
-      */
+      {
+        id: "hotel",
+        name: "فندق",
+        thumbnailUrl: "/images/thumbnails/hotel-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
+      },
+      {
+        id: "real-estate",
+        name: "مكتب عقار",
+        thumbnailUrl: "/images/thumbnails/real-estate-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
+      },
+      {
+        id: "clinic",
+        name: "عيادة",
+        thumbnailUrl: "/images/thumbnails/clinic-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
+      },
+      {
+        id: "restaurant",
+        name: "مطعم",
+        thumbnailUrl: "/images/thumbnails/restaurant-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
+      },
+      {
+        id: "perfumes-shop",
+        name: "متجر عطور",
+        thumbnailUrl: "/images/thumbnails/perfumes-shop-chat.png",
+        agentRoles: [ /* سيتم تعبئتها في الخطوة 3 */ ]
+      },
     ],
   },
   // =================================================================
