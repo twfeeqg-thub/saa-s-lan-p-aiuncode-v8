@@ -1,16 +1,19 @@
 // ملف الإعدادات المركزي لصفحة الهبوط
-// يحتوي على جميع المحتوى والبيانات للصفحة
+// تم التحديث ليعكس البنية الصحيحة للملفات ويضيف جميع القطاعات
 
 // =================================================================
-// == استيراد بيانات السيناريوهات من ملفات خارجية                ==
+// == استيراد بيانات السيناريوهات من ملفات خارجية (بنية محدثة)   ==
 // =================================================================
 import datesShopChat from '../data/chat-scenarios/dates-shop-chat';
 import hotelChat from '../data/chat-scenarios/hotel-chat';
 import clinicChat from '../data/chat-scenarios/clinic-chat';
 import realEstateChat from '../data/chat-scenarios/real-estate-chat';
-import carAgencyChat from '../data/chat-scenarios/car-agency-chat'; // يستخدم محتوى صالون الحلاقة مؤقتاً
 import restaurantChat from '../data/chat-scenarios/restaurant-chat';
-import gymChat from '../data/chat-scenarios/gym-chat'; // يستخدم محتوى مواد البناء مؤقتاً
+// -- ملفات جديدة ومنظمة --
+import buildingMaterialsChat from '../data/chat-scenarios/building-materials-chat';
+import barberShopChat from '../data/chat-scenarios/barber-shop-chat';
+import carAgencyChat from '../data/chat-scenarios/car-agency-chat';
+import gymChat from '../data/chat-scenarios/gym-chat';
 
 
 interface ConfigType {
@@ -36,7 +39,6 @@ interface ConfigType {
 }
 
 export const config: ConfigType = {
-  // التحكم في إظهار وإخفاء الأقسام
   sections: {
     hero: true,
     painPoints: true,
@@ -48,7 +50,6 @@ export const config: ConfigType = {
     smartAmbassador: true,
   },
 
-  // ... (الأقسام الأخرى تبقى كما هي) ...
   header: {
     logo: {
       tagline: "ذكاء صناعي بلا تعقيد",
@@ -116,73 +117,83 @@ export const config: ConfigType = {
     ],
   },
 
-  // =================================================================
-  // == مرحلة Project Phoenix: بناء القسم التفاعلي الجديد (نسخة مطورة) ==
-  // =================================================================
   smartAgentScenarios: {
     title: "شف وكيلنا الذكي ويش يمكن يسوي بدالك",
     subtitle: "اضغط على أي بزنس تحت وشوف بنفسك كيف يرد على العملاء ويزيد مبيعاتك!",
     finalActions: {
       realCta: "اطلب وكيلك طال عمرك",
     },
+    // =================================================================
+    // == بداية التعديل: تم تحديث القائمة لتعكس كل القطاعات بشكل صحيح ==
+    // =================================================================
     scenarios: [
       {
         id: "dates-shop",
         name: "محل تمور",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/dates-shop-chat.png",
-        agentRoles: datesShopChat // <-- ✨ الربط بالبيانات المستوردة
+        agentRoles: datesShopChat
       },
       {
         id: "hotel",
         name: "فندق",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/hotel-chat.png",
-        agentRoles: hotelChat // <-- ✨ الربط بالبيانات المستوردة
+        agentRoles: hotelChat
       },
       {
         id: "clinic",
         name: "عيادة",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/clinic-chat.png",
-        agentRoles: clinicChat // <-- ✨ الربط بالبيانات المستوردة
+        agentRoles: clinicChat
       },
       {
         id: "building-materials",
         name: "مواد بناء",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/building-materials-chat.png",
-        agentRoles: gymChat // <-- ✨ الربط بالبيانات المستوردة (مؤقتاً)
+        agentRoles: buildingMaterialsChat // <-- ✨ تم التصحيح
       },
       {
         id: "restaurant",
         name: "مطعم",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/restaurant-chat.png",
-        agentRoles: restaurantChat // <-- ✨ الربط بالبيانات المستوردة
+        agentRoles: restaurantChat
       },
       {
         id: "barber-shop",
         name: "صالون حلاقة",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/barber-shop-chat.png",
-        agentRoles: carAgencyChat // <-- ✨ الربط بالبيانات المستوردة (مؤقتاً)
+        agentRoles: barberShopChat // <-- ✨ تم التصحيح
       },
       {
         id: "real-estate",
         name: "وكيل عقاري",
         enabled: true,
         thumbnailUrl: "/images/thumbnails/real-estate-chat.png",
-        agentRoles: realEstateChat // <-- ✨ الربط بالبيانات المستوردة
+        agentRoles: realEstateChat
+      },
+      // -- ✨✨ أزرار جديدة تمت إضافتها ✨✨ --
+      {
+        id: "car-agency",
+        name: "وكالة سيارات",
+        enabled: true,
+        thumbnailUrl: "/images/thumbnails/car-agency-chat.png", // تأكد من وجود هذه الصورة
+        agentRoles: carAgencyChat
+      },
+      {
+        id: "gym",
+        name: "نادي رياضي",
+        enabled: true,
+        thumbnailUrl: "/images/thumbnails/gym-chat.png", // تأكد من وجود هذه الصورة
+        agentRoles: gymChat
       },
     ],
   },
-  // =================================================================
-  // == نهاية قسم Project Phoenix                                  ==
-  // =================================================================
-
-
-  // ... (بقية الأقسام تبقى كما هي) ...
+  
   finalCta: {
     title: "جرب الآن وابدأ رحلتك!",
     pricing: {
@@ -207,26 +218,3 @@ export const config: ConfigType = {
   footer: {
     tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
     contact: {
-      title: "اتصل بنا",
-      email: "info@aiuncode.com",
-      telegram: {
-        username: "@tsahma",
-        link: "https://t.me/tsahma",
-      },
-    },
-    legalLinks: [
-      { text: "سياسة الخصوصية", link: "/privacy" },
-      { text: "شروط الاستخدام", link: "/terms" },
-      { text: "إنشاء حساب", link: "/signup" },
-    ],
-    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
-  },
-  smartAmbassador: {
-    buttonLabel: "تحدث معنا",
-    chatTitle: "السفير الذكي",
-    placeholder: "اكتب رسالتك هنا...",
-    sendButton: "إرسال",
-    welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
-    defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
-  },
-};
