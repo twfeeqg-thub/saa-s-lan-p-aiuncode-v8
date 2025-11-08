@@ -50,6 +50,11 @@ const playSound = (type: 'sent' | 'received') => {
     }
   }
   
+  // استئناف السياق إذا كان معلقًا (مطلوب في بعض المتصفحات)
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+
   const ctx = audioContext;
   const oscillator = ctx.createOscillator();
   const gainNode = ctx.createGain();
@@ -59,15 +64,15 @@ const playSound = (type: 'sent' | 'received') => {
   
   if (type === 'sent') {
     oscillator.type = 'triangle';
-    oscillator.frequency.setValueAtTime(1200, ctx.currentTime);
-    gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+    oscillator.frequency.setValueAtTime(1000, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + 0.1);
   } else { // received
     oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(800, ctx.currentTime);
-    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    oscillator.frequency.setValueAtTime(1300, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
     oscillator.start(ctx.currentTime);
     oscillator.stop(ctx.currentTime + 0.15);
@@ -78,19 +83,19 @@ const playSound = (type: 'sent' | 'received') => {
 // استيراد أنواع البيانات
 type Scenario = typeof config.smartAgentScenarios.scenarios[0];
 type AgentRole = Scenario['agentRoles'][0];
-// --- بداية التعديل: تحديث نوع الرسالة ليشمل النوع الجديد ---
-type ChatMessage = AgentRole['chat'][0] & { type: 'bot' | 'user' | 'buttons' | 'payment-link' };
+// --- بداية التعديل: تحديث نوع الرسالة ليشمل الأنواع الجديدة ---
+type ChatMessage = {
+  type: 'bot' | 'user' | 'buttons' | 'payment-link';
+  text?: string;
+  options?: string[];
+  delay?: number;
+};
 // --- نهاية التعديل ---
 
 interface FakeScenarioChatProps {
   scenario: Scenario;
 }
 
-/**
- * FakeScenarioChat Component
- * ... (التعليقات السابقة تبقى كما هي) ...
- * 11. تمت ترقيته ليدعم الأصوات المضمنة، سرعة محادثة قابلة للتخصيص، وزر دفع ديناميكي.
- */
 export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
   const { realCta } = config.smartAgentScenarios.finalActions;
   const enabledRoles = scenario.agentRoles.filter(role => role.enabled);
@@ -99,12 +104,14 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
   const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // تأثير لإعادة تعيين المحادثة عند تغيير السيناريو أو الدور
   useEffect(() => {
     const firstEnabledRole = scenario.agentRoles.find(role => role.enabled);
     setActiveRole(firstEnabledRole);
     setDisplayedMessages([]);
   }, [scenario]);
 
+  // تأثير مسؤول عن عرض الرسائل بشكل متتابع
   useEffect(() => {
     if (!activeRole) return;
 
@@ -120,31 +127,38 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
       }
 
       const currentMessage = messages[currentIndex];
-      const delay = currentMessage.delay || (currentMessage.type === 'bot' ? 2000 : 500);
+      // --- بداية التعديل: استخدام التأخير المخصص أو قيمة افتراضية أبطأ ---
+      const typingDuration = 1500; // مدة ظهور "يكتب الآن..."
+      const postMessageDelay = currentMessage.delay || (currentMessage.type === 'bot' ? 2200 : 1200);
+      // --- نهاية التعديل ---
       
-      if (currentMessage.type === 'bot') {
+      if (currentMessage.type === 'bot' || currentMessage.type === 'payment-link') {
         setIsTyping(true);
         timeoutId = setTimeout(() => {
           playSound('received');
           setIsTyping(false);
           setDisplayedMessages(prev => [...prev, currentMessage]);
           currentIndex++;
-          timeoutId = setTimeout(showNextMessage, delay);
-        }, 1200); // مدة ظهور مؤشر "يكتب الآن..."
-      } else {
+          timeoutId = setTimeout(showNextMessage, postMessageDelay);
+        }, typingDuration);
+      } else { // user or buttons
         playSound('sent');
         setDisplayedMessages(prev => [...prev, currentMessage]);
         currentIndex++;
-        timeoutId = setTimeout(showNextMessage, delay);
+        timeoutId = setTimeout(showNextMessage, postMessageDelay);
       }
     };
 
     timeoutId = setTimeout(showNextMessage, 500);
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      // تنظيف جميع المؤقتات عند تغيير الدور
+      clearTimeout(timeoutId);
+    };
 
   }, [activeRole]);
 
+  // تأثير للتمرير التلقائي إلى أسفل المحادثة
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -182,7 +196,7 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
       case 'buttons':
         return (
           <div key={index} className="flex flex-wrap gap-2 justify-start my-4 ml-11 animate-fade-in">
-            {message.options.map((option, i) => (
+            {message.options?.map((option, i) => (
               <button key={i} className="px-4 py-2 text-sm bg-white border border-[var(--color-primary)] text-[var(--color-primary)] rounded-full hover:bg-blue-50">
                 {option}
               </button>
@@ -248,6 +262,3 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
     </div>
   );
 }
-
-
-
