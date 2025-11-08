@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { config } from '@/src/config/landingPageConfig';
 
 // الأيقونات المضمنة كـ SVG
@@ -22,6 +22,23 @@ const UserIcon = () => (
   </svg>
 );
 
+// --- بداية التعديل ---
+// مؤشر "يكتب الآن..."
+const TypingIndicator = () => (
+  <div className="flex items-start gap-3 my-4 animate-fade-in">
+    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+      <BotIcon />
+    </div>
+    <div className="bg-gray-100 rounded-lg p-3 flex items-center space-x-1">
+      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short"></span>
+      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short delay-150"></span>
+      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short delay-300"></span>
+    </div>
+  </div>
+);
+// --- نهاية التعديل ---
+
+
 // استيراد أنواع البيانات
 type Scenario = typeof config.smartAgentScenarios.scenarios[0];
 type AgentRole = Scenario['agentRoles'][0];
@@ -34,29 +51,78 @@ interface FakeScenarioChatProps {
 /**
  * FakeScenarioChat Component
  * ... (التعليقات السابقة تبقى كما هي) ...
- * 8. تمت ترقيته ليفهم خاصية `enabled` للأدوار ولفلترة الأدوار المعطلة.
- * 9. تم تكبير حجم خط المحادثة لتحسين القراءة.
+ * 10. تمت ترقيته لعرض المحادثة بشكل حي ومتتابع مع مؤشر "يكتب الآن...".
  */
 export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
   const { finalActions } = config.smartAgentScenarios;
-
-  // --- بداية التعديل ---
-  // 1. نقوم بفلترة الأدوار الوظيفية لنحصل فقط على المفعّلة منها
   const enabledRoles = scenario.agentRoles.filter(role => role.enabled);
-  // --- نهاية التعديل ---
+  const [activeRole, setActiveRole] = useState<AgentRole | undefined>(enabledRoles[0]);
 
   // --- بداية التعديل ---
-  // 2. نضبط الحالة الأولية لتكون أول دور "مفعّل" في القائمة
-  const [activeRole, setActiveRole] = useState<AgentRole | undefined>(enabledRoles[0]);
+  // حالات جديدة للتحكم في العرض الحي للمحادثة
+  const [displayedMessages, setDisplayedMessages] = useState<ChatMessage[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   // --- نهاية التعديل ---
 
   useEffect(() => {
-    // --- بداية التعديل ---
-    // 3. نضمن تحديث الدور النشط ليكون أول دور "مفعّل" عند تغيير السيناريو
     const firstEnabledRole = scenario.agentRoles.find(role => role.enabled);
     setActiveRole(firstEnabledRole);
-    // --- نهاية التعديل ---
+    // عند تغيير السيناريو، نفرّغ الرسائل المعروضة
+    setDisplayedMessages([]);
   }, [scenario]);
+
+  // --- بداية التعديل ---
+  // تأثير جديد مسؤول عن عرض الرسائل بشكل متتابع
+  useEffect(() => {
+    if (!activeRole) return;
+
+    // نبدأ بعرض الرسائل من الصفر
+    setDisplayedMessages([]);
+    const messages = activeRole.chat;
+    let currentIndex = 0;
+
+    const showNextMessage = () => {
+      if (currentIndex >= messages.length) {
+        setIsTyping(false);
+        return;
+      }
+
+      const currentMessage = messages[currentIndex];
+      
+      // إذا كانت الرسالة من البوت، نظهر مؤشر "يكتب الآن..."
+      if (currentMessage.type === 'bot') {
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          setDisplayedMessages(prev => [...prev, currentMessage]);
+          currentIndex++;
+          setTimeout(showNextMessage, 1200); // تأخير قبل الرسالة التالية
+        }, 800); // مدة ظهور مؤشر "يكتب الآن..."
+      } else {
+        // رسائل المستخدم والأزرار تظهر فوراً
+        setDisplayedMessages(prev => [...prev, currentMessage]);
+        currentIndex++;
+        setTimeout(showNextMessage, 300); // تأخير بسيط قبل الرسالة التالية
+      }
+    };
+
+    // نبدأ عرض أول رسالة بعد فترة قصيرة
+    const timeoutId = setTimeout(showNextMessage, 500);
+
+    // دالة التنظيف لإلغاء المؤقتات عند تغيير الدور أو إغلاق المكون
+    return () => clearTimeout(timeoutId);
+
+  }, [activeRole]);
+
+  // تأثير للتمرير التلقائي إلى أسفل المحادثة
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [displayedMessages, isTyping]);
+  // --- نهاية التعديل ---
+
 
   const handleRoleClick = (role: AgentRole) => {
     setActiveRole(role);
@@ -71,10 +137,7 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
               <BotIcon />
             </div>
             <div className="bg-gray-100 rounded-lg p-3 max-w-xs md:max-w-md">
-              {/* --- بداية التعديل --- */}
-              {/* 4. تكبير حجم الخط */}
               <p className="text-base text-gray-800 whitespace-pre-wrap">{message.text}</p>
-              {/* --- نهاية التعديل --- */}
             </div>
           </div>
         );
@@ -82,10 +145,7 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
         return (
           <div key={index} className="flex items-start gap-3 my-4 justify-end animate-fade-in">
             <div className="bg-[var(--color-primary)] text-white rounded-lg p-3 max-w-xs md:max-w-md">
-              {/* --- بداية التعديل --- */}
-              {/* 4. تكبير حجم الخط */}
               <p className="text-base">{message.text}</p>
-              {/* --- نهاية التعديل --- */}
             </div>
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
               <UserIcon />
@@ -107,18 +167,14 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
     }
   };
   
-  // إذا لم يكن هناك دور نشط (لأن كل الأدوار معطلة مثلاً)، لا نعرض شيئاً
   if (!activeRole) {
     return <div className="p-4 text-center text-gray-500">لا توجد أدوار مفعّلة لهذا السيناريو.</div>;
   }
 
   return (
     <div className="w-full h-full flex flex-col bg-white rounded-xl">
-      {/* 1. شريط أزرار الأدوار الوظيفية */}
       <div className="p-3 border-b border-gray-200">
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          {/* --- بداية التعديل --- */}
-          {/* 5. نعرض أزرار الأدوار المفعّلة فقط */}
           {enabledRoles.map((role) => (
             <button
               key={role.id}
@@ -135,16 +191,18 @@ export function FakeScenarioChat({ scenario }: FakeScenarioChatProps) {
               {role.name}
             </button>
           ))}
-          {/* --- نهاية التعديل --- */}
         </div>
       </div>
 
-      {/* 2. نافذة عرض رسائل المحادثة */}
-      <div className="flex-1 p-4 overflow-y-auto">
-        {activeRole.chat.map(renderMessage)}
+      {/* --- بداية التعديل --- */}
+      {/* نعرض الرسائل من `displayedMessages` بدلاً من `activeRole.chat` */}
+      <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto">
+        {displayedMessages.map(renderMessage)}
+        {/* نعرض مؤشر "يكتب الآن..." إذا كانت الحالة `true` */}
+        {isTyping && <TypingIndicator />}
       </div>
+      {/* --- نهاية التعديل --- */}
 
-      {/* 3. شريط الأزرار النهائية للدعوة لاتخاذ إجراء */}
       <div className="p-4 border-t border-gray-200 bg-gray-50 rounded-b-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <button className="w-full px-4 py-3 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition-colors">
