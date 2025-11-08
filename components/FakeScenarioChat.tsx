@@ -30,4 +30,30 @@ const TypingIndicator = () => (
     <div className="bg-gray-100 rounded-lg p-3 flex items-center space-x-1">
       <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short"></span>
       <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short delay-150"></span>
-      <span className
+      <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce-short delay-300"></span>
+    </div>
+  </div>
+);
+
+// --- بداية التعديل: إضافة آلية الصوت المضمنة ---
+// متغير لتخزين سياق الصوت لتجنب إعادة إنشائه
+let audioContext: AudioContext | null = null;
+
+const playSound = (type: 'sent' | 'received') => {
+  if (typeof window === 'undefined') return;
+  
+  // إنشاء سياق الصوت عند أول استخدام فقط
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  }
+  
+  const ctx = audioContext;
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  
+  if (type === 'sent') {
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime
