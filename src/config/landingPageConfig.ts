@@ -215,6 +215,31 @@ export const config: ConfigType = {
       { question: "هل يمكنني تحديث المحتوى بنفسي؟", answer: "نعم، نوفر لك لوحة تحكم سهلة." },
     ],
   },
+  // ... (كل الكود السابق يبقى كما هو) ...
+
   footer: {
     tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
     contact: {
+      title: "اتصل بنا",
+      email: "info@aiuncode.com",
+      telegram: {
+        username: "@tsahma",
+        link: "https://t.me/tsahma",
+      },
+    },
+    legalLinks: [
+      { text: "سياسة الخصوصية", link: "/privacy" },
+      { text: "شروط الاستخدام", link: "/terms" },
+      { text: "إنشاء حساب", link: "/signup" },
+    ],
+    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
+  },
+  smartAmbassador: {
+    buttonLabel: "تحدث معنا",
+    chatTitle: "السفير الذكي",
+    placeholder: "اكتب رسالتك هنا...",
+    sendButton: "إرسال",
+    welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+    defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
+  },
+}; // <-- القوس الأخير الذي يغلق كائن config
