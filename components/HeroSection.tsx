@@ -28,10 +28,10 @@ export function HeroSection() {
   const activeTitle = config.hero.title[config.hero.title.active]
 
   return (
-    // --- بداية التعديل النهائي ---
-    // تطبيق مبدأ Mobile-First: ارتفاع كامل على الجوال، ثم تعديله للشاشات الأكبر
-    <section className="relative flex flex-col min-h-screen justify-center md:min-h-[550px] lg:min-h-[600px]">
-    {/* --- نهاية التعديل النهائي --- */}
+    // --- بداية التعديل ---
+    // تم إزالة min-h-screen والهوامش الكبيرة من هنا
+    <section className="relative bg-gray-50">
+    {/* --- نهاية التعديل --- */}
 
       {/* الخلفية */}
       <div className="absolute inset-0 -z-10">
@@ -55,7 +55,10 @@ export function HeroSection() {
       </header>
 
       {/* المحتوى الرئيسي */}
-      <div className="flex-1 flex items-center justify-center px-6 pt-20 pb-10"> {/* تعديل الـ padding ليتناسب مع جميع الشاشات */}
+      {/* --- بداية التعديل --- */}
+      {/* تم تطبيق هوامش متجاوبة: صغيرة على الجوال وتزداد مع حجم الشاشة */}
+      <div className="flex items-center justify-center px-6 py-32 sm:py-36 md:py-40 lg:py-48">
+      {/* --- نهاية التعديل --- */}
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[var(--color-text-main)] leading-tight text-balance">
             {activeTitle}
