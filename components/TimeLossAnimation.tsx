@@ -19,7 +19,6 @@ const MESSAGE_TYPES = {
   calendar: { icon: ICONS.calendar(), color: "orange" },
 };
 
-// --- 2. إعادة تصميم مرحلة الترتيب (عمودان على اليسار) ---
 const messagesConfig = [
   { type: "question", chaos: { x: -50, y: -45 }, ordered: { x: -45, y: -60 } },
   { type: "dollar",   chaos: { x: 30,  y: -55 }, ordered: { x: -15, y: -60 } },
@@ -40,9 +39,10 @@ export default function TimeLossAnimation() {
     const sequence = async () => {
       await controls.start("initial");
       await controls.start("chaos");
-      // --- 2. بدء الترتيب مباشرة مع ظهور الشعار ---
-      await controls.start("reorder");
-      await controls.start("finalCheck");
+      // --- 2. استخدام onComplete لربط النهاية بالترتيب ---
+      await controls.start("reorder").then(() => {
+        controls.start("finalCheck");
+      });
     };
     
     sequence();
@@ -59,13 +59,12 @@ export default function TimeLossAnimation() {
 
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
-      {/* --- 1. الشعار في الركن العلوي الأيمن --- */}
       <motion.div
         className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
           reorder: { scale: 1, opacity: 1, transition: { delay: 2.5, type: "spring" } },
-          finalCheck: { scale: 0, opacity: 0, transition: { delay: 0.5 } }
+          finalCheck: { scale: 0, opacity: 0, transition: { delay: 0.5, duration: 0.3 } }
         }}
         animate={controls}
       >
@@ -83,30 +82,39 @@ export default function TimeLossAnimation() {
               transition: { delay: i * 0.2, type: "spring", stiffness: 100 }
             },
             reorder: {
-              x: msg.ordered.x, y: msg.ordered.y,
-              // --- 2. تصغير الحجم عند الترتيب ---
-              scale: 0.6,
-              opacity: 0.8,
+              x: msg.ordered.x, y: msg.ordered.y, scale: 0.6, opacity: 0.8,
               transition: { delay: 3 + i * 0.4, type: "spring", stiffness: 120 }
             },
-            finalCheck: { scale: 0, opacity: 0, transition: { duration: 0.5 } }
+            finalCheck: { scale: 0, opacity: 0, transition: { duration: 0.3 } }
           }}
           animate={controls}
         >
           <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
             {MESSAGE_TYPES[msg.type].icon}
           </svg>
+          
+          {/* --- 1. إضافة علامات الصح الفردية --- */}
+          <motion.div
+            className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center border-2 border-white"
+            variants={{
+              initial: { scale: 0, opacity: 0 },
+              reorder: { scale: 1, opacity: 1, transition: { delay: 3.5 + i * 0.4 } },
+              finalCheck: { scale: 0, opacity: 0 }
+            }}
+            animate={controls}
+          >
+             <svg viewBox="0 0 24 24" fill="none" className="w-2 h-2 text-white">{ICONS.check()}</svg>
+          </motion.div>
         </motion.div>
       ))}
       
-      {/* --- 3. النهاية القوية: علامة الصح تملأ الشاشة --- */}
       <motion.div
         className="absolute inset-0 flex items-center justify-center bg-green-500 z-30"
         variants={{
           initial: { opacity: 0, scale: 0 },
           finalCheck: {
             opacity: 1, scale: 1,
-            transition: { delay: 8, duration: 0.5, type: "spring" }
+            transition: { duration: 0.5, type: "spring" }
           }
         }}
         animate={controls}
