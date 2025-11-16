@@ -124,71 +124,70 @@ export const config: ConfigType = {
       realCta: "اطلب وكيلك طال عمرك",
     },
     // =================================================================
-    // == بداية التعديل: تم تحديث القائمة لتعكس كل القطاعات بشكل صحيح ==
+    // == بداية التعديل: تم تغيير `thumbnailUrl` إلى `showcaseImageUrl` ==
     // =================================================================
     scenarios: [
       {
         id: "dates-shop",
         name: "محل تمور",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/dates-shop-chat.png",
+        showcaseImageUrl: "/images/showcase/dates-shop.jpg", // <-- ✨ تم التغيير
         agentRoles: datesShopChat
       },
       {
         id: "hotel",
         name: "فندق",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/hotel-chat.png",
+        showcaseImageUrl: "/images/showcase/hotel.jpg", // <-- ✨ تم التغيير
         agentRoles: hotelChat
       },
       {
         id: "clinic",
         name: "عيادة",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/clinic-chat.png",
+        showcaseImageUrl: "/images/showcase/clinic.jpg", // <-- ✨ تم التغيير
         agentRoles: clinicChat
       },
       {
         id: "building-materials",
         name: "مواد بناء",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/building-materials-chat.png",
-        agentRoles: buildingMaterialsChat // <-- ✨ تم التصحيح
+        showcaseImageUrl: "/images/showcase/building-materials.jpg", // <-- ✨ تم التغيير
+        agentRoles: buildingMaterialsChat
       },
       {
         id: "restaurant",
         name: "مطعم",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/restaurant-chat.png",
+        showcaseImageUrl: "/images/showcase/restaurant.jpg", // <-- ✨ تم التغيير
         agentRoles: restaurantChat
       },
       {
         id: "barber-shop",
         name: "صالون حلاقة",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/barber-shop-chat.png",
-        agentRoles: barberShopChat // <-- ✨ تم التصحيح
+        showcaseImageUrl: "/images/showcase/barber-shop.jpg", // <-- ✨ تم التغيير
+        agentRoles: barberShopChat
       },
       {
         id: "real-estate",
         name: "وكيل عقاري",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/real-estate-chat.png",
+        showcaseImageUrl: "/images/showcase/real-estate.jpg", // <-- ✨ تم التغيير
         agentRoles: realEstateChat
       },
-      // -- ✨✨ أزرار جديدة تمت إضافتها ✨✨ --
       {
         id: "car-agency",
         name: "وكالة سيارات",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/car-agency-chat.png", // تأكد من وجود هذه الصورة
+        showcaseImageUrl: "/images/showcase/car-agency.jpg", // <-- ✨ تم التغيير
         agentRoles: carAgencyChat
       },
       {
         id: "gym",
         name: "نادي رياضي",
         enabled: true,
-        thumbnailUrl: "/images/thumbnails/gym-chat.png", // تأكد من وجود هذه الصورة
+        showcaseImageUrl: "/images/showcase/gym.jpg", // <-- ✨ تم التغيير
         agentRoles: gymChat
       },
     ],
@@ -215,7 +214,6 @@ export const config: ConfigType = {
       { question: "هل يمكنني تحديث المحتوى بنفسي؟", answer: "نعم، نوفر لك لوحة تحكم سهلة." },
     ],
   },
-  // ... (كل الكود السابق يبقى كما هو) ...
 
   footer: {
     tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
@@ -242,4 +240,4 @@ export const config: ConfigType = {
     welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
     defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
   },
-}; // <-- القوس الأخير الذي يغلق كائن config
+};
