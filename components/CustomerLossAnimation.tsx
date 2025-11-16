@@ -9,8 +9,18 @@ const ICONS = {
   store: () => <><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /></>,
   question: () => <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1-1.5 2.5-3 3.5-1.5 1-3 .5-3 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
   check: () => <path d="M20 6 9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />,
-  saudiRiyal: () => <><path d="M14 11a3 3 0 0 0-6 0v1a3 3 0 0 0 6 0v-1z" stroke="currentColor" strokeWidth="2" /><path d="M4 18h14.48a2 2 0 0 0 1.8-3.1L16 6H8l-4.32 9.9a2 2 0 0 0 1.8 3.1H6" stroke="currentColor" strokeWidth="2" /></>,
   box: () => <><path d="M21 10V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v5" /><path d="m21 10-9 6-9-6" /><path d="M3 10v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8" /></>,
+  // --- أيقونة الريال السعودي الرسمية الجديدة (SVG) ---
+  saudiRiyalOfficial: () => (
+    <>
+      <path d="M10.6,3.4h2.8v10.4c0,0.8-0.7,1.5-1.5,1.5h-2.1c-0.8,0-1.5-0.7-1.5-1.5L8.3,3.4H10.6z" />
+      <path d="M17.7,8.2H6.3c-0.8,0-1.5,0.7-1.5,1.5v0c0,0.8,0.7,1.5,1.5,1.5h11.3" />
+      <path d="M15.4,15.3H8.6c-0.8,0-1.5,0.7-1.5,1.5v0c0,0.8,0.7,1.5,1.5,1.5h6.8" />
+      <path d="M15.4,3.4l2.3,4.8H6.3L8.6,3.4H15.4z" />
+      <path d="M17.7,11.2l-2.3,4.1H8.6l-2.3-4.1H17.7z" />
+      <path d="M15.4,18.3l2.3,4.8H6.3l2.3-4.8H15.4z" />
+    </>
+  ),
 };
 
 export default function CustomerLossAnimation() {
@@ -20,7 +30,6 @@ export default function CustomerLossAnimation() {
     await controls.start("initial");
     await controls.start("journeyStart");
     await controls.start("obstacle");
-    // --- 2. تطبيق التسلسل المنطقي الصحيح ---
     await controls.start("beamTravel");
     await controls.start("problemSolved");
     await controls.start("journeyComplete");
@@ -35,7 +44,8 @@ export default function CustomerLossAnimation() {
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* العميل والمتجر */}
+      {/* ... (بقية الكود يبقى كما هو تمامًا) ... */}
+      
       <motion.div
         className="absolute bottom-4 left-4 text-gray-500 z-10"
         variants={{
@@ -57,8 +67,6 @@ export default function CustomerLossAnimation() {
       >
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.store()}</svg>
       </motion.div>
-
-      {/* أيقونة الاستفهام */}
       <motion.div
         className="absolute top-8 left-4 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
@@ -71,8 +79,6 @@ export default function CustomerLossAnimation() {
       >
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-orange-600">{ICONS.question()}</svg>
       </motion.div>
-      
-      {/* أيقونة الصح */}
       <motion.div
         className="absolute top-8 left-4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
@@ -84,8 +90,6 @@ export default function CustomerLossAnimation() {
       >
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-green-600">{ICONS.check()}</svg>
       </motion.div>
-
-      {/* شعار المنصة */}
       <motion.div
         className="absolute top-8 right-4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-30"
         variants={{
@@ -97,8 +101,6 @@ export default function CustomerLossAnimation() {
       >
         <Image src="/images/logo.png" alt="AI-Uncode Agent" width={40} height={40} />
       </motion.div>
-
-      {/* الشعاع */}
       <motion.div
         className="absolute top-[56px] right-[36px] w-4 h-4 bg-blue-400 rounded-full z-20"
         variants={{
@@ -111,8 +113,6 @@ export default function CustomerLossAnimation() {
         }}
         animate={controls}
       />
-
-      {/* بقية العناصر */}
       <motion.div
         className="absolute bottom-[48px] left-[110px] text-purple-500 z-0"
         variants={{
@@ -123,6 +123,8 @@ export default function CustomerLossAnimation() {
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.box()}</svg>
       </motion.div>
+
+      {/* --- التعديل هنا: استخدام الأيقونة الرسمية --- */}
       <motion.div
         className="absolute top-4 right-8"
         variants={{
@@ -131,7 +133,9 @@ export default function CustomerLossAnimation() {
         }}
         animate={controls}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-500">{ICONS.saudiRiyal()}</svg>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="text-green-500">
+          {ICONS.saudiRiyalOfficial()}
+        </svg>
       </motion.div>
     </div>
   );
