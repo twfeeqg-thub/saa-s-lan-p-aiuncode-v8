@@ -124,14 +124,14 @@ export const config: ConfigType = {
       realCta: "اطلب وكيلك طال عمرك",
     },
     // =================================================================
-    // == بداية التعديل: تم استبدال الروابط الفاشلة بروابط Unsplash المضمونة ==
+    // == بداية التعديل: تم تحديث الروابط الثلاثة التي لم تعمل         ==
     // =================================================================
     scenarios: [
       {
         id: "dates-shop",
         name: "محل تمور",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1615658323228-065f79421535?q=80&w=2070&auto=format&fit=crop",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1591135873932-58a104a35b4e?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
         agentRoles: datesShopChat
       },
       {
@@ -152,7 +152,7 @@ export const config: ConfigType = {
         id: "building-materials",
         name: "مواد بناء",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1519903401057-a19a50bda23a?q=80&w=2070&auto=format&fit=crop",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1581092916376-2993665a8354?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
         agentRoles: buildingMaterialsChat
       },
       {
@@ -166,7 +166,7 @@ export const config: ConfigType = {
         id: "barber-shop",
         name: "صالون حلاقة",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1621607512214-6c3411994676?q=80&w=1974&auto=format&fit=crop",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1599334432325-89a7f16384e8?q=80&w=1974&auto=format&fit=crop", // <-- ✨ رابط جديد
         agentRoles: barberShopChat
       },
       {
