@@ -4,7 +4,6 @@ import { motion, useAnimationControls } from "framer-motion"
 import { useEffect } from "react"
 import Image from "next/image"
 
-// --- 3. إضافة أيقونة الإعجاب ---
 const ICONS = {
   question: () => <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1-1.5 2.5-3 3.5-1.5 1-3 .5-3 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
   dollar: () => <path d="M12 2v20m5-17H7m10 4H7m10 4H7m10 4H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
@@ -35,7 +34,6 @@ const messagesConfig = [
 ];
 
 export default function TimeLossAnimation() {
-  // --- 2. استخدام متحكمات منفصلة لكل جزء ---
   const chaosControls = useAnimationControls();
   const logoControls = useAnimationControls();
   const orderControls = useAnimationControls();
@@ -43,7 +41,6 @@ export default function TimeLossAnimation() {
 
   useEffect(() => {
     const sequence = async () => {
-      // إعادة كل شيء إلى الحالة الأولية
       await Promise.all([
         chaosControls.start("initial"),
         logoControls.start("initial"),
@@ -51,22 +48,15 @@ export default function TimeLossAnimation() {
         finalControls.start("initial"),
       ]);
 
-      // المرحلة 1: عرض الفوضى
       await chaosControls.start("animate");
-
-      // المرحلة 2: إظهار الشعار (بعد ثانية واحدة)
       await logoControls.start("animate");
-
-      // المرحلة 3: بدء عملية الترتيب (بعد 2.5 ثانية)
       await orderControls.start("animate");
-
-      // المرحلة 4: إظهار علامة الإعجاب النهائية (بعد 7 ثوانٍ)
       await finalControls.start("animate");
     };
     
     sequence();
-    // --- 4. تمديد مدة الدورة الكاملة ---
-    const interval = setInterval(sequence, 10000);
+    // --- 3. تمديد مدة الدورة الكاملة إلى 12 ثانية ---
+    const interval = setInterval(sequence, 12000);
     return () => clearInterval(interval);
   }, [chaosControls, logoControls, orderControls, finalControls]);
 
@@ -82,10 +72,10 @@ export default function TimeLossAnimation() {
       <motion.div animate={logoControls} initial="initial"
         variants={{
           initial: { scale: 0, opacity: 0, x: "-50%", y: "-50%" },
-          // --- 1. تسريع ظهور الشعار ---
-          animate: { scale: 1, opacity: 1, transition: { delay: 1, type: "spring", stiffness: 150 } },
+          animate: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring", stiffness: 150 } },
         }}
-        className="absolute top-1/2 left-1/2 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center p-1 z-10"
+        // --- 2. إدارة الطبقات ---
+        className="absolute top-1/2 left-1/2 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center p-1 z-20"
       >
         <Image src="/images/logo.png" alt="AI-Uncode Agent" width={56} height={56} />
       </motion.div>
@@ -96,12 +86,13 @@ export default function TimeLossAnimation() {
             initial: { opacity: 0, scale: 0, x: 0, y: 50 },
             animate: {
               x: msg.chaos.x, y: msg.chaos.y, opacity: 1, scale: 1,
-              transition: { delay: i * 0.1, type: "spring", stiffness: 100 }
+              transition: { delay: i * 0.15, type: "spring", stiffness: 100 }
             },
           }}
-          className={`absolute top-1/2 left-1/2 w-9 h-9 rounded-full flex items-center justify-center shadow-sm ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
+          // --- 1. تصغير حجم الفقاعات ---
+          className={`absolute top-1/2 left-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm z-10 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
         >
-           <svg viewBox="0 0 24 24" fill="none" className={`w-5 h-5 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
+           <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
             {MESSAGE_TYPES[msg.type].icon}
           </svg>
         </motion.div>
@@ -112,20 +103,21 @@ export default function TimeLossAnimation() {
           variants={{
             initial: { opacity: 0, scale: 0 },
             animate: {
-              x: msg.ordered.x, y: msg.ordered.y, opacity: 1, scale: 0.8,
-              transition: { delay: 2.5 + i * 0.4, type: "spring", stiffness: 120 }
+              x: msg.ordered.x, y: msg.ordered.y, opacity: 1, scale: 0.7,
+              // --- 3. إبطاء وإطالة مدة الترتيب ---
+              transition: { delay: 3 + i * 0.5, type: "spring", stiffness: 120 }
             }
           }}
-          className={`absolute top-1/2 left-1/2 w-9 h-9 rounded-full flex items-center justify-center shadow-sm ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
+          className={`absolute top-1/2 left-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm z-10 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
         >
-          <svg viewBox="0 0 24 24" fill="none" className={`w-5 h-5 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
+          <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
             {MESSAGE_TYPES[msg.type].icon}
           </svg>
           <motion.div
-            variants={{ initial: { scale: 0 }, animate: { scale: 1, transition: { delay: 2.8 + i * 0.4 } } }}
-            className="absolute -right-2 -bottom-0 w-5 h-5 rounded-full flex items-center justify-center bg-green-500"
+            variants={{ initial: { scale: 0 }, animate: { scale: 1, transition: { delay: 3.5 + i * 0.5 } } }}
+            className="absolute -right-2 -bottom-0 w-4 h-4 rounded-full flex items-center justify-center bg-green-500"
           >
-            <svg viewBox="0 0 24 24" fill="none" className="w-3 h-3 text-white">{ICONS.check()}</svg>
+            <svg viewBox="0 0 24 24" fill="none" className="w-2.5 h-2.5 text-white">{ICONS.check()}</svg>
           </motion.div>
         </motion.div>
       ))}
@@ -133,9 +125,11 @@ export default function TimeLossAnimation() {
       <motion.div animate={finalControls} initial="initial"
         variants={{
           initial: { opacity: 0, scale: 0 },
-          animate: { opacity: 1, scale: 1.2, transition: { delay: 7.5, type: "spring" } }
+          // --- 3. تأخير ظهور النهاية ---
+          animate: { opacity: 1, scale: 1.2, transition: { delay: 9.5, type: "spring" } }
         }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center bg-blue-500"
+        // --- 2. إدارة الطبقات ---
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center bg-blue-500 z-30"
       >
         <svg viewBox="0 0 24 24" fill="none" className="w-10 h-10 text-white">{ICONS.thumbsUp()}</svg>
       </motion.div>
