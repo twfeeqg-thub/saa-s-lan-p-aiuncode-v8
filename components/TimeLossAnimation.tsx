@@ -1,9 +1,10 @@
 "use client"
 
 import { motion, useAnimationControls } from "framer-motion"
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react" // استيراد useCallback
 import Image from "next/image"
 
+// ... (الأيقونات وأنواع الرسائل تبقى كما هي)
 const ICONS = {
   question: () => <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1-1.5 2.5-3 3.5-1.5 1-3 .5-3 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
   dollar: () => <path d="M12 2v20m5-17H7m10 4H7m10 4H7m10 4H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
@@ -32,23 +33,36 @@ const messagesConfig = [
   { type: "dollar",   chaos: { x: -20, y: 60 }, ordered: { x: -15, y: 60 } },
 ];
 
+
 export default function TimeLossAnimation() {
   const controls = useAnimationControls();
 
-  useEffect(() => {
-    const sequence = async () => {
-      await controls.start("initial");
-      await controls.start("chaos");
-      // --- 2. استخدام onComplete لربط النهاية بالترتيب ---
-      await controls.start("reorder").then(() => {
-        controls.start("finalCheck");
-      });
-    };
+  // --- الحل: استخدام useCallback و async/await للتحكم الكامل في الحلقة ---
+  const sequence = useCallback(async () => {
+    // 1. إعادة كل شيء إلى الحالة الأولية
+    await controls.start("initial");
     
+    // 2. بدء الفوضى
+    await controls.start("chaos");
+    
+    // 3. بدء الترتيب
+    await controls.start("reorder");
+    
+    // 4. عرض علامة الصح النهائية
+    await controls.start("finalCheck");
+
+    // 5. انتظار قصير قبل إعادة التشغيل
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // 6. إعادة تشغيل التسلسل
     sequence();
-    const interval = setInterval(sequence, 12000);
-    return () => clearInterval(interval);
   }, [controls]);
+
+  useEffect(() => {
+    // بدء التسلسل لأول مرة فقط
+    sequence();
+  }, [sequence]);
+
 
   const getColorClasses = (color: string, type: "bg" | "text") => ({
     blue: { bg: "bg-blue-100", text: "text-blue-600" },
@@ -93,7 +107,6 @@ export default function TimeLossAnimation() {
             {MESSAGE_TYPES[msg.type].icon}
           </svg>
           
-          {/* --- 1. إضافة علامات الصح الفردية --- */}
           <motion.div
             className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center border-2 border-white"
             variants={{
@@ -114,7 +127,7 @@ export default function TimeLossAnimation() {
           initial: { opacity: 0, scale: 0 },
           finalCheck: {
             opacity: 1, scale: 1,
-            transition: { duration: 0.5, type: "spring" }
+            transition: { delay: 0.2, duration: 0.5, type: "spring" }
           }
         }}
         animate={controls}
