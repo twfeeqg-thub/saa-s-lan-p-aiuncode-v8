@@ -33,7 +33,7 @@ export default function CustomerLossAnimation() {
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* --- 1. العميل والمتجر في الأسفل --- */}
+      {/* العميل والمتجر في الأسفل */}
       <motion.div
         className="absolute bottom-4 left-4 text-gray-500 z-10"
         variants={{
@@ -56,9 +56,10 @@ export default function CustomerLossAnimation() {
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.store()}</svg>
       </motion.div>
 
-      {/* --- 1. الاستفهام والشعار في الأعلى --- */}
+      {/* --- 1. إعادة تموضع الأيقونات العلوية --- */}
+      {/* أيقونة الاستفهام (يسار) */}
       <motion.div
-        className="absolute top-8 left-1/4 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-20"
+        className="absolute top-8 left-4 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
           obstacle: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
@@ -69,8 +70,9 @@ export default function CustomerLossAnimation() {
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-orange-600">{ICONS.question()}</svg>
       </motion.div>
       
+      {/* أيقونة الصح التي تحل محل الاستفهام */}
       <motion.div
-        className="absolute top-8 left-1/4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shadow-md z-20"
+        className="absolute top-8 left-4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
           intervention: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
@@ -81,8 +83,9 @@ export default function CustomerLossAnimation() {
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-green-600">{ICONS.check()}</svg>
       </motion.div>
 
+      {/* شعار المنصة (يمين) */}
       <motion.div
-        className="absolute top-8 right-1/4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-30"
+        className="absolute top-8 right-4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-30"
         variants={{
           initial: { scale: 0, opacity: 0 },
           obstacle: { scale: 1, opacity: 1, transition: { delay: 1.8, type: "spring" } },
@@ -93,17 +96,21 @@ export default function CustomerLossAnimation() {
         <Image src="/images/logo.png" alt="AI-Uncode Agent" width={40} height={40} />
       </motion.div>
 
-      {/* --- 2. المرسلة (الشعاع) --- */}
+      {/* --- 2. تعديل حركة الشعاع ليقطع المسافة الجديدة --- */}
       <motion.div
-        className="absolute top-[56px] right-[55px] w-4 h-4 bg-blue-400 rounded-full"
+        className="absolute top-[56px] right-[36px] w-4 h-4 bg-blue-400 rounded-full z-20"
         variants={{
           initial: { x: 0, opacity: 0 },
-          intervention: { x: -38, opacity: [0, 1, 0], transition: { duration: 0.8, delay: 2.5 } }
+          intervention: { 
+            x: -75, // زيادة المسافة التي يقطعها الشعاع
+            opacity: [0, 1, 0], 
+            transition: { duration: 1, delay: 2.5 } 
+          }
         }}
         animate={controls}
       />
 
-      {/* بقية العناصر تبقى كما هي */}
+      {/* بقية العناصر */}
       <motion.div
         className="absolute bottom-[48px] left-[110px] text-purple-500 z-0"
         variants={{
