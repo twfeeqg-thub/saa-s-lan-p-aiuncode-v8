@@ -124,70 +124,70 @@ export const config: ConfigType = {
       realCta: "اطلب وكيلك طال عمرك",
     },
     // =================================================================
-    // == بداية التعديل: تم استبدال المسارات المحلية بروابط خارجية مباشرة ==
+    // == بداية التعديل: تم استبدال الروابط الفاشلة بروابط Unsplash المضمونة ==
     // =================================================================
     scenarios: [
       {
         id: "dates-shop",
         name: "محل تمور",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/pX4sWjP1/dates-shop.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1615658323228-065f79421535?q=80&w=2070&auto=format&fit=crop",
         agentRoles: datesShopChat
       },
       {
         id: "hotel",
         name: "فندق",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/L8y8p0g2/hotel.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
         agentRoles: hotelChat
       },
       {
         id: "clinic",
         name: "عيادة",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/Yq3B0k5x/clinic.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop",
         agentRoles: clinicChat
       },
       {
         id: "building-materials",
         name: "مواد بناء",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/tJ0g0VzM/building-materials.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1519903401057-a19a50bda23a?q=80&w=2070&auto=format&fit=crop",
         agentRoles: buildingMaterialsChat
       },
       {
         id: "restaurant",
         name: "مطعم",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/W3d5WdJ1/restaurant.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop",
         agentRoles: restaurantChat
       },
       {
         id: "barber-shop",
         name: "صالون حلاقة",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/prM1tDkM/barber-shop.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1621607512214-6c3411994676?q=80&w=1974&auto=format&fit=crop",
         agentRoles: barberShopChat
       },
       {
         id: "real-estate",
         name: "وكيل عقاري",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/BvB7gL3T/real-estate.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop",
         agentRoles: realEstateChat
       },
       {
         id: "car-agency",
         name: "وكالة سيارات",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/G2pCgHwZ/car-agency.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop",
         agentRoles: carAgencyChat
       },
       {
         id: "gym",
         name: "نادي رياضي",
         enabled: true,
-        showcaseImageUrl: "https://i.postimg.cc/L5YgCjVv/gym.jpg",
+        showcaseImageUrl: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop",
         agentRoles: gymChat
       },
     ],
