@@ -20,7 +20,9 @@ export default function CustomerLossAnimation() {
     await controls.start("initial");
     await controls.start("journeyStart");
     await controls.start("obstacle");
-    await controls.start("intervention");
+    // --- 2. تطبيق التسلسل المنطقي الصحيح ---
+    await controls.start("beamTravel");
+    await controls.start("problemSolved");
     await controls.start("journeyComplete");
     await new Promise(resolve => setTimeout(resolve, 3000));
     sequence();
@@ -33,21 +35,21 @@ export default function CustomerLossAnimation() {
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* العميل والمتجر في الأسفل */}
+      {/* العميل والمتجر */}
       <motion.div
         className="absolute bottom-4 left-4 text-gray-500 z-10"
         variants={{
           initial: { opacity: 0, x: 0 },
           journeyStart: { opacity: 1, x: 0, transition: { duration: 0.5 } },
           obstacle: { x: 40, transition: { duration: 1.5 } },
-          intervention: { x: 40 },
-          journeyComplete: { x: 85, transition: { duration: 1, delay: 1.5 } },
+          beamTravel: { x: 40 },
+          problemSolved: { x: 40 },
+          journeyComplete: { x: 85, transition: { duration: 1, delay: 0.5 } },
         }}
         animate={controls}
       >
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.customer()}</svg>
       </motion.div>
-
       <motion.div
         className="absolute bottom-4 right-4 text-gray-500"
         variants={{ initial: { opacity: 0 }, journeyStart: { opacity: 1 } }}
@@ -56,26 +58,26 @@ export default function CustomerLossAnimation() {
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.store()}</svg>
       </motion.div>
 
-      {/* --- 1. إعادة تموضع الأيقونات العلوية --- */}
-      {/* أيقونة الاستفهام (يسار) */}
+      {/* أيقونة الاستفهام */}
       <motion.div
         className="absolute top-8 left-4 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
           obstacle: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
-          intervention: { scale: 0, opacity: 0, transition: { delay: 1.5 } }
+          beamTravel: { scale: 1, opacity: 1 },
+          problemSolved: { scale: 0, opacity: 0, transition: { duration: 0.3 } }
         }}
         animate={controls}
       >
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-orange-600">{ICONS.question()}</svg>
       </motion.div>
       
-      {/* أيقونة الصح التي تحل محل الاستفهام */}
+      {/* أيقونة الصح */}
       <motion.div
         className="absolute top-8 left-4 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
-          intervention: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
+          problemSolved: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 200 } },
           journeyComplete: { scale: 0, opacity: 0, transition: { delay: 1.5 } }
         }}
         animate={controls}
@@ -83,7 +85,7 @@ export default function CustomerLossAnimation() {
         <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-green-600">{ICONS.check()}</svg>
       </motion.div>
 
-      {/* شعار المنصة (يمين) */}
+      {/* شعار المنصة */}
       <motion.div
         className="absolute top-8 right-4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-30"
         variants={{
@@ -96,15 +98,15 @@ export default function CustomerLossAnimation() {
         <Image src="/images/logo.png" alt="AI-Uncode Agent" width={40} height={40} />
       </motion.div>
 
-      {/* --- 2. تعديل حركة الشعاع ليقطع المسافة الجديدة --- */}
+      {/* الشعاع */}
       <motion.div
         className="absolute top-[56px] right-[36px] w-4 h-4 bg-blue-400 rounded-full z-20"
         variants={{
           initial: { x: 0, opacity: 0 },
-          intervention: { 
-            x: -75, // زيادة المسافة التي يقطعها الشعاع
+          beamTravel: { 
+            x: -75, 
             opacity: [0, 1, 0], 
-            transition: { duration: 1, delay: 2.5 } 
+            transition: { duration: 1, delay: 0.5 } 
           }
         }}
         animate={controls}
@@ -115,18 +117,17 @@ export default function CustomerLossAnimation() {
         className="absolute bottom-[48px] left-[110px] text-purple-500 z-0"
         variants={{
           initial: { y: -20, opacity: 0 },
-          journeyComplete: { y: 0, opacity: 1, transition: { delay: 2.5, type: "spring", stiffness: 150 } }
+          journeyComplete: { y: 0, opacity: 1, transition: { delay: 1.5, type: "spring", stiffness: 150 } }
         }}
         animate={controls}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.box()}</svg>
       </motion.div>
-
       <motion.div
         className="absolute top-4 right-8"
         variants={{
           initial: { y: 20, opacity: 0 },
-          journeyComplete: { y: 0, opacity: 1, transition: { delay: 3, type: "spring" } }
+          journeyComplete: { y: 0, opacity: 1, transition: { delay: 2, type: "spring" } }
         }}
         animate={controls}
       >
