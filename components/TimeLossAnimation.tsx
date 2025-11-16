@@ -10,7 +10,6 @@ const ICONS = {
   truck: () => <><path d="M10 17h4V5H2v12h2" /><path d="M22 17h-4.32a2.28 2.28 0 0 0-2.17 1.35c-.38.7-.08 1.65.7 2.15s1.8.2 2.4-.5c.6-.7.3-1.8-.4-2.4" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /></>,
   calendar: () => <><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>,
   check: () => <path d="M20 6 9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />,
-  thumbsUp: () => <path d="M7 11V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4M7 11H4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3M7 11l1.11 6.23A2 2 0 0 0 10 19h4.23a2 2 0 0 0 1.95-1.57L18 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />,
 };
 
 const MESSAGE_TYPES = {
@@ -20,45 +19,36 @@ const MESSAGE_TYPES = {
   calendar: { icon: ICONS.calendar(), color: "orange" },
 };
 
+// --- 2. إعادة تصميم مرحلة الترتيب (عمودان على اليسار) ---
 const messagesConfig = [
-  { type: "question", chaos: { x: -50, y: -45 }, ordered: { y: -65, x: -30 } },
-  { type: "dollar",   chaos: { x: 30,  y: -55 }, ordered: { y: -65, x: 30 } },
-  { type: "truck",    chaos: { x: 45,  y: 0 },   ordered: { y: -35, x: -30 } },
-  { type: "calendar", chaos: { x: -35, y: 15 },  ordered: { y: -35, x: 30 } },
-  { type: "question", chaos: { x: -10, y: -20 }, ordered: { y: -5, x: -30 } },
-  { type: "dollar",   chaos: { x: 55,  y: 40 },  ordered: { y: -5, x: 30 } },
-  { type: "truck",    chaos: { x: -60, y: 35 },  ordered: { y: 25, x: -30 } },
-  { type: "calendar", chaos: { x: 0,   y: 50 },  ordered: { y: 25, x: 30 } },
-  { type: "question", chaos: { x: 20, y: 20 }, ordered: { y: 55, x: -30 } },
-  { type: "dollar", chaos: { x: -20, y: 60 }, ordered: { y: 55, x: 30 } },
+  { type: "question", chaos: { x: -50, y: -45 }, ordered: { x: -45, y: -60 } },
+  { type: "dollar",   chaos: { x: 30,  y: -55 }, ordered: { x: -15, y: -60 } },
+  { type: "truck",    chaos: { x: 45,  y: 0 },   ordered: { x: -45, y: -30 } },
+  { type: "calendar", chaos: { x: -35, y: 15 },  ordered: { x: -15, y: -30 } },
+  { type: "question", chaos: { x: -10, y: -20 }, ordered: { x: -45, y: 0 } },
+  { type: "dollar",   chaos: { x: 55,  y: 40 },  ordered: { x: -15, y: 0 } },
+  { type: "truck",    chaos: { x: -60, y: 35 },  ordered: { x: -45, y: 30 } },
+  { type: "calendar", chaos: { x: 0,   y: 50 },  ordered: { x: -15, y: 30 } },
+  { type: "question", chaos: { x: 20, y: 20 },  ordered: { x: -45, y: 60 } },
+  { type: "dollar",   chaos: { x: -20, y: 60 }, ordered: { x: -15, y: 60 } },
 ];
 
 export default function TimeLossAnimation() {
-  const chaosControls = useAnimationControls();
-  const logoControls = useAnimationControls();
-  const orderControls = useAnimationControls();
-  const finalControls = useAnimationControls();
+  const controls = useAnimationControls();
 
   useEffect(() => {
     const sequence = async () => {
-      await Promise.all([
-        chaosControls.start("initial"),
-        logoControls.start("initial"),
-        orderControls.start("initial"),
-        finalControls.start("initial"),
-      ]);
-
-      await chaosControls.start("animate");
-      await logoControls.start("animate");
-      await orderControls.start("animate");
-      await finalControls.start("animate");
+      await controls.start("initial");
+      await controls.start("chaos");
+      // --- 2. بدء الترتيب مباشرة مع ظهور الشعار ---
+      await controls.start("reorder");
+      await controls.start("finalCheck");
     };
     
     sequence();
-    // --- 3. تمديد مدة الدورة الكاملة إلى 12 ثانية ---
     const interval = setInterval(sequence, 12000);
     return () => clearInterval(interval);
-  }, [chaosControls, logoControls, orderControls, finalControls]);
+  }, [controls]);
 
   const getColorClasses = (color: string, type: "bg" | "text") => ({
     blue: { bg: "bg-blue-100", text: "text-blue-600" },
@@ -69,69 +59,61 @@ export default function TimeLossAnimation() {
 
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
-      <motion.div animate={logoControls} initial="initial"
+      {/* --- 1. الشعار في الركن العلوي الأيمن --- */}
+      <motion.div
+        className="absolute top-4 right-4 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-20"
         variants={{
-          initial: { scale: 0, opacity: 0, x: "-50%", y: "-50%" },
-          animate: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring", stiffness: 150 } },
+          initial: { scale: 0, opacity: 0 },
+          reorder: { scale: 1, opacity: 1, transition: { delay: 2.5, type: "spring" } },
+          finalCheck: { scale: 0, opacity: 0, transition: { delay: 0.5 } }
         }}
-        // --- 2. إدارة الطبقات ---
-        className="absolute top-1/2 left-1/2 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center p-1 z-20"
+        animate={controls}
       >
-        <Image src="/images/logo.png" alt="AI-Uncode Agent" width={56} height={56} />
+        <Image src="/images/logo.png" alt="AI-Uncode Agent" width={40} height={40} />
       </motion.div>
 
       {messagesConfig.map((msg, i) => (
-        <motion.div key={i} animate={chaosControls} initial="initial"
-          variants={{
-            initial: { opacity: 0, scale: 0, x: 0, y: 50 },
-            animate: {
-              x: msg.chaos.x, y: msg.chaos.y, opacity: 1, scale: 1,
-              transition: { delay: i * 0.15, type: "spring", stiffness: 100 }
-            },
-          }}
-          // --- 1. تصغير حجم الفقاعات ---
+        <motion.div
+          key={i}
           className={`absolute top-1/2 left-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm z-10 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
+          variants={{
+            initial: { opacity: 0, scale: 0, x: "-50%", y: "-50%" },
+            chaos: {
+              x: msg.chaos.x, y: msg.chaos.y, opacity: 1, scale: 1,
+              transition: { delay: i * 0.2, type: "spring", stiffness: 100 }
+            },
+            reorder: {
+              x: msg.ordered.x, y: msg.ordered.y,
+              // --- 2. تصغير الحجم عند الترتيب ---
+              scale: 0.6,
+              opacity: 0.8,
+              transition: { delay: 3 + i * 0.4, type: "spring", stiffness: 120 }
+            },
+            finalCheck: { scale: 0, opacity: 0, transition: { duration: 0.5 } }
+          }}
+          animate={controls}
         >
-           <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
+          <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
             {MESSAGE_TYPES[msg.type].icon}
           </svg>
         </motion.div>
       ))}
       
-      {messagesConfig.map((msg, i) => (
-         <motion.div key={`ordered-${i}`} animate={orderControls} initial="initial"
-          variants={{
-            initial: { opacity: 0, scale: 0 },
-            animate: {
-              x: msg.ordered.x, y: msg.ordered.y, opacity: 1, scale: 0.7,
-              // --- 3. إبطاء وإطالة مدة الترتيب ---
-              transition: { delay: 3 + i * 0.5, type: "spring", stiffness: 120 }
-            }
-          }}
-          className={`absolute top-1/2 left-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm z-10 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "bg")}`}
-        >
-          <svg viewBox="0 0 24 24" fill="none" className={`w-4 h-4 ${getColorClasses(MESSAGE_TYPES[msg.type].color, "text")}`}>
-            {MESSAGE_TYPES[msg.type].icon}
-          </svg>
-          <motion.div
-            variants={{ initial: { scale: 0 }, animate: { scale: 1, transition: { delay: 3.5 + i * 0.5 } } }}
-            className="absolute -right-2 -bottom-0 w-4 h-4 rounded-full flex items-center justify-center bg-green-500"
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="w-2.5 h-2.5 text-white">{ICONS.check()}</svg>
-          </motion.div>
-        </motion.div>
-      ))}
-
-      <motion.div animate={finalControls} initial="initial"
+      {/* --- 3. النهاية القوية: علامة الصح تملأ الشاشة --- */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center bg-green-500 z-30"
         variants={{
           initial: { opacity: 0, scale: 0 },
-          // --- 3. تأخير ظهور النهاية ---
-          animate: { opacity: 1, scale: 1.2, transition: { delay: 9.5, type: "spring" } }
+          finalCheck: {
+            opacity: 1, scale: 1,
+            transition: { delay: 8, duration: 0.5, type: "spring" }
+          }
         }}
-        // --- 2. إدارة الطبقات ---
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center bg-blue-500 z-30"
+        animate={controls}
       >
-        <svg viewBox="0 0 24 24" fill="none" className="w-10 h-10 text-white">{ICONS.thumbsUp()}</svg>
+        <svg viewBox="0 0 24 24" fill="none" className="w-2/3 h-2/3 text-white">
+          {ICONS.check()}
+        </svg>
       </motion.div>
     </div>
   );
