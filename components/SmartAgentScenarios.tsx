@@ -6,43 +6,39 @@ import Image from 'next/image';
 import { FakeScenarioChat } from './FakeScenarioChat'; 
 
 // استيراد أنواع البيانات من ملف الإعدادات لضمان التوافق
-type Scenario = typeof config.smartAgentScenarios.scenarios[0];
+// --- بداية التعديل ---
+// 1. تحديث النوع ليشمل الحقل الجديد showcaseImageUrl
+type Scenario = (typeof config.smartAgentScenarios.scenarios)[0] & { showcaseImageUrl: string };
+// --- نهاية التعديل ---
+
 
 /**
  * SmartAgentScenarios Component
  * ... (التعليقات السابقة تبقى كما هي) ...
- * 8. تمت ترقيته ليفهم خاصية `enabled` ويقوم بفلترة السيناريوهات المعطلة.
+ * 9. تمت ترقيته لعرض صورة معبرة عن النشاط التجاري (Showcase Image) بدلاً من لقطة الشاشة.
  */
 export function SmartAgentScenarios() {
   const { title, subtitle, scenarios } = config.smartAgentScenarios;
 
-  // --- بداية التعديل ---
-  // 1. نقوم بفلترة السيناريوهات لنحصل فقط على المفعّلة منها
   const enabledScenarios = scenarios.filter(scenario => scenario.enabled);
-  // --- نهاية التعديل ---
 
   const [activeScenario, setActiveScenario] = useState<Scenario | null>(null);
   const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
-    // --- بداية التعديل ---
-    // 2. نتأكد من وجود سيناريوهات مفعّلة قبل محاولة الاختيار العشوائي
     if (enabledScenarios.length > 0) {
-      // نختار عشوائياً فقط من قائمة السيناريوهات المفعّلة
       const randomIndex = Math.floor(Math.random() * enabledScenarios.length);
-      const randomScenario = enabledScenarios[randomIndex];
+      const randomScenario = enabledScenarios[randomIndex] as Scenario; // Cast to the updated type
       setActiveScenario(randomScenario);
     }
-    // --- نهاية التعديل ---
     setShowChat(false); 
-  }, [scenarios]); // نبقي الاعتماد على `scenarios` الأصلي لإعادة التشغيل عند أي تغيير في الإعدادات
+  }, [scenarios]);
 
   const handleScenarioClick = (scenario: Scenario) => {
     setActiveScenario(scenario);
     setShowChat(false); 
   };
 
-  // إذا لم يتم تحميل أي سيناريو مفعّل، لا نعرض القسم بأكمله
   if (!activeScenario) {
     return null;
   }
@@ -58,13 +54,11 @@ export function SmartAgentScenarios() {
           {subtitle}
         </p>
 
-        {/* --- بداية التعديل --- */}
-        {/* 3. نعرض أزرار السيناريوهات المفعّلة فقط */}
         <div className="flex flex-wrap justify-center gap-3 mb-12">
           {enabledScenarios.map((scenario) => (
             <button
               key={scenario.id}
-              onClick={() => handleScenarioClick(scenario)}
+              onClick={() => handleScenarioClick(scenario as Scenario)} // Cast to the updated type
               className={`
                 px-6 py-3 rounded-full text-base font-semibold transition-all duration-300 ease-in-out
                 shadow-md hover:shadow-lg hover:-translate-y-1
@@ -80,7 +74,6 @@ export function SmartAgentScenarios() {
             </button>
           ))}
         </div>
-        {/* --- نهاية التعديل --- */}
 
         <div className="w-full max-w-4xl mx-auto min-h-[550px] md:min-h-[600px] bg-white rounded-xl shadow-2xl">
           <div key={activeScenario.id} className="animate-fade-in h-full">
@@ -88,17 +81,21 @@ export function SmartAgentScenarios() {
               <FakeScenarioChat scenario={activeScenario} />
             ) : (
               <div className="p-4 flex flex-col items-center justify-center h-full">
+                {/* --- بداية التعديل --- */}
+                {/* 2. تغيير النص ليعكس طبيعة الصورة الجديدة */}
                 <p className="text-sm text-gray-500 mb-4">
-                  مثال حي لمحادثة في سيناريو: <strong>{activeScenario.name}</strong>
+                  شاهد كيف يعمل وكيلنا الذكي في سيناريو: <strong>{activeScenario.name}</strong>
                 </p>
+                {/* 3. استخدام الحقل الجديد `showcaseImageUrl` وتحديث النص البديل */}
                 <Image
-                  src={activeScenario.thumbnailUrl}
-                  alt={`لقطة شاشة لمحادثة وهمية في ${activeScenario.name}`}
+                  src={activeScenario.showcaseImageUrl}
+                  alt={`صورة معبرة عن نشاط ${activeScenario.name}`}
                   width={1024}
                   height={768}
-                  className="rounded-lg border border-gray-200 mb-6"
+                  className="rounded-lg border border-gray-200 mb-6 object-cover aspect-video" // aspect-video للحفاظ على أبعاد الصورة
                   priority 
                 />
+                {/* --- نهاية التعديل --- */}
                 <button 
                   onClick={() => setShowChat(true)}
                   className="px-8 py-3 bg-[var(--color-secondary)] text-white font-semibold rounded-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
