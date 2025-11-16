@@ -4,13 +4,15 @@ import { motion, useAnimationControls } from "framer-motion"
 import { useEffect, useCallback } from "react"
 import Image from "next/image"
 
-// أيقونات SVG للسيناريو الجديد
+// --- أيقونات SVG مع إضافة أيقونة الريال السعودي الجديدة ---
 const ICONS = {
   customer: () => <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></>,
   store: () => <><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /></>,
   question: () => <path d="M9.09 9a3 3 0 0 1 5.83 1c0 1-1.5 2.5-3 3.5-1.5 1-3 .5-3 2.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
   check: () => <path d="M20 6 9 17l-5-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />,
-  dollar: () => <path d="M12 2v20m5-17H7m10 4H7m10 4H7m10 4H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />,
+  // --- أيقونة الريال السعودي الجديد (SAR) ---
+  saudiRiyal: () => <><path d="M14 11a3 3 0 0 0-6 0v1a3 3 0 0 0 6 0v-1z" /><path d="M4 18h14.48a2 2 0 0 0 1.8-3.1L16 6H8l-4.32 9.9a2 2 0 0 0 1.8 3.1H6" /></>,
+  box: () => <path d="M21 10V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v5" /><path d="m21 10-9 6-9-6" /><path d="M3 10v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-8" />,
 };
 
 export default function CustomerLossAnimation() {
@@ -22,7 +24,7 @@ export default function CustomerLossAnimation() {
     await controls.start("obstacle");
     await controls.start("intervention");
     await controls.start("journeyComplete");
-    await new Promise(resolve => setTimeout(resolve, 2500));
+    await new Promise(resolve => setTimeout(resolve, 3000));
     sequence();
   }, [controls]);
 
@@ -33,23 +35,25 @@ export default function CustomerLossAnimation() {
   return (
     <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* أيقونة العميل (نقطة البداية) */}
+      {/* أيقونة العميل المتحركة */}
       <motion.div
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
-        variants={{ initial: { opacity: 0 }, journeyStart: { opacity: 1 } }}
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 z-10"
+        variants={{
+          initial: { opacity: 0, x: 0 },
+          journeyStart: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+          obstacle: { x: 40, transition: { duration: 1.5 } }, // يتحرك إلى منتصف المسار
+          intervention: { x: 40 },
+          journeyComplete: { x: 95, transition: { duration: 1, delay: 0.5 } }, // يكمل الرحلة
+        }}
         animate={controls}
       >
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.customer()}</svg>
       </motion.div>
 
-      {/* أيقونة المتجر (نقطة النهاية) */}
+      {/* أيقونة المتجر */}
       <motion.div
         className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-        variants={{
-          initial: { opacity: 0 },
-          journeyStart: { opacity: 1 },
-          journeyComplete: { color: "#22c55e", transition: { delay: 1 } } // اللون الأخضر عند اكتمال الرحلة
-        }}
+        variants={{ initial: { opacity: 0 }, journeyStart: { opacity: 1 } }}
         animate={controls}
       >
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.store()}</svg>
@@ -57,27 +61,15 @@ export default function CustomerLossAnimation() {
 
       {/* الخط المتقطع (مسار الشراء) */}
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 150 150">
-        <motion.path
-          d="M 35 75 H 115"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeDasharray="5 5"
-          className="text-gray-300"
-          variants={{
-            initial: { pathLength: 0, opacity: 0 },
-            journeyStart: { pathLength: 0.5, opacity: 1, transition: { duration: 1.5 } }, // يتوقف في المنتصف
-            journeyComplete: { pathLength: 1, opacity: 1, transition: { duration: 1, delay: 0.5 } } // يكمل المسار
-          }}
-          animate={controls}
-        />
+        <path d="M 35 75 H 115" stroke="currentColor" strokeWidth="3" strokeDasharray="5 5" className="text-gray-300" />
       </svg>
 
       {/* العائق (علامة الاستفهام) */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-10"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center shadow-md z-20"
         variants={{
           initial: { scale: 0, opacity: 0 },
-          obstacle: { scale: 1, opacity: 1, transition: { type: "spring" } },
+          obstacle: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
           intervention: { scale: 0, opacity: 0, transition: { delay: 0.5 } }
         }}
         animate={controls}
@@ -87,27 +79,52 @@ export default function CustomerLossAnimation() {
 
       {/* شعار المنصة (الحل) */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-20"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-md flex items-center justify-center p-1 z-30"
         variants={{
           initial: { scale: 0, opacity: 0 },
-          intervention: { scale: 1, opacity: 1, transition: { type: "spring" } },
-          journeyComplete: { scale: 0, opacity: 0, transition: { delay: 1.5 } }
+          intervention: { scale: 1, opacity: 1, transition: { delay: 1, type: "spring" } },
+          journeyComplete: { scale: 0, opacity: 0, transition: { delay: 2 } }
         }}
         animate={controls}
       >
         <Image src="/images/logo.png" alt="AI-Uncode Agent" width={40} height={40} />
       </motion.div>
+      
+      {/* فقاعة الدردشة مع علامة الصح */}
+      <motion.div
+        className="absolute top-8 left-1/2 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shadow-md z-20"
+        variants={{
+          initial: { scale: 0, opacity: 0 },
+          intervention: { scale: 1, opacity: 1, transition: { delay: 1.5, type: "spring" } },
+          journeyComplete: { scale: 0, opacity: 0, transition: { delay: 0.2 } }
+        }}
+        animate={controls}
+      >
+        <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-green-600">{ICONS.check()}</svg>
+      </motion.div>
 
-      {/* علامة الدولار (النتيجة النهائية) */}
+      {/* المنتج الذي يسقط في المتجر */}
+      <motion.div
+        className="absolute top-1/2 left-[115px] -translate-x-1/2 text-purple-500 z-0"
+        variants={{
+          initial: { y: -50, opacity: 0 },
+          journeyComplete: { y: 0, opacity: 1, transition: { delay: 1.5, type: "spring", stiffness: 150 } }
+        }}
+        animate={controls}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{ICONS.box()}</svg>
+      </motion.div>
+
+      {/* أيقونة الريال السعودي (النتيجة النهائية) */}
       <motion.div
         className="absolute top-4 right-8"
         variants={{
           initial: { y: 20, opacity: 0 },
-          journeyComplete: { y: 0, opacity: 1, transition: { delay: 1.2, type: "spring" } }
+          journeyComplete: { y: 0, opacity: 1, transition: { delay: 2, type: "spring" } }
         }}
         animate={controls}
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-500">{ICONS.dollar()}</svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-green-500">{ICONS.saudiRiyal()}</svg>
       </motion.div>
 
     </div>
