@@ -1,120 +1,162 @@
-"use client"
+import React from "react"; import { motion, AnimatePresence } from "framer-motion";
 
-import { motion, useAnimationControls } from "framer-motion"
-import { useEffect, useCallback } from "react"
-import Image from "next/image"
+/**
 
-const ICONS = {
-  gear: () => <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />,
-  line: (props) => <path d="M5 12h14" {...props} />,
-  wallet: () => <><path d="M19 7V4a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3" /><path d="M2 7h20" /><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" /></>,
-  x: () => <path d="M18 6 6 18M6 6l12 12" />,
-  rocket: () => <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.3.09-3.1a2 2 0 0 0-2.43-2.43c-.84.61-2.26.62-3.1.09zM12 15.5V13a6 6 0 0 0-3-5.2V4.5a2.5 2.5 0 0 1 5 0V7.8a6 6 0 0 0-3 5.2v2.5" />,
-};
+AnimatedScenarioHero
 
-// تعريف الأشكال ومواقعها (الفوضوية والمنظمة)
-const SHAPES_CONFIG = [
-  // التروس التي ستذهب إلى الزوايا
-  { type: 'gear', chaos: { x: -50, y: -40, rotate: 0 },   order: { x: -55, y: -55, rotate: 360, scale: 0.5 } },
-  { type: 'gear', chaos: { x: 50, y: 30, rotate: 90 },    order: { x: 55, y: -55, rotate: 360, scale: 0.5 } },
-  // الخطوط التي ستشكل محتوى الواجهة
-  { type: 'line', chaos: { x: -30, y: 40, rotate: -30 }, order: { x: 0, y: -10, rotate: 0, scale: 0.8 } },
-  { type: 'line', chaos: { x: 20, y: -50, rotate: 120 }, order: { x: 0, y: 10, rotate: 0, scale: 0.8 } },
-];
 
-export default function ComplexityAnimation() {
-  const controls = useAnimationControls();
+---
 
-  const sequence = useCallback(async () => {
-    await controls.start("initial");
-    await controls.start("chaos");
-    await controls.start("intervention");
-    await controls.start("build");
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    sequence();
-  }, [controls]);
+Reusable React component (Tailwind + Framer Motion) to build complex, timeline-driven
 
-  useEffect(() => {
-    sequence();
-  }, [sequence]);
+interface animations (suitable as a hero/landing section replacement for GIFs/videos).
 
-  return (
-    <div style={{ width: '150px', height: '150px', position: 'relative', overflow: 'hidden' }}>
+Features:
 
-      {/* 1. أيقونة المحفظة والتكلفة (الألم) */}
+Accepts an array of "scenes". Each scene contains elements and per-element animation steps.
+
+
+Plays scenes in sequence with crossfade and stagger control.
+
+
+Keyboard accessible (pause/play) and responsive.
+
+
+Lightweight: renders DOM + CSS + framer-motion (no video). Works with Lottie/Rive embeds as well.
+
+
+Usage example (simple):
+
+<AnimatedScenarioHero
+
+scenes={[
+
+{ id: 'discover', duration: 3500, elements: [
+
+{ key: 'title', type: 'text', content: 'Discover AI-Uncode', enter: {y: 24, opacity:0}, animate: {y:0, opacity:1}, delay:0.0 },
+
+{ key: 'cta', type: 'button', content: 'Get Started', enter: {scale:.9, opacity:0}, animate:{scale:1, opacity:1}, delay:0.6 }
+
+]},
+
+{ id: 'flow', duration: 4000, elements: [ /* ... */ ] }
+
+]}
+
+loop={true}
+
+className="max-w-6xl mx-auto"
+
+/> */
+
+
+const DEFAULT_SCENE_DURATION = 3500;
+
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+export default function AnimatedScenarioHero({ scenes = [], loop = true, className = "", pauseOnHover = true }) { const [index, setIndex] = React.useState(0); const [paused, setPaused] = React.useState(false); const timerRef = React.useRef(null);
+
+React.useEffect(() => { if (paused) return; const scene = scenes[index] || { duration: DEFAULT_SCENE_DURATION }; const duration = clamp(scene.duration || DEFAULT_SCENE_DURATION, 800, 20000); timerRef.current = setTimeout(() => { const next = index + 1; if (next >= scenes.length) { if (loop) setIndex(0); } else setIndex(next); }, duration); return () => clearTimeout(timerRef.current); }, [index, paused, scenes, loop]);
+
+// keyboard controls: space toggles pause/play, arrow keys navigate scenes React.useEffect(() => { const onKey = (e) => { if (e.code === 'Space') { e.preventDefault(); setPaused(p => !p); } if (e.code === 'ArrowRight') { setIndex(i => Math.min(i+1, scenes.length-1)); } if (e.code === 'ArrowLeft') { setIndex(i => Math.max(i-1, 0)); } }; window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey); }, [scenes.length]);
+
+const current = scenes[index] || { id: 'empty', elements: [] };
+
+return ( <section aria-label="Animated scenarios" className={relative overflow-hidden p-6 rounded-2xl shadow-lg bg-gradient-to-br from-white to-slate-50 ${className}} onMouseEnter={() => pauseOnHover && setPaused(true)} onMouseLeave={() => pauseOnHover && setPaused(false)} tabIndex={0} > <div className="flex items-center justify-between mb-4"> <div className="space-y-1"> <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">{current.title || 'Scenario'}</h2> <p className="text-sm text-slate-500">{current.subtitle || 'Animated interface preview — accessible & code-friendly.'}</p> </div>
+
+<div className="flex gap-2 items-center">
+      <button
+        aria-pressed={paused}
+        onClick={() => setPaused(p => !p)}
+        className="px-3 py-1 rounded-xl shadow-sm border text-sm text-slate-700 bg-white"
+      >{paused ? 'Play' : 'Pause'}</button>
+
+      <div className="text-xs text-slate-500">{index+1}/{Math.max(scenes.length,1)}</div>
+    </div>
+  </div>
+
+  <div className="relative w-full h-64 md:h-80 lg:h-96 bg-transparent rounded-xl overflow-hidden flex items-center justify-center">
+    <AnimatePresence mode="wait">
+      {/* Scene wrapper */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
-        variants={{
-          initial: { scale: 0, opacity: 0 },
-          chaos: { scale: 1, opacity: 1, transition: { delay: 1, type: "spring" } },
-          intervention: { scale: 0, opacity: 0, transition: { duration: 0.3 } }
-        }}
-        animate={controls}
+        key={current.id || index}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.45 }}
+        className="absolute inset-0 flex items-center justify-center"
       >
-        <div className="relative w-16 h-16">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-full h-full text-gray-500">
-            {ICONS.wallet()}
-          </svg>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="absolute inset-0 w-full h-full text-red-500">
-            {ICONS.x()}
-          </svg>
+        {/* Elements inside scene */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl px-4">
+          {current.elements && current.elements.map((el, i) => {
+            // default variant map
+            const enter = el.enter || { y: 20, opacity: 0, scale: 1 };
+            const animate = el.animate || { y: 0, opacity: 1, scale: 1 };
+            const exit = el.exit || { opacity: 0, y: -12 };
+            const delay = typeof el.delay === 'number' ? el.delay : (i * 0.12);
+
+            const common = {
+              initial: enter,
+              animate: animate,
+              exit: exit,
+              transition: { type: 'spring', stiffness: 120, damping: 16, delay }
+            };
+
+            // Element rendering by type (text, image, lottie, custom)
+            if (el.type === 'image') {
+              return (
+                <motion.div key={el.key || i} {...common} className="flex items-center justify-center">
+                  <img src={el.src} alt={el.alt || ''} className="rounded-2xl shadow-md max-h-64 object-contain" />
+                </motion.div>
+              );
+            }
+
+            if (el.type === 'lottie') {
+              // user may pass a React Lottie component in el.component or a fallback image
+              return (
+                <motion.div key={el.key || i} {...common} className="flex items-center justify-center">
+                  {el.component ? el.component : <img src={el.fallback} alt="animation" className="rounded-xl" />}
+                </motion.div>
+              );
+            }
+
+            if (el.type === 'button') {
+              return (
+                <motion.div key={el.key || i} {...common} className="flex items-center">
+                  <button className="px-4 py-2 rounded-2xl shadow-sm bg-slate-900 text-white font-medium">{el.content}</button>
+                </motion.div>
+              );
+            }
+
+            // default: text / card
+            return (
+              <motion.div key={el.key || i} {...common} className="p-4 rounded-xl bg-white/60 backdrop-blur-sm shadow-inner">
+                {el.title && <h3 className="text-lg font-semibold">{el.title}</h3>}
+                {el.content && <p className="text-sm text-slate-600 mt-2">{el.content}</p>}
+              </motion.div>
+            );
+
+          })}
         </div>
       </motion.div>
+    </AnimatePresence>
+  </div>
 
-      {/* 3. الإطار الذي يمثل الواجهة النهائية */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border-2 rounded-lg"
-        variants={{
-          initial: { opacity: 0, borderColor: "#9ca3af" }, // رمادي
-          build: { opacity: 1, borderColor: "#22c55e", transition: { delay: 1.5 } } // أخضر
-        }}
-        animate={controls}
-      />
-
-      {/* الأشكال التي تتحول من فوضى إلى نظام */}
-      {SHAPES_CONFIG.map((shape, i) => (
-        <motion.div
-          key={i}
-          className="absolute top-1/2 left-1/2 text-gray-400"
-          variants={{
-            initial: { opacity: 0, scale: 0 },
-            chaos: { x: shape.chaos.x, y: shape.chaos.y, rotate: shape.chaos.rotate, opacity: 1, scale: 1, transition: { delay: i * 0.2, type: "spring" } },
-            build: { x: shape.order.x, y: shape.order.y, rotate: shape.order.rotate, scale: shape.order.scale, color: "#3b82f6", transition: { delay: 1.2 + i * 0.2, duration: 1 } }
-          }}
-          animate={controls}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            {shape.type === 'gear' ? ICONS.gear() : ICONS.line()}
-          </svg>
-        </motion.div>
-      ))}
-
-      {/* 2. شعار المنصة (المنظم) */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center p-1 z-20"
-        variants={{
-          initial: { scale: 0, opacity: 0 },
-          intervention: { scale: 1, opacity: 1, transition: { delay: 0.5, type: "spring" } },
-          build: { scale: 0, opacity: 0, transition: { delay: 2.5 } }
-        }}
-        animate={controls}
+  {/* Simple pagination dots */}
+  <div className="mt-4 flex items-center justify-center gap-2">
+    {scenes.map((s, i) => (
+      <button
+        key={s.id || i}
+        onClick={() => setIndex(i)}
+        aria-label={`Go to scene ${i+1}`}
+        className={`w-3 h-3 rounded-full ${i === index ? 'scale-110' : 'opacity-50'}`}
       >
-        <Image src="/images/logo.png" alt="AI-Uncode Agent" width={56} height={56} />
-      </motion.div>
+        <span className="sr-only">{i+1}</span>
+      </button>
+    ))}
+  </div>
 
-      {/* 4. أيقونة الصاروخ (النتيجة) */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-blue-500 z-30"
-        variants={{
-          initial: { scale: 0, opacity: 0 },
-          build: { scale: 1.5, opacity: 1, transition: { delay: 2.8, type: "spring" } }
-        }}
-        animate={controls}
-      >
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          {ICONS.rocket()}
-        </svg>
-      </motion.div>
-    </div>
-  );
-}
+</section>
+
+); }
+
