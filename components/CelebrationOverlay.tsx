@@ -7,29 +7,27 @@ import ReactConfetti from 'react-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface CelebrationOverlayProps {
-  // `stage` يحدد ما الذي يجب عرضه: رسالة وسيطة أم احتفال نهائي
   stage: 'intermediate' | 'final' | 'hidden';
-  // الرسالة التي ستظهر في المنتصف
   message: string;
-  // دالة لإخفاء الواجهة عند انتهاء العرض
   onComplete: () => void;
 }
 
 export function CelebrationOverlay({ stage, message, onComplete }: CelebrationOverlayProps) {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  // تأثير جانبي للحصول على أبعاد الشاشة لتغطيتها بالقصاصات
   useEffect(() => {
     const { innerWidth, innerHeight } = window;
     setDimensions({ width: innerWidth, height: innerHeight });
   }, []);
 
-  // تأثير جانبي لإخفاء الواجهة تلقائياً بعد مدة معينة
   useEffect(() => {
     if (stage !== 'hidden') {
+      // --- بداية التعديل ---
+      // زيادة مدة عرض الرسالة النهائية إلى 5 ثوانٍ
       const timer = setTimeout(() => {
         onComplete();
-      }, stage === 'final' ? 3500 : 1500); // مدة أطول للاحتفال النهائي
+      }, stage === 'final' ? 5000 : 1500); 
+      // --- نهاية التعديل ---
 
       return () => clearTimeout(timer);
     }
@@ -44,7 +42,6 @@ export function CelebrationOverlay({ stage, message, onComplete }: CelebrationOv
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
         >
-          {/* تأثير القصاصات الملونة (يعمل فقط في المرحلة النهائية) */}
           {stage === 'final' && (
             <ReactConfetti
               width={dimensions.width}
@@ -55,7 +52,6 @@ export function CelebrationOverlay({ stage, message, onComplete }: CelebrationOv
             />
           )}
 
-          {/* حاوية الرسالة */}
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
