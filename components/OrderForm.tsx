@@ -10,12 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group" // 1. استيراد مكون جديد
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { toast } from "sonner"
-import { User, Mail, Sparkles, Briefcase, MessageCircle } from "lucide-react" // 2. استيراد أيقونة جديدة
+import { User, Mail, Sparkles, Briefcase, MessageCircle } from "lucide-react"
 import { orderFormContent, type OrderFormContent } from "@/src/config/orderFormConfig"
 
-// 3. تحديث نوع بيانات الفورم
 interface FormData {
   name: string
   service: "new_landing_page" | "integrate_agent" | "full_package"
@@ -25,7 +24,6 @@ interface FormData {
 }
 
 export default function OrderFormWrapper() {
-  // 4. إضافة قيمة افتراضية لـ contactMethod
   const methods = useForm<FormData>({
     defaultValues: {
       contactMethod: 'whatsapp',
@@ -48,15 +46,14 @@ function OrderForm() {
     trigger,
     watch,
     setValue,
-    unregister, // 5. نحتاج unregister لإعادة تعيين التحقق
+    unregister,
   } = useFormContext<FormData>()
   const router = useRouter()
 
   const contactMethod = watch('contactMethod');
 
-  // 6. منطق التحقق الديناميكي
   useEffect(() => {
-    unregister('contactValue'); // إعادة تعيين التحقق عند تغيير الطريقة
+    unregister('contactValue');
   }, [contactMethod, unregister]);
 
   const content: OrderFormContent = orderFormContent
@@ -83,7 +80,7 @@ function OrderForm() {
     if (currentStep === 1) fieldToTrigger = "name";
     if (currentStep === 2) fieldToTrigger = "service";
     if (currentStep === 3) fieldToTrigger = "projectGoal";
-    if (currentStep === 4) fieldToTrigger = "contactValue"; // 7. التحقق من حقل التواصل الجديد
+    if (currentStep === 4) fieldToTrigger = "contactValue";
 
     if (fieldToTrigger) {
         isValid = await trigger(fieldToTrigger);
@@ -153,18 +150,88 @@ function OrderForm() {
 
         <div className="bg-card border border-border rounded-2xl shadow-2xl p-8 md:p-12">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* ... الخطوات 1، 2، 3 تبقى كما هي ... */}
             {currentStep === 1 && (
-              // ... كود الخطوة الأولى ...
-            )}
-            {currentStep === 2 && (
-              // ... كود الخطوة الثانية ...
-            )}
-            {currentStep === 3 && (
-              // ... كود الخطوة الثالثة ...
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex items-start gap-4">
+                  <div className="mt-2">{getStepIcon(1)}</div>
+                  <div className="flex-1 space-y-3">
+                    <label className="text-lg font-medium text-card-foreground leading-relaxed block">
+                      {content.fields.name.label}
+                    </label>
+                    <Input
+                      {...register("name", { required: "لا تخلّي هالحقل فاضي" })}
+                      className="text-lg h-14 bg-background border-2 focus:border-primary transition-all"
+                      placeholder="اكتب اسمك أو اسم شركتك..."
+                    />
+                    {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+                  </div>
+                </div>
+                <Button type="button" onClick={handleNext} className="w-full h-14 text-lg font-medium">
+                  التالي
+                </Button>
+              </div>
             )}
 
-            {/* --- بداية التعديل الرئيسي للخطوة الرابعة --- */}
+            {currentStep === 2 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex items-start gap-4">
+                  <div className="mt-2">{getStepIcon(2)}</div>
+                  <div className="flex-1 space-y-3">
+                    <label className="text-lg font-medium text-card-foreground leading-relaxed block">
+                      {content.fields.service.label}
+                    </label>
+                    <Controller
+                      control={control}
+                      name="service"
+                      rules={{ required: "لو سمحت، اختر خدمة" }}
+                      render={({ field }) => (
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className="space-y-3 pt-2"
+                        >
+                          {content.fields.service.options.map((option) => (
+                            <Label key={option.value} className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-muted has-[:checked]:border-primary transition-all">
+                              <RadioGroupItem value={option.value} />
+                              <span>{option.label}</span>
+                            </Label>
+                          ))}
+                        </RadioGroup>
+                      )}
+                    />
+                    {errors.service && <p className="text-sm text-destructive mt-2">{errors.service.message}</p>}
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <Button type="button" onClick={() => setCurrentStep(1)} variant="outline" className="flex-1 h-14 text-lg">السابق</Button>
+                  <Button type="button" onClick={handleNext} className="flex-1 h-14 text-lg font-medium">التالي</Button>
+                </div>
+              </div>
+            )}
+
+            {currentStep === 3 && (
+              <div className="space-y-6 animate-fade-in">
+                <div className="flex items-start gap-4">
+                  <div className="mt-2">{getStepIcon(3)}</div>
+                  <div className="flex-1 space-y-3">
+                    <label className="text-lg font-medium text-card-foreground leading-relaxed block">
+                      {content.fields.projectGoal.label}
+                    </label>
+                    <Textarea
+                      {...register("projectGoal", { required: "نحتاج نعرف وش هدفك" })}
+                      className="text-lg min-h-32 bg-background border-2 focus:border-primary transition-all resize-none"
+                      placeholder="مثال: أبي صفحة لمتجر تمور عشان أزيد مبيعاتي، وأبي وكيل ذكي يرد على استفسارات الزباين..."
+                    />
+                    {errors.projectGoal && <p className="text-sm text-destructive">{errors.projectGoal.message}</p>}
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <Button type="button" onClick={() => setCurrentStep(2)} variant="outline" className="flex-1 h-14 text-lg">السابق</Button>
+                  <Button type="button" onClick={handleNext} className="flex-1 h-14 text-lg font-medium">التالي</Button>
+                </div>
+              </div>
+            )}
+
             {currentStep === 4 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -202,14 +269,14 @@ function OrderForm() {
                         pattern: {
                           value: contactMethod === 'email' 
                             ? /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i 
-                            : /^\+?[0-9\s-]{7,15}$/, // Regex بسيط لرقم الهاتف
+                            : /^\+?[0-9\s-]{7,15}$/,
                           message: content.fields.contact.validationMessages[contactMethod]
                         }
                       })}
                       className="text-lg h-14 bg-background border-2 focus:border-primary transition-all"
                       placeholder={content.fields.contact.placeholders[contactMethod]}
                       type={contactMethod === 'email' ? 'email' : 'tel'}
-                      key={contactMethod} // مفتاح متغير لإعادة إنشاء المكون عند تغيير النوع
+                      key={contactMethod}
                     />
                     {errors.contactValue && <p className="text-sm text-destructive">{errors.contactValue.message}</p>}
                   </div>
@@ -222,7 +289,6 @@ function OrderForm() {
                 </div>
               </div>
             )}
-            {/* --- نهاية التعديل الرئيسي للخطوة الرابعة --- */}
           </form>
         </div>
 
