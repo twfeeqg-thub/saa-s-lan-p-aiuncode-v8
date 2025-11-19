@@ -3,24 +3,20 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+// --- بداية التعديل ---
+// 1. استيراد Controller للتعامل مع المكونات المركبة
+import { useForm, Controller, FormProvider } from "react-hook-form"
+// --- نهاية التعديل ---
 import { useRouter } from "next/navigation"
-// ملاحظة: هذه الاستيرادات قد تفشل إذا لم يتم تثبيت المكونات بعد
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-// --- بداية التعديل ---
-// 1. حذف استيراد useToast القديم
-// import { useToast } from "@/components/ui/use-toast"
-// 2. إضافة استيراد toast من sonner
 import { toast } from "sonner"
-// --- نهاية التعديل ---
 import { User, Mail, Sparkles, Briefcase } from "lucide-react"
 import { orderFormContent, type OrderFormContent } from "@/src/config/orderFormConfig"
 
-// تعريف نوع البيانات التي سيتم جمعها من الفورم
 interface FormData {
   name: string
   service: "new_landing_page" | "integrate_agent" | "full_package"
@@ -28,19 +24,29 @@ interface FormData {
   contact: string
 }
 
-export default function OrderForm() {
+// المكون الرئيسي الآن يستخدم FormProvider لتمرير حالة الفورم
+export default function OrderFormWrapper() {
+  const methods = useForm<FormData>();
+  return (
+    <FormProvider {...methods}>
+      <OrderForm />
+    </FormProvider>
+  );
+}
+
+function OrderForm() {
   const [currentStep, setCurrentStep] = useState(1)
+  // --- بداية التعديل ---
+  // 2. استخدام useFormContext بدلاً من استدعاء useForm مرة أخرى
   const {
+    control, // نحتاج control للـ Controller
     register,
     handleSubmit,
     formState: { errors },
     trigger,
-    setValue,
-    watch,
-  } = useForm<FormData>()
+  } = useFormContext<FormData>()
+  // --- نهاية التعديل ---
   const router = useRouter()
-  // 3. حذف استدعاء hook الـ useToast
-  // const { toast } = useToast()
 
   const content: OrderFormContent = orderFormContent
   const totalSteps = 4
@@ -72,7 +78,6 @@ export default function OrderForm() {
     }
 
     if (isValid && currentStep < totalSteps) {
-      // 4. تعديل استدعاء toast ليناسب صيغة sonner
       toast(toastMessages[currentStep - 1]);
       setCurrentStep(currentStep + 1)
     }
@@ -80,13 +85,11 @@ export default function OrderForm() {
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted:", data)
-    // 4. تعديل استدعاء toast ليناسب صيغة sonner (استخدام .success للون الأخضر)
     toast.success(toastMessages[3]);
     
-    // لاحقاً، سنستبدل هذا بالربط الفعلي (إرسال إيميل، الخ)
     setTimeout(() => {
       router.push("/thank-you")
-    }, 1000) // تم زيادة المدة قليلاً لترى الرسالة بوضوح
+    }, 1000)
   }
 
   const getStepIcon = (step: number) => {
@@ -105,7 +108,6 @@ export default function OrderForm() {
       dir="rtl"
     >
       <div className="w-full max-w-2xl">
-        {/* Header */}
         <div className="text-center mb-12 space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-relaxed text-balance">
             {content.title}
@@ -115,7 +117,6 @@ export default function OrderForm() {
           </p>
         </div>
 
-        {/* Progress Bar */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-medium text-muted-foreground">
@@ -134,10 +135,8 @@ export default function OrderForm() {
           </p>
         </div>
 
-        {/* Form Card */}
         <div className="bg-card border border-border rounded-2xl shadow-2xl p-8 md:p-12">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            {/* Step 1: Name */}
             {currentStep === 1 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -160,7 +159,7 @@ export default function OrderForm() {
               </div>
             )}
 
-            {/* Step 2: Service Selection */}
+            {/* --- بداية التعديل الرئيسي --- */}
             {currentStep === 2 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -169,19 +168,26 @@ export default function OrderForm() {
                     <label className="text-lg font-medium text-card-foreground leading-relaxed block">
                       {content.fields.service.label}
                     </label>
-                    <RadioGroup
-                      {...register("service", { required: "الرجاء اختيار خدمة" })}
-                      onValueChange={(value) => setValue("service", value as FormData["service"], { shouldValidate: true })}
-                      className="space-y-3 pt-2"
-                      value={watch("service")}
-                    >
-                      {content.fields.service.options.map((option) => (
-                        <Label key={option.value} className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-muted has-[:checked]:border-primary transition-all">
-                          <RadioGroupItem value={option.value} />
-                          <span>{option.label}</span>
-                        </Label>
-                      ))}
-                    </RadioGroup>
+                    {/* 3. استخدام Controller لربط RadioGroup */}
+                    <Controller
+                      control={control}
+                      name="service"
+                      rules={{ required: "الرجاء اختيار خدمة" }}
+                      render={({ field }) => (
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          value={field.value}
+                          className="space-y-3 pt-2"
+                        >
+                          {content.fields.service.options.map((option) => (
+                            <Label key={option.value} className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-muted has-[:checked]:border-primary transition-all">
+                              <RadioGroupItem value={option.value} />
+                              <span>{option.label}</span>
+                            </Label>
+                          ))}
+                        </RadioGroup>
+                      )}
+                    />
                     {errors.service && <p className="text-sm text-destructive mt-2">{errors.service.message}</p>}
                   </div>
                 </div>
@@ -191,8 +197,8 @@ export default function OrderForm() {
                 </div>
               </div>
             )}
+            {/* --- نهاية التعديل الرئيسي --- */}
 
-            {/* Step 3: Project Goal */}
             {currentStep === 3 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -204,7 +210,7 @@ export default function OrderForm() {
                     <Textarea
                       {...register("projectGoal", { required: "هذا الحقل مطلوب" })}
                       className="text-lg min-h-32 bg-background border-2 focus:border-primary transition-all resize-none"
-                      placeholder="مثال: أريد صفحة هبوط لمتجر تمور لزيادة المبيعات، وأحتاج وكيل ذكي للرد على استفسارات الأسعار والشحن."
+                      placeholder="مثال: أريد صفحة هبوط لمتجر تمور..."
                     />
                     {errors.projectGoal && <p className="text-sm text-destructive">{errors.projectGoal.message}</p>}
                   </div>
@@ -216,7 +222,6 @@ export default function OrderForm() {
               </div>
             )}
 
-            {/* Step 4: Contact */}
             {currentStep === 4 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -251,7 +256,6 @@ export default function OrderForm() {
           </form>
         </div>
 
-        {/* Step Indicators */}
         <div className="flex justify-center gap-3 mt-8">
           {[1, 2, 3, 4].map((step) => (
             <div
