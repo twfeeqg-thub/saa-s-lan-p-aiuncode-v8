@@ -22,7 +22,6 @@ export const orderFormContent = {
     projectGoal: {
       label: "علّمنا عن مشروعك والهدف اللي تبي توصله.",
     },
-    // --- بداية التعديل الرئيسي ---
     contact: {
       label: "وآخر شي، كيف تبغانا نتواصل معك؟",
       types: [
@@ -38,7 +37,6 @@ export const orderFormContent = {
         email: "تأكد من الإيميل، شكله غير صحيح",
       }
     },
-    // --- نهاية التعديل الرئيسي ---
   },
   
   // النصوص والأزرار
@@ -52,13 +50,16 @@ export const orderFormContent = {
     step4: "خلاص قرّبنا نخلص!",
   },
   
-  // رسائل التنبيه (Toast)
+  // رسائل التنبيه (Toast) - هذه الرسائل لن تستخدم كـ toast بعد الآن بل كرسائل في CelebrationOverlay
   toastMessages: {
     step1: "كفو! اللي بعده...",
     step2: "حلو! الحين عطنا تفاصيل مشروعك.",
     step3: "باقي خطوة وحدة بس!",
-    step4: "وصل طلبك! بنتواصل معك قريب.",
+    step4: "وصل طلبك! بنتواصل معك قريب.", // هذه الرسالة لن تظهر كـ toast بل كجزء من الاحتفال النهائي
   },
+
+  // الرسالة الاحتفالية النهائية
+  finalCelebrationMessage: "وصل طلبك بنجاح، والآن ريّح بالك وخلّ التعقيدات الباقية علينا وبنتواصل معك قريب",
 };
 
 export type OrderFormContent = typeof orderFormContent;
