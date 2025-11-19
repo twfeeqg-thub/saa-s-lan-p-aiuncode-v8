@@ -4,8 +4,8 @@
 
 import { useState } from "react"
 // --- بداية التعديل ---
-// 1. استيراد Controller للتعامل مع المكونات المركبة
-import { useForm, Controller, FormProvider } from "react-hook-form"
+// 1. إضافة useFormContext إلى قائمة الاستيراد لحل خطأ البناء
+import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form"
 // --- نهاية التعديل ---
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -24,7 +24,6 @@ interface FormData {
   contact: string
 }
 
-// المكون الرئيسي الآن يستخدم FormProvider لتمرير حالة الفورم
 export default function OrderFormWrapper() {
   const methods = useForm<FormData>();
   return (
@@ -36,16 +35,13 @@ export default function OrderFormWrapper() {
 
 function OrderForm() {
   const [currentStep, setCurrentStep] = useState(1)
-  // --- بداية التعديل ---
-  // 2. استخدام useFormContext بدلاً من استدعاء useForm مرة أخرى
   const {
-    control, // نحتاج control للـ Controller
+    control,
     register,
     handleSubmit,
     formState: { errors },
     trigger,
   } = useFormContext<FormData>()
-  // --- نهاية التعديل ---
   const router = useRouter()
 
   const content: OrderFormContent = orderFormContent
@@ -146,9 +142,9 @@ function OrderForm() {
                       {content.fields.name.label}
                     </label>
                     <Input
-                      {...register("name", { required: "هذا الحقل مطلوب" })}
+                      {...register("name", { required: "لا تخلّي هالحقل فاضي" })}
                       className="text-lg h-14 bg-background border-2 focus:border-primary transition-all"
-                      placeholder="اكتب اسمك أو اسم شركتك هنا..."
+                      placeholder="اكتب اسمك أو اسم شركتك..."
                     />
                     {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                   </div>
@@ -159,7 +155,6 @@ function OrderForm() {
               </div>
             )}
 
-            {/* --- بداية التعديل الرئيسي --- */}
             {currentStep === 2 && (
               <div className="space-y-6 animate-fade-in">
                 <div className="flex items-start gap-4">
@@ -168,11 +163,10 @@ function OrderForm() {
                     <label className="text-lg font-medium text-card-foreground leading-relaxed block">
                       {content.fields.service.label}
                     </label>
-                    {/* 3. استخدام Controller لربط RadioGroup */}
                     <Controller
                       control={control}
                       name="service"
-                      rules={{ required: "الرجاء اختيار خدمة" }}
+                      rules={{ required: "لو سمحت، اختر خدمة" }}
                       render={({ field }) => (
                         <RadioGroup
                           onValueChange={field.onChange}
@@ -197,7 +191,6 @@ function OrderForm() {
                 </div>
               </div>
             )}
-            {/* --- نهاية التعديل الرئيسي --- */}
 
             {currentStep === 3 && (
               <div className="space-y-6 animate-fade-in">
@@ -208,9 +201,9 @@ function OrderForm() {
                       {content.fields.projectGoal.label}
                     </label>
                     <Textarea
-                      {...register("projectGoal", { required: "هذا الحقل مطلوب" })}
+                      {...register("projectGoal", { required: "نحتاج نعرف وش هدفك" })}
                       className="text-lg min-h-32 bg-background border-2 focus:border-primary transition-all resize-none"
-                      placeholder="مثال: أريد صفحة هبوط لمتجر تمور..."
+                      placeholder="مثال: أبي صفحة لمتجر تمور عشان أزيد مبيعاتي، وأبي وكيل ذكي يرد على استفسارات الزباين..."
                     />
                     {errors.projectGoal && <p className="text-sm text-destructive">{errors.projectGoal.message}</p>}
                   </div>
@@ -232,14 +225,14 @@ function OrderForm() {
                     </label>
                     <Input
                       {...register("contact", { 
-                        required: "هذا الحقل مطلوب",
+                        required: "عطنا إيميلك عشان نتواصل",
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "الرجاء إدخال بريد إلكتروني صالح"
+                          message: "تأكد من الإيميل، شكله غير صحيح"
                         }
                       })}
                       className="text-lg h-14 bg-background border-2 focus:border-primary transition-all"
-                      placeholder="بريدك الإلكتروني..."
+                      placeholder="اكتب إيميلك هنا..."
                       type="email"
                     />
                     {errors.contact && <p className="text-sm text-destructive">{errors.contact.message}</p>}
