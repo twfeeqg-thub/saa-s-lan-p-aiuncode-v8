@@ -1,20 +1,55 @@
 // ملف الإعدادات المركزي لصفحة الهبوط
-// يحتوي على جميع المحتوى والبيانات للصفحة
+// تم التحديث ليعكس البنية الصحيحة للملفات ويضيف جميع القطاعات
 
-export const config = {
-  // التحكم في إظهار وإخفاء الأقسام
-  // <--  هذه القيمة للتفعيل true ، وهذه القيمة للتعطيل false
+// =================================================================
+// == استيراد بيانات السيناريوهات من ملفات خارجية (بنية محدثة)   ==
+// =================================================================
+import datesShopChat from '../data/chat-scenarios/dates-shop-chat';
+import hotelChat from '../data/chat-scenarios/hotel-chat';
+import clinicChat from '../data/chat-scenarios/clinic-chat';
+import realEstateChat from '../data/chat-scenarios/real-estate-chat';
+import restaurantChat from '../data/chat-scenarios/restaurant-chat';
+// -- ملفات جديدة ومنظمة --
+import buildingMaterialsChat from '../data/chat-scenarios/building-materials-chat';
+import barberShopChat from '../data/chat-scenarios/barber-shop-chat';
+import carAgencyChat from '../data/chat-scenarios/car-agency-chat';
+import gymChat from '../data/chat-scenarios/gym-chat';
+
+
+interface ConfigType {
+  sections: {
+    hero: boolean;
+    painPoints: boolean;
+    solution: boolean;
+    smartAgentScenarios: boolean;
+    finalCta: boolean;
+    faq: boolean;
+    footer: boolean;
+    smartAmbassador: boolean;
+  };
+  header: any;
+  hero: any;
+  painPoints: any;
+  solution: any;
+  smartAgentScenarios: any;
+  finalCta: any;
+  faq: any;
+  footer: any;
+  smartAmbassador: any;
+}
+
+export const config: ConfigType = {
   sections: {
     hero: true,
     painPoints: true,
     solution: true,
+    smartAgentScenarios: true,
     finalCta: true,
     faq: true,
     footer: true,
     smartAmbassador: true,
   },
 
-  // الشريط العلوي
   header: {
     logo: {
       tagline: "ذكاء صناعي بلا تعقيد",
@@ -24,8 +59,6 @@ export const config = {
       link: "/login",
     },
   },
-
-  // القسم العلوي (Hero)
   hero: {
     title: {
       variantA: "توقف عن خسارة عملائك... أطلق موقعك الذكي في 7 أيام فقط!",
@@ -42,31 +75,26 @@ export const config = {
       text: "عرض محدود: أول 20 عميلًا هذا الأسبوع يحصلون على خصم 25%!",
     },
   },
-
-  // قسم نقاط الألم
- painPoints: {
-  title: "هل تشعر بهذا كل يوم؟",
-  points: [
-    { 
-      text: "تغرق في رسائل متكررة؟", 
-      solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
-      lottieFile: "/animations/wasted-time.json" // <-- تم التصحيح
-    },
-    { 
-      text: "تخسر عملاء لعدم الرد الفوري؟", 
-      solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
-      lottieFile: "/animations/lost-customer.json" // <-- تم التصحيح
-    },
-    { 
-      text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
-      solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
-      lottieFile: "/animations/tech-complexity.json" // <-- تم التصحيح
-    },
-  ],
-},
-
-
-  // قسم الحل والدليل الاجتماعي
+  painPoints: {
+    title: "هل تشعر بهذا كل يوم؟",
+    points: [
+      { 
+        text: "تغرق في رسائل متكررة؟", 
+        solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
+        lottieFile: "/animations/wasted-time.json"
+      },
+      { 
+        text: "تخسر عملاء لعدم الرد الفوري؟", 
+        solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
+        lottieFile: "/animations/lost-customer.json"
+      },
+      { 
+        text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
+        solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
+        lottieFile: "/animations/tech-complexity.json"
+      },
+    ],
+  },
   solution: {
     title: "الحل البسيط: مشروعك جاهز في 3 خطوات",
     steps: [
@@ -89,59 +117,95 @@ export const config = {
     ],
   },
 
-  // --- بداية الجزء الذي تم حذفه بالخطأ ---
-  // قسم الدعوة النهائية والأسعار
+  smartAgentScenarios: {
+    title: "شف وكيلنا الذكي ويش يمكن يسوي بدالك",
+    subtitle: "اضغط على أي بزنس تحت وشوف بنفسك كيف يرد على العملاء ويزيد مبيعاتك!",
+    finalActions: {
+      realCta: "اطلب وكيلك طال عمرك",
+    },
+    // =================================================================
+    // == بداية التعديل: تم تحديث الروابط الثلاثة التي لم تعمل         ==
+    // =================================================================
+    scenarios: [
+      {
+        id: "dates-shop",
+        name: "محل تمور",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1591135873932-58a104a35b4e?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
+        agentRoles: datesShopChat
+      },
+      {
+        id: "hotel",
+        name: "فندق",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: hotelChat
+      },
+      {
+        id: "clinic",
+        name: "عيادة",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: clinicChat
+      },
+      {
+        id: "building-materials",
+        name: "مواد بناء",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1581092916376-2993665a8354?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
+        agentRoles: buildingMaterialsChat
+      },
+      {
+        id: "restaurant",
+        name: "مطعم",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop",
+        agentRoles: restaurantChat
+      },
+      {
+        id: "barber-shop",
+        name: "صالون حلاقة",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1599334432325-89a7f16384e8?q=80&w=1974&auto=format&fit=crop", // <-- ✨ رابط جديد
+        agentRoles: barberShopChat
+      },
+      {
+        id: "real-estate",
+        name: "وكيل عقاري",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop",
+        agentRoles: realEstateChat
+      },
+      {
+        id: "car-agency",
+        name: "وكالة سيارات",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: carAgencyChat
+      },
+      {
+        id: "gym",
+        name: "نادي رياضي",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop",
+        agentRoles: gymChat
+      },
+    ],
+  },
+  
   finalCta: {
     title: "جرب الآن وابدأ رحلتك!",
     pricing: {
       plans: [
-        {
-          name: "باقة الانطلاق",
-          price: "500",
-          currency: "ريال/شهريًا",
-          features: ["صفحة هبوط احترافية", "وكيل AI أساسي"],
-        },
-        {
-          name: "باقة النمو",
-          price: "900",
-          currency: "ريال/شهريًا",
-          features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"],
-        },
-
-
-        {
-
-        name: "باقة النمو 2",
-          price: "900",
-          currency: "ريال/شهريًا",
-          features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"],
-        }, 
-
-        
-        {
-
-        name: "باقة النمو 3",
-          price: "900",
-          currency: "ريال/شهريًا",
-          features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"],
-        },
-
-
-
-        
+        { name: "باقة الانطلاق", price: "500", currency: "ريال/شهريًا", features: ["صفحة هبوط احترافية", "وكيل AI أساسي"] },
+        { name: "باقة النمو", price: "900", currency: "ريال/شهريًا", features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"] },
       ],
-
-        
-        
-      
       guaranteeText: "ضمان استرداد الأموال لمدة 30 يومًا",
     },
     finalCtaButton: {
       text: "احجز عرضك المجاني قبل نفاذه",
     },
   },
-
-  // قسم الأسئلة الشائعة
   faq: {
     triggerText: "أسئلة تدور في ذهنك؟",
     questions: [
@@ -151,7 +215,6 @@ export const config = {
     ],
   },
 
-  // الفوتر (الذيل)
   footer: {
     tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
     contact: {
@@ -169,8 +232,6 @@ export const config = {
     ],
     copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
   },
-
-  // إعدادات السفير الذكي
   smartAmbassador: {
     buttonLabel: "تحدث معنا",
     chatTitle: "السفير الذكي",
@@ -179,7 +240,4 @@ export const config = {
     welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
     defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
   },
-  // --- نهاية الجزء الذي تم حذفه بالخطأ ---
-}
-
-export type Config = typeof config
+};

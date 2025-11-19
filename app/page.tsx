@@ -6,6 +6,11 @@ import { FinalCtaSection } from "@/components/FinalCtaSection"
 import { SmartFAQSection } from "@/components/SmartFAQSection"
 import { Footer } from "@/components/Footer"
 import { SmartAmbassador } from "@/components/SmartAmbassador"
+// --- بداية التعديل ---
+// 1. تم استيراد المكون الجديد
+import { SmartAgentScenarios } from "@/components/SmartAgentScenarios" 
+// 2. تم حذف استيراد المكون القديم `InteractiveDemoSection`
+// --- نهاية التعديل ---
 
 export default function Home() {
   return (
@@ -19,7 +24,12 @@ export default function Home() {
       {/* Solution Section */}
       {config.sections.solution && <SolutionSection />}
 
-      {/* Final CTA Section */}
+      {/* --- بداية التعديل --- */}
+      {/* 3. تم استبدال المكون القديم بالجديد مع استخدام المؤشر الصحيح من ملف الإعدادات */}
+      {config.sections.smartAgentScenarios && <SmartAgentScenarios />}
+      {/* --- نهاية التعديل --- */}
+
+      {/* قسم الدعوة النهائية (كان اسمه القسم القديم في تعليقك) */}
       {config.sections.finalCta && <FinalCtaSection />}
 
       {/* Smart FAQ Section */}
@@ -30,6 +40,10 @@ export default function Home() {
 
       {/* Smart Ambassador */}
       {config.sections.smartAmbassador && <SmartAmbassador />}
+
+      {/* --- بداية التعديل --- */}
+      {/* 4. تم حذف العنصر المؤقت الذي كان يمنع قفز الصفحة، لم نعد بحاجة إليه */}
+      {/* --- نهاية التعديل --- */}
     </main>
   )
 }
