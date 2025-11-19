@@ -5,12 +5,18 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
+// ملاحظة: هذه الاستيرادات قد تفشل إذا لم يتم تثبيت المكونات بعد
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
+// --- بداية التعديل ---
+// 1. حذف استيراد useToast القديم
+// import { useToast } from "@/components/ui/use-toast"
+// 2. إضافة استيراد toast من sonner
+import { toast } from "sonner"
+// --- نهاية التعديل ---
 import { User, Mail, Sparkles, Briefcase } from "lucide-react"
 import { orderFormContent, type OrderFormContent } from "@/src/config/orderFormConfig"
 
@@ -33,7 +39,8 @@ export default function OrderForm() {
     watch,
   } = useForm<FormData>()
   const router = useRouter()
-  const { toast } = useToast()
+  // 3. حذف استدعاء hook الـ useToast
+  // const { toast } = useToast()
 
   const content: OrderFormContent = orderFormContent
   const totalSteps = 4
@@ -65,24 +72,21 @@ export default function OrderForm() {
     }
 
     if (isValid && currentStep < totalSteps) {
-      toast({
-        title: toastMessages[currentStep - 1],
-        duration: 2000,
-      })
+      // 4. تعديل استدعاء toast ليناسب صيغة sonner
+      toast(toastMessages[currentStep - 1]);
       setCurrentStep(currentStep + 1)
     }
   }
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted:", data)
-    toast({
-      title: toastMessages[3],
-      duration: 2000,
-    })
+    // 4. تعديل استدعاء toast ليناسب صيغة sonner (استخدام .success للون الأخضر)
+    toast.success(toastMessages[3]);
+    
     // لاحقاً، سنستبدل هذا بالربط الفعلي (إرسال إيميل، الخ)
     setTimeout(() => {
       router.push("/thank-you")
-    }, 500)
+    }, 1000) // تم زيادة المدة قليلاً لترى الرسالة بوضوح
   }
 
   const getStepIcon = (step: number) => {
@@ -207,8 +211,7 @@ export default function OrderForm() {
                 </div>
                 <div className="flex gap-4">
                   <Button type="button" onClick={() => setCurrentStep(2)} variant="outline" className="flex-1 h-14 text-lg">السابق</Button>
-                  <Button type
-="button" onClick={handleNext} className="flex-1 h-14 text-lg font-medium">التالي</Button>
+                  <Button type="button" onClick={handleNext} className="flex-1 h-14 text-lg font-medium">التالي</Button>
                 </div>
               </div>
             )}
