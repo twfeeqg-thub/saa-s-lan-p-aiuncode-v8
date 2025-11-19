@@ -5,17 +5,15 @@
 import { useState, useEffect } from "react"
 import { useForm, Controller, FormProvider, useFormContext } from "react-hook-form"
 import { useRouter } from "next/navigation"
+import Image from "next/image" // 1. استيراد مكون Image
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-// 1. حذف استيراد toast
-// import { toast } from "sonner"
 import { User, Mail, Sparkles, Briefcase, MessageCircle } from "lucide-react"
 import { orderFormContent, type OrderFormContent } from "@/src/config/orderFormConfig"
-// 2. استيراد المكون الاحتفالي الجديد
 import { CelebrationOverlay } from "./CelebrationOverlay"
 
 interface FormData {
@@ -41,7 +39,6 @@ export default function OrderFormWrapper() {
 
 function OrderForm() {
   const [currentStep, setCurrentStep] = useState(1)
-  // 3. إضافة حالة جديدة للتحكم بالواجهة الاحتفالية
   const [celebration, setCelebration] = useState<{
     stage: 'hidden' | 'intermediate' | 'final';
     message: string;
@@ -94,20 +91,15 @@ function OrderForm() {
     }
 
     if (isValid && currentStep < totalSteps) {
-      // 4. تفعيل الواجهة الاحتفالية الوسيطة
       setCelebration({ stage: 'intermediate', message: toastMessages[currentStep - 1] });
-      // سيتم الانتقال للخطوة التالية عند انتهاء عرض الرسالة
     }
   }
 
   const onSubmit = (data: FormData) => {
     console.log("Form submitted:", data)
-    // 5. تفعيل الواجهة الاحتفالية النهائية
     setCelebration({ stage: 'final', message: content.finalCelebrationMessage });
-    // سيتم الانتقال لصفحة الشكر عند انتهاء العرض
   }
 
-  // 6. دالة جديدة للتعامل مع انتهاء عرض الواجهة الاحتفالية
   const handleCelebrationComplete = () => {
     if (celebration.stage === 'intermediate') {
       setCurrentStep(currentStep + 1);
@@ -134,7 +126,6 @@ function OrderForm() {
 
   return (
     <>
-      {/* 7. إضافة المكون الاحتفالي إلى الواجهة */}
       <CelebrationOverlay
         stage={celebration.stage}
         message={celebration.message}
@@ -146,7 +137,22 @@ function OrderForm() {
         dir="rtl"
       >
         <div className="w-full max-w-2xl">
-          {/* ... باقي الكود يبقى كما هو ... */}
+          {/* --- بداية التعديل الرئيسي --- */}
+          {/* 2. إضافة منطقة الترحيب الجديدة */}
+          <div className="text-center mb-8 animate-fade-in">
+            <Image
+              src={content.welcomeSection.avatarPlaceholder}
+              alt="User Avatar"
+              width={80}
+              height={80}
+              className="rounded-full mx-auto mb-4 border-4 border-white shadow-lg"
+            />
+            <p className="text-2xl font-bold text-foreground">
+              {content.welcomeSection.greeting}
+            </p>
+          </div>
+          {/* --- نهاية التعديل الرئيسي --- */}
+
           <div className="text-center mb-12 space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-relaxed text-balance">
               {content.title}
@@ -309,7 +315,6 @@ function OrderForm() {
                   </div>
                   <div className="flex gap-4">
                     <Button type="button" onClick={() => setCurrentStep(3)} variant="outline" className="flex-1 h-14 text-lg">السابق</Button>
-                    {/* 8. تعديل زر الإرسال النهائي */}
                     <Button type="button" onClick={handleSubmit(onSubmit)} className="flex-1 h-14 text-lg font-medium bg-gradient-to-l from-primary to-secondary hover:opacity-90">
                       {content.submitButtonText}
                     </Button>
