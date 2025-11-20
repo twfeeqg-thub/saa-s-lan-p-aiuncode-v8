@@ -1,11 +1,43 @@
 // src/config/landingPageConfig.ts
 
-// (باقي الاستيرادات في أعلى الملف تبقى كما هي)
+// ملف الإعدادات المركزي لصفحة الهبوط
+// تم التحديث ليعكس البنية الصحيحة للملفات ويضيف جميع القطاعات
+
+// =================================================================
+// == استيراد بيانات السيناريوهات من ملفات خارجية (بنية محدثة)   ==
+// =================================================================
 import datesShopChat from '../data/chat-scenarios/dates-shop-chat';
-// ...الخ
+import hotelChat from '../data/chat-scenarios/hotel-chat';
+import clinicChat from '../data/chat-scenarios/clinic-chat';
+import realEstateChat from '../data/chat-scenarios/real-estate-chat';
+import restaurantChat from '../data/chat-scenarios/restaurant-chat';
+// -- ملفات جديدة ومنظمة --
+import buildingMaterialsChat from '../data/chat-scenarios/building-materials-chat';
+import barberShopChat from '../data/chat-scenarios/barber-shop-chat';
+import carAgencyChat from '../data/chat-scenarios/car-agency-chat';
+import gymChat from '../data/chat-scenarios/gym-chat';
+
 
 interface ConfigType {
-  // ... (باقي الأنواع)
+  sections: {
+    hero: boolean;
+    painPoints: boolean;
+    solution: boolean;
+    smartAgentScenarios: boolean;
+    finalCta: boolean;
+    faq: boolean;
+    footer: boolean;
+    smartAmbassador: boolean;
+  };
+  header: any;
+  hero: any;
+  painPoints: any;
+  solution: any;
+  smartAgentScenarios: any;
+  finalCta: any;
+  faq: any;
+  footer: any;
+  smartAmbassador: any;
 }
 
 export const config: ConfigType = {
@@ -17,25 +49,194 @@ export const config: ConfigType = {
     finalCta: true,
     faq: true,
     footer: true,
-    smartAmbassador: true, // تأكد من أن هذا true
+    smartAmbassador: true,
   },
 
-  // ... (كل أقسام header, hero, painPoints, solution, ...إلخ تبقى كما هي)
-  // ...
-  // ...
+  header: {
+    logo: {
+      tagline: "ذكاء صناعي بلا تعقيد",
+    },
+    loginButton: {
+      text: "تسجيل الدخول",
+      link: "/login",
+    },
+  },
+  hero: {
+    title: {
+      variantA: "توقف عن خسارة عملائك... أطلق موقعك الذكي في 7 أيام فقط!",
+      variantB: "هل أنت جاهز لمضاعفة مبيعاتك؟ موقعك الذكي جاهز في أسبوع!",
+      variantC: "حوّل زوارك إلى عملاء... بوكيل ذكاء اصطناعي يتحدث لهجتهم.",
+      active: "variantA" as "variantA" | "variantB" | "variantC",
+    },
+    subtitle:
+      "نبني لك صفحة احترافية مع وكيل AI يتحدث لهجتك الخليجية، يجيب 24/7، ويزيد مبيعاتك. لا تعقيد، فقط نتائج سريعة.",
+    ctaButton: {
+      text: "ابدأ مجانًا الآن",
+    },
+    scarcityBanner: {
+      text: "عرض محدود: أول 20 عميلًا هذا الأسبوع يحصلون على خصم 25%!",
+    },
+  },
+  painPoints: {
+    title: "هل تشعر بهذا كل يوم؟",
+    points: [
+      { 
+        text: "تغرق في رسائل متكررة؟", 
+        solutionHint: "(وكيل AI يرد نيابة عنك 24/7)",
+        lottieFile: "/animations/wasted-time.json"
+      },
+      { 
+        text: "تخسر عملاء لعدم الرد الفوري؟", 
+        solutionHint: "(يزيد مبيعاتك بنسبة تصل إلى 15%)",
+        lottieFile: "/animations/lost-customer.json"
+      },
+      { 
+        text: "التكنولوجيا تبدو معقدة ومكلفة؟", 
+        solutionHint: "(نبني كل شيء في 7 أيام دون جهد منك)",
+        lottieFile: "/animations/tech-complexity.json"
+      },
+    ],
+  },
+  solution: {
+    title: "الحل البسيط: مشروعك جاهز في 3 خطوات",
+    steps: [
+      { text: "نستمع لرؤيتك", icon: "💬" },
+      { text: "نبني موقعك + AI", icon: "🎨" },
+      { text: "تدير من جوالك", icon: "🚀" },
+    ],
+    urgencyText: "انضم إلى رواد التجارة!",
+    testimonials: [
+      {
+        quote: "زادت مبيعاتي 15% في شهر! الوكيل AI يفهم عملائي تمامًا.",
+        author: "سارة الأحمدي",
+        company: "مؤسسة متجر عطري",
+      },
+      {
+        quote: "جمعنا 500 عميل عقاري جديد بأقل جهد. نقلة نوعية!",
+        author: "خالد بن فهد",
+        company: "مدير تسويق، دارك العقارية",
+      },
+    ],
+  },
 
-  // اذهب إلى نهاية الملف وعدّل قسم smartAmbassador
+  smartAgentScenarios: {
+    title: "شف وكيلنا الذكي ويش يمكن يسوي بدالك",
+    subtitle: "اضغط على أي بزنس تحت وشوف بنفسك كيف يرد على العملاء ويزيد مبيعاتك!",
+    finalActions: {
+      realCta: "اطلب وكيلك طال عمرك",
+    },
+    scenarios: [
+      {
+        id: "dates-shop",
+        name: "محل تمور",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1591135873932-58a104a35b4e?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: datesShopChat
+      },
+      {
+        id: "hotel",
+        name: "فندق",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: hotelChat
+      },
+      {
+        id: "clinic",
+        name: "عيادة",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: clinicChat
+      },
+      {
+        id: "building-materials",
+        name: "مواد بناء",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1581092916376-2993665a8354?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: buildingMaterialsChat
+      },
+      {
+        id: "restaurant",
+        name: "مطعم",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop",
+        agentRoles: restaurantChat
+      },
+      {
+        id: "barber-shop",
+        name: "صالون حلاقة",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1599334432325-89a7f16384e8?q=80&w=1974&auto=format&fit=crop",
+        agentRoles: barberShopChat
+      },
+      {
+        id: "real-estate",
+        name: "وكيل عقاري",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1973&auto=format&fit=crop",
+        agentRoles: realEstateChat
+      },
+      {
+        id: "car-agency",
+        name: "وكالة سيارات",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop",
+        agentRoles: carAgencyChat
+      },
+      {
+        id: "gym",
+        name: "نادي رياضي",
+        enabled: true,
+        showcaseImageUrl: "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=1975&auto=format&fit=crop",
+        agentRoles: gymChat
+      },
+    ],
+  },
   
-  footer: {
-    // ... (محتوى الفوتر يبقى كما هو)
+  finalCta: {
+    title: "جرب الآن وابدأ رحلتك!",
+    pricing: {
+      plans: [
+        { name: "باقة الانطلاق", price: "500", currency: "ريال/شهريًا", features: ["صفحة هبوط احترافية", "وكيل AI أساسي"] },
+        { name: "باقة النمو", price: "900", currency: "ريال/شهريًا", features: ["موقع متعدد الصفحات", "وكيل AI متقدم", "تكامل واتساب"] },
+      ],
+      guaranteeText: "ضمان استرداد الأموال لمدة 30 يومًا",
+    },
+    finalCtaButton: {
+      text: "احجز عرضك المجاني قبل نفاذه",
+    },
+  },
+  faq: {
+    triggerText: "أسئلة تدور في ذهنك؟",
+    questions: [
+      { question: "هل أحتاج إلى خبرة تقنية؟", answer: "لا إطلاقًا. نحن نهتم بكل الجوانب التقنية." },
+      { question: "ما هي اللهجات التي يدعمها الوكيل؟", answer: "ندعم حاليًا اللهجة السعودية، الإماراتية، والكويتية." },
+      { question: "هل يمكنني تحديث المحتوى بنفسي؟", answer: "نعم، نوفر لك لوحة تحكم سهلة." },
+    ],
   },
 
-  // --- بداية التعديل ---
+  footer: {
+    tagline: "نحن شريكك في النجاح. مهمتنا أن نضعك في مكانك الطبيعي: في القمة.",
+    contact: {
+      title: "اتصل بنا",
+      email: "info@aiuncode.com",
+      telegram: {
+        username: "@tsahma",
+        link: "https://t.me/tsahma",
+      },
+    },
+    legalLinks: [
+      { text: "سياسة الخصوصية", link: "/privacy" },
+      { text: "شروط الاستخدام", link: "/terms" },
+      { text: "إنشاء حساب", link: "/signup" },
+    ],
+    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
+  },
+  
+  // --- هذا هو التعديل الوحيد والمقصود في هذا الملف ---
   smartAmbassador: {
-    enabled: true, // إذا حطيتها false، يختفي السفير بكبره
-    activeAmbassador: 'guided' as 'guided' | 'n8n', // 'guided' = الجديد أبو أزرار, 'n8n' = القديم
+    enabled: true,
+    activeAmbassador: 'guided' as 'guided' | 'n8n',
     
-    // باقي الإعدادات القديمة
     buttonLabel: "تحدث معنا",
     chatTitle: "السفير الذكي",
     placeholder: "اكتب رسالتك هنا...",
@@ -43,5 +244,4 @@ export const config: ConfigType = {
     welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
     defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
   },
-  // --- نهاية التعديل ---
 };
