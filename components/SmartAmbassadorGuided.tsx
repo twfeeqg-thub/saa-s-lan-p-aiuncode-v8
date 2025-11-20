@@ -6,9 +6,9 @@ import { useState, useRef, useEffect } from "react"
 import { X, Volume2, VolumeX, RotateCcw } from "lucide-react"
 import { config } from "@/src/config/landingPageConfig"
 import Image from "next/image"
-import { knowledgeBase } from "@/src/config/knowledgeBase" // <-- 1. استيراد قاعدة المعرفة
+import { knowledgeBase } from "@/src/config/knowledgeBase"
 
-// --- 2. تعريف أنواع البيانات الجديدة ---
+// تعريف أنواع البيانات الجديدة
 interface Message {
   type: "user" | "bot";
   text: string;
@@ -17,7 +17,7 @@ interface Message {
 
 export function SmartAmbassadorGuided() {
   const [isOpen, setIsOpen] = useState(false)
-  // --- 3. تعديل الحالة الأولية للرسائل ---
+  // تعديل الحالة الأولية للرسائل لتبدأ من الجذر
   const [messages, setMessages] = useState<Message[]>([
     knowledgeBase.root
   ])
@@ -50,7 +50,7 @@ export function SmartAmbassadorGuided() {
     oscillator.stop(ctx.currentTime + 0.1)
   }
 
-  // --- 4. دالة جديدة للتعامل مع نقرات الأزرار ---
+  // دالة جديدة للتعامل مع نقرات الأزرار
   const handleOptionClick = (option: { text: string; nextId: string }) => {
     playClickSound();
 
@@ -80,7 +80,7 @@ export function SmartAmbassadorGuided() {
 
   return (
     <>
-      {/* واجهة الزر العائم (تبقى كما هي) */}
+      {/* واجهة الزر العائم */}
       <div
         onClick={toggleChat}
         className="group fixed bottom-6 left-6 z-50 flex cursor-pointer items-center gap-3"
@@ -103,7 +103,7 @@ export function SmartAmbassadorGuided() {
         <>
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={toggleChat} />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[90vw] max-w-md h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
-            {/* الشريط العلوي (يبقى كما هو) */}
+            {/* الشريط العلوي */}
             <div className="flex items-center justify-between p-4 border-b bg-[var(--color-primary)] text-white rounded-t-2xl">
               <h3 className="font-bold text-lg">{config.smartAmbassador.chatTitle}</h3>
               <div className="flex items-center gap-2">
@@ -126,9 +126,9 @@ export function SmartAmbassadorGuided() {
                   <div className={`max-w-[85%] p-3 rounded-2xl ${ message.type === "user" ? "bg-gray-100 text-[var(--color-text-main)] rounded-br-none" : "bg-[var(--color-primary)] text-white rounded-bl-none" }`}>
                     <p className="text-sm leading-relaxed">{message.text}</p>
                   </div>
-                  {/* --- 5. عرض الأزرار الديناميكية --- */}
+                  {/* عرض الأزرار الديناميكية */}
                   {message.type === 'bot' && message.options && (
-                    <div className="flex flex-wrap gap-2 mt-3">
+                    <div className="flex flex-wrap gap-2 mt-3 justify-start">
                       {message.options.map((option, i) => (
                         <button
                           key={i}
@@ -144,9 +144,6 @@ export function SmartAmbassadorGuided() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-            
-            {/* --- 6. إزالة شريط الإدخال القديم --- */}
-            {/* تم إزالة شريط الإدخال بالكامل لأنه لا حاجة له الآن */}
           </div>
         </>
       )}
