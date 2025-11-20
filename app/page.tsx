@@ -10,7 +10,7 @@ import { Footer } from "@/components/Footer"
 import { SmartAgentScenarios } from "@/components/SmartAgentScenarios" 
 
 // --- بداية التعديل ---
-// 1. نستورد السفيرين كلهم
+// 1. نستورد السفيرين معًا
 import { SmartAmbassador } from "@/components/SmartAmbassador"
 import { SmartAmbassadorGuided } from "@/components/SmartAmbassadorGuided"
 // --- نهاية التعديل ---
@@ -40,7 +40,7 @@ export default function Home() {
       {config.sections.footer && <Footer />}
 
       {/* --- بداية التعديل --- */}
-      {/* 2. نحط المنطق الذكي اللي يختار السفير الصح */}
+      {/* 2. نستبدل السطر القديم بالمنطق الشرطي الجديد لاختيار السفير */}
       {config.smartAmbassador.enabled && (
         <>
           {config.smartAmbassador.activeAmbassador === 'guided' && <SmartAmbassadorGuided />}
