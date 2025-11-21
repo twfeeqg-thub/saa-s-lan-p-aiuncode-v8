@@ -1,3 +1,5 @@
+// src/config/landingPageConfig.ts
+
 // ملف الإعدادات المركزي لصفحة الهبوط
 // تم التحديث ليعكس البنية الصحيحة للملفات ويضيف جميع القطاعات
 
@@ -123,15 +125,12 @@ export const config: ConfigType = {
     finalActions: {
       realCta: "اطلب وكيلك طال عمرك",
     },
-    // =================================================================
-    // == بداية التعديل: تم تحديث الروابط الثلاثة التي لم تعمل         ==
-    // =================================================================
     scenarios: [
       {
         id: "dates-shop",
         name: "محل تمور",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1591135873932-58a104a35b4e?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
+        showcaseImageUrl: "https://images.unsplash.com/photo-1591135873932-58a104a35b4e?q=80&w=2070&auto=format&fit=crop",
         agentRoles: datesShopChat
       },
       {
@@ -152,7 +151,7 @@ export const config: ConfigType = {
         id: "building-materials",
         name: "مواد بناء",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1581092916376-2993665a8354?q=80&w=2070&auto=format&fit=crop", // <-- ✨ رابط جديد
+        showcaseImageUrl: "https://images.unsplash.com/photo-1581092916376-2993665a8354?q=80&w=2070&auto=format&fit=crop",
         agentRoles: buildingMaterialsChat
       },
       {
@@ -166,7 +165,7 @@ export const config: ConfigType = {
         id: "barber-shop",
         name: "صالون حلاقة",
         enabled: true,
-        showcaseImageUrl: "https://images.unsplash.com/photo-1599334432325-89a7f16384e8?q=80&w=1974&auto=format&fit=crop", // <-- ✨ رابط جديد
+        showcaseImageUrl: "https://images.unsplash.com/photo-1599334432325-89a7f16384e8?q=80&w=1974&auto=format&fit=crop",
         agentRoles: barberShopChat
       },
       {
@@ -232,7 +231,12 @@ export const config: ConfigType = {
     ],
     copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
   },
+  
+  // --- هذا هو التعديل الوحيد والمقصود في هذا الملف ---
   smartAmbassador: {
+    enabled: true,
+    activeAmbassador: 'guided' as 'guided' | 'n8n',
+    
     buttonLabel: "تحدث معنا",
     chatTitle: "السفير الذكي",
     placeholder: "اكتب رسالتك هنا...",

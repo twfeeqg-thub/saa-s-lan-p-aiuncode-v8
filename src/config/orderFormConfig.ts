@@ -1,6 +1,16 @@
 // src/config/orderFormConfig.ts
 
 export const orderFormContent = {
+  // --- بداية التعديل ---
+  // 1. إضافة قسم الترحيب الجديد
+  welcomeSection: {
+    // رسالة للزائر العادي (سيتم تخصيصها لاحقاً للمستخدم المسجل)
+    greeting: "يا هلا والله! نورتنا.",
+    // صورة رمزية افتراضية (سيتم استبدالها بصورة المستخدم لاحقاً)
+    avatarPlaceholder: "/placeholder-user.jpg", 
+  },
+  // --- نهاية التعديل ---
+
   // العنوان الرئيسي
   title: "خلّنا نبدأ مشروعك ونخليه حقيقة",
   // الوصف
@@ -22,7 +32,6 @@ export const orderFormContent = {
     projectGoal: {
       label: "علّمنا عن مشروعك والهدف اللي تبي توصله.",
     },
-    // --- بداية التعديل الرئيسي ---
     contact: {
       label: "وآخر شي، كيف تبغانا نتواصل معك؟",
       types: [
@@ -38,7 +47,6 @@ export const orderFormContent = {
         email: "تأكد من الإيميل، شكله غير صحيح",
       }
     },
-    // --- نهاية التعديل الرئيسي ---
   },
   
   // النصوص والأزرار
@@ -59,6 +67,9 @@ export const orderFormContent = {
     step3: "باقي خطوة وحدة بس!",
     step4: "وصل طلبك! بنتواصل معك قريب.",
   },
+
+  // الرسالة الاحتفالية النهائية
+  finalCelebrationMessage: "وصل طلبك بنجاح، والآن ريّح بالك وخلّ التعقيدات الباقية علينا وبنتواصل معك قريب",
 };
 
 export type OrderFormContent = typeof orderFormContent;

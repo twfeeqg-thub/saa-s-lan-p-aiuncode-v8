@@ -1,3 +1,5 @@
+// app/page.tsx
+
 import { config } from "@/src/config/landingPageConfig"
 import { HeroSection } from "@/components/HeroSection"
 import { PainPointsSection } from "@/components/PainPointsSection"
@@ -5,11 +7,12 @@ import { SolutionSection } from "@/components/SolutionSection"
 import { FinalCtaSection } from "@/components/FinalCtaSection"
 import { SmartFAQSection } from "@/components/SmartFAQSection"
 import { Footer } from "@/components/Footer"
-import { SmartAmbassador } from "@/components/SmartAmbassador"
-// --- بداية التعديل ---
-// 1. تم استيراد المكون الجديد
 import { SmartAgentScenarios } from "@/components/SmartAgentScenarios" 
-// 2. تم حذف استيراد المكون القديم `InteractiveDemoSection`
+
+// --- بداية التعديل ---
+// 1. نستورد السفيرين معًا
+import { SmartAmbassador } from "@/components/SmartAmbassador"
+import { SmartAmbassadorGuided } from "@/components/SmartAmbassadorGuided"
 // --- نهاية التعديل ---
 
 export default function Home() {
@@ -24,12 +27,10 @@ export default function Home() {
       {/* Solution Section */}
       {config.sections.solution && <SolutionSection />}
 
-      {/* --- بداية التعديل --- */}
-      {/* 3. تم استبدال المكون القديم بالجديد مع استخدام المؤشر الصحيح من ملف الإعدادات */}
+      {/* Smart Agent Scenarios */}
       {config.sections.smartAgentScenarios && <SmartAgentScenarios />}
-      {/* --- نهاية التعديل --- */}
 
-      {/* قسم الدعوة النهائية (كان اسمه القسم القديم في تعليقك) */}
+      {/* Final CTA Section */}
       {config.sections.finalCta && <FinalCtaSection />}
 
       {/* Smart FAQ Section */}
@@ -38,11 +39,14 @@ export default function Home() {
       {/* Footer */}
       {config.sections.footer && <Footer />}
 
-      {/* Smart Ambassador */}
-      {config.sections.smartAmbassador && <SmartAmbassador />}
-
       {/* --- بداية التعديل --- */}
-      {/* 4. تم حذف العنصر المؤقت الذي كان يمنع قفز الصفحة، لم نعد بحاجة إليه */}
+      {/* 2. نستبدل السطر القديم بالمنطق الشرطي الجديد لاختيار السفير */}
+      {config.smartAmbassador.enabled && (
+        <>
+          {config.smartAmbassador.activeAmbassador === 'guided' && <SmartAmbassadorGuided />}
+          {config.smartAmbassador.activeAmbassador === 'n8n' && <SmartAmbassador />}
+        </>
+      )}
       {/* --- نهاية التعديل --- */}
     </main>
   )
