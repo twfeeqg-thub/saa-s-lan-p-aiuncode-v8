@@ -1,0 +1,762 @@
+تقرير تعريف مشروع صفحة هبوط aiuncode.com - تم إنشاؤه في: Tue Dec  9 08:24:19 UTC 2025
+==============================================================
+
+##############################################################################
+# هيكل المشروع (بعمق 5 مستويات)
+##############################################################################
+
+.
+├── README.md
+├── app
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── order
+│   │   └── page.tsx
+│   └── page.tsx
+├── components
+│   ├── CelebrationOverlay.tsx
+│   ├── ComplexityAnimation.tsx
+│   ├── CustomerLossAnimation.tsx
+│   ├── FakeScenarioChat.tsx
+│   ├── FinalCtaSection.tsx
+│   ├── Footer.tsx
+│   ├── HeroSection.tsx
+│   ├── OrderForm.tsx
+│   ├── PainPointsSection.tsx
+│   ├── SmartAgentScenarios.tsx
+│   ├── SmartAmbassador.tsx
+│   ├── SmartAmbassadorGuided.tsx
+│   ├── SmartFAQSection.tsx
+│   ├── SolutionSection.tsx
+│   ├── TimeLossAnimation.tsx
+│   ├── VisualPlaceholder.tsx
+│   ├── generator
+│   │   ├── BuildSpeedScreen.tsx
+│   │   ├── FinaleScreen.tsx
+│   │   ├── PathSelectionScreen.tsx
+│   │   └── SparkScreen.tsx
+│   ├── interactive-demo
+│   │   ├── BuildingScreen.tsx
+│   │   ├── CustomizationForm.tsx
+│   │   ├── DemoChatWindow.tsx
+│   │   ├── FakeConversation.tsx
+│   │   ├── InteractiveDemoSection.tsx
+│   │   ├── ScenarioSelector.tsx
+│   │   └── keep.
+│   ├── theme-provider.tsx
+│   └── ui
+│       ├── button.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── radio-group.tsx
+│       ├── textarea.tsx
+│       ├── toggle-group.tsx
+│       └── toggle.tsx
+├── components.json
+├── context_for_manus.txt
+├── create_landing_page_profile.sh
+├── env.local
+├── landing_page_profile.txt
+├── lib
+│   └── utils.ts
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── project_context.txt
+├── project_summary.txt
+├── public
+│   ├── animations
+│   │   ├── lost-customer.json
+│   │   ├── tech-complexity.json
+│   │   └── wasted-time.json
+│   ├── images
+│   │   ├── keep.
+│   │   ├── logo.png
+│   │   ├── qr-telegram.png
+│   │   ├── qr-whatsapp.png
+│   │   └── showcase
+│   │       └── keep
+│   ├── placeholder-logo.png
+│   ├── placeholder-logo.svg
+│   ├── placeholder-user.jpg
+│   ├── placeholder.jpg
+│   └── placeholder.svg
+├── src
+│   ├── config
+│   │   ├── knowledgeBase.ts
+│   │   ├── landingPageConfig.ts
+│   │   └── orderFormConfig.ts
+│   └── data
+│       └── chat-scenarios
+│           ├── barber-shop-chat.ts
+│           ├── building-materials-chat.ts
+│           ├── car-agency-chat.ts
+│           ├── clinic-chat.ts
+│           ├── dates-shop-chat.ts
+│           ├── gym-chat.ts
+│           ├── hotel-chat.ts
+│           ├── real-estate-chat.ts
+│           └── restaurant-chat.ts
+├── styles
+│   └── globals.css
+└── tsconfig.json
+
+17 directories, 82 files
+
+##############################################################################
+# المكتبات المستخدمة (من package.json)
+##############################################################################
+
+Dependencies:
+{
+  "@hookform/resolvers": "^3.10.0",
+  "@radix-ui/react-accordion": "1.2.2",
+  "@radix-ui/react-alert-dialog": "1.1.4",
+  "@radix-ui/react-aspect-ratio": "1.1.1",
+  "@radix-ui/react-avatar": "1.1.2",
+  "@radix-ui/react-checkbox": "1.1.3",
+  "@radix-ui/react-collapsible": "1.1.2",
+  "@radix-ui/react-context-menu": "2.2.4",
+  "@radix-ui/react-dialog": "1.1.4",
+  "@radix-ui/react-dropdown-menu": "2.1.4",
+  "@radix-ui/react-hover-card": "1.1.4",
+  "@radix-ui/react-label": "2.1.1",
+  "@radix-ui/react-menubar": "1.1.4",
+  "@radix-ui/react-navigation-menu": "1.2.3",
+  "@radix-ui/react-popover": "1.1.4",
+  "@radix-ui/react-progress": "1.1.1",
+  "@radix-ui/react-radio-group": "1.2.2",
+  "@radix-ui/react-scroll-area": "1.2.2",
+  "@radix-ui/react-select": "2.1.4",
+  "@radix-ui/react-separator": "1.1.1",
+  "@radix-ui/react-slider": "1.2.2",
+  "@radix-ui/react-slot": "1.1.1",
+  "@radix-ui/react-switch": "1.1.2",
+  "@radix-ui/react-tabs": "1.1.2",
+  "@radix-ui/react-toast": "1.2.4",
+  "@radix-ui/react-toggle": "1.1.1",
+  "@radix-ui/react-toggle-group": "1.1.1",
+  "@radix-ui/react-tooltip": "1.1.6",
+  "@vercel/analytics": "latest",
+  "autoprefixer": "^10.4.20",
+  "class-variance-authority": "^0.7.1",
+  "clsx": "^2.1.1",
+  "cmdk": "1.0.4",
+  "date-fns": "4.1.0",
+  "embla-carousel-react": "8.5.1",
+  "framer-motion": "^11.18.2",
+  "input-otp": "1.4.1",
+  "lucide-react": "^0.454.0",
+  "next": "16.0.0",
+  "next-themes": "latest",
+  "react": "19.2.0",
+  "react-colorful": "^5.6.1",
+  "react-confetti": "^6.4.0",
+  "react-day-picker": "9.8.0",
+  "react-dom": "19.2.0",
+  "react-hook-form": "^7.66.1",
+  "react-icons": "^5.5.0",
+  "react-resizable-panels": "^2.1.7",
+  "recharts": "2.15.4",
+  "sonner": "^1.7.4",
+  "tailwind-merge": "^2.5.5",
+  "tailwindcss-animate": "^1.0.7",
+  "vaul": "^1.1.2",
+  "zod": "^3.25.76"
+}
+
+DevDependencies:
+{
+  "@tailwindcss/postcss": "^4.1.9",
+  "@types/node": "^22",
+  "@types/react": "^19",
+  "@types/react-dom": "^19",
+  "postcss": "^8.5",
+  "tailwindcss": "^4.1.9",
+  "tw-animate-css": "1.3.3",
+  "typescript": "^5"
+}
+
+##############################################################################
+# ملخص محتويات الملفات الهامة
+##############################################################################
+
+
+=======================================
+الملف: README.md
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+# AI-Uncode Landing Page
+
+صفحة هبوط عصرية ومتجاوبة بالكامل لشركة SaaS باسم "AI-Uncode" مبنية باستخدام Next.js 16 و Tailwind CSS مع دعم كامل للغة العربية واتجاه RTL.
+
+## 🏗️ البنية المعمارية
+
+تم بناء هذا المشروع وفقًا لمبادئ معمارية صارمة لضمان سهولة الصيانة والتوسع:
+
+### 1. فصل الاهتمامات والتحكم المركزي
+
+**ملف الإعدادات المركزي:** `src/config/landingPageConfig.ts`
+
+- يحتوي على **جميع** محتوى وبيانات الصفحة
+- يدعم متغيرات A/B Testing للعناوين الرئيسية
+- يتحكم في إظهار/إخفاء الأقسام عبر مؤشرات boolean
+- المكونات stateless تقرأ فقط من هذا الملف
+
+**مثال على تغيير المحتوى:**
+
+\`\`\`typescript
+
+--------- (آخر 20 سطرًا) ----------
+### الخطوط لا تظهر بشكل صحيح؟
+- تأكد من أن `dir="rtl"` موجود في `<html>` في `layout.tsx`
+- تحقق من تحميل خط Tajawal بشكل صحيح
+
+## 📝 ملاحظات مهمة
+
+1. **لا تعدّل المكونات مباشرة** - عدّل فقط في ملف الإعدادات
+2. **استخدم الألوان المخصصة دائمًا** - لا تستخدم ألوان Tailwind المباشرة
+3. **العناصر النائبة** - استبدلها بمحتوى حقيقي عند الجاهزية
+4. **اختبر على الجوال أولاً** - التصميم mobile-first
+
+## 📞 الدعم
+
+للأسئلة أو المساعدة:
+- البريد الإلكتروني: info@aiuncode.com
+- تلغرام: [@tsahma](https://t.me/tsahma)
+
+---
+
+**بُني بـ ❤️ لـ AI-Uncode**
+
+=======================================
+الملف: package.json
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+{
+  "name": "my-v0-project",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint .",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
+    "@radix-ui/react-accordion": "1.2.2",
+    "@radix-ui/react-alert-dialog": "1.1.4",
+    "@radix-ui/react-aspect-ratio": "1.1.1",
+    "@radix-ui/react-avatar": "1.1.2",
+    "@radix-ui/react-checkbox": "1.1.3",
+    "@radix-ui/react-collapsible": "1.1.2",
+    "@radix-ui/react-context-menu": "2.2.4",
+    "@radix-ui/react-dialog": "1.1.4",
+
+--------- (آخر 20 سطرًا) ----------
+    "react-icons": "^5.5.0",
+    "react-resizable-panels": "^2.1.7",
+    "recharts": "2.15.4",
+    "sonner": "^1.7.4",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7",
+    "vaul": "^1.1.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.9",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8.5",
+    "tailwindcss": "^4.1.9",
+    "tw-animate-css": "1.3.3",
+    "typescript": "^5"
+  }
+}
+
+=======================================
+الملف: app/layout.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+import type React from "react"
+import type { Metadata } from "next"
+import { Tajawal } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import "./globals.css"
+import Script from "next/script"
+
+const tajawal = Tajawal({
+  subsets: ["arabic", "latin"],
+  weight: ["300", "400", "500", "700", "800"],
+  display: "swap",
+})
+
+export const metadata: Metadata = {
+  title: "AI-Uncode | ذكاء صناعي بلا تعقيد",
+  description: "نبني لك صفحة احترافية مع وكيل AI يتحدث لهجتك الخليجية، يجيب 24/7، ويزيد مبيعاتك",
+  generator: "AI-Uncode",
+  keywords: ["ذكاء اصطناعي", "AI", "SaaS", "وكيل ذكي", "صفحة هبوط", "تسويق"],
+  authors: [{ name: "AI-Uncode" }],
+  openGraph: {
+
+--------- (آخر 20 سطرًا) ----------
+    <html lang="ar" dir="rtl">
+      <head>
+        {/* Microsoft Clarity Integration */}
+        <Script id="clarity-script" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "YOUR_PROJECT_ID");
+          `}
+        </Script>
+      </head>
+      <body className={`${tajawal.className} font-sans antialiased`}>
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  )
+}
+
+=======================================
+الملف: app/page.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+// app/page.tsx
+
+import { config } from "@/src/config/landingPageConfig"
+import { HeroSection } from "@/components/HeroSection"
+import { PainPointsSection } from "@/components/PainPointsSection"
+import { SolutionSection } from "@/components/SolutionSection"
+import { FinalCtaSection } from "@/components/FinalCtaSection"
+import { SmartFAQSection } from "@/components/SmartFAQSection"
+import { Footer } from "@/components/Footer"
+import { SmartAgentScenarios } from "@/components/SmartAgentScenarios" 
+
+// --- بداية التعديل ---
+// 1. نستورد السفيرين معًا
+import { SmartAmbassador } from "@/components/SmartAmbassador"
+import { SmartAmbassadorGuided } from "@/components/SmartAmbassadorGuided"
+// --- نهاية التعديل ---
+
+export default function Home() {
+  return (
+    <main className="min-h-screen">
+
+--------- (آخر 20 سطرًا) ----------
+      {config.sections.finalCta && <FinalCtaSection />}
+
+      {/* Smart FAQ Section */}
+      {config.sections.faq && <SmartFAQSection />}
+
+      {/* Footer */}
+      {config.sections.footer && <Footer />}
+
+      {/* --- بداية التعديل --- */}
+      {/* 2. نستبدل السطر القديم بالمنطق الشرطي الجديد لاختيار السفير */}
+      {config.smartAmbassador.enabled && (
+        <>
+          {config.smartAmbassador.activeAmbassador === 'guided' && <SmartAmbassadorGuided />}
+          {config.smartAmbassador.activeAmbassador === 'n8n' && <SmartAmbassador />}
+        </>
+      )}
+      {/* --- نهاية التعديل --- */}
+    </main>
+  )
+}
+
+=======================================
+الملف: app/order/page.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+// app/order/page.tsx
+
+import OrderForm from "@/components/OrderForm";
+// --- بداية التعديل ---
+// تم تغيير مسار الاستيراد من shadcn/ui إلى sonner
+import { Toaster } from "sonner";
+// --- نهاية التعديل ---
+
+export default function OrderPage() {
+  return (
+    <main>
+      <OrderForm />
+      {/* الآن هذا المكون يستخدم مكتبة sonner مباشرة */}
+      <Toaster richColors />
+    </main>
+  );
+}
+
+--------- (آخر 20 سطرًا) ----------
+// app/order/page.tsx
+
+import OrderForm from "@/components/OrderForm";
+// --- بداية التعديل ---
+// تم تغيير مسار الاستيراد من shadcn/ui إلى sonner
+import { Toaster } from "sonner";
+// --- نهاية التعديل ---
+
+export default function OrderPage() {
+  return (
+    <main>
+      <OrderForm />
+      {/* الآن هذا المكون يستخدم مكتبة sonner مباشرة */}
+      <Toaster richColors />
+    </main>
+  );
+}
+
+=======================================
+الملف: components/generator/BuildSpeedScreen.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+"use client"
+
+import type React from "react"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+export function ProjectForm() {
+  const [formData, setFormData] = useState({
+    projectName: "",
+    offering: "",
+    tagline: "",
+    contact: "",
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+
+--------- (آخر 20 سطرًا) ----------
+          <div className="flex items-center justify-between gap-3 pt-4">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleBack}
+              className="px-2 bg-transparent"
+              aria-label="العودة للخلف"
+            >
+              ↩️
+            </Button>
+            <Button type="submit" className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
+              جاهز للتتويج!
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+=======================================
+الملف: components/interactive-demo/BuildingScreen.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+"use client"
+
+import { useState, useEffect } from "react"
+import { config } from "@/src/config/landingPageConfig"
+import { Palette, Puzzle, Wand2, Check, Loader2 } from "lucide-react"
+
+// 1. تعريف أنواع Props: المكون سيستقبل دالة setStage من الأب
+type BuildingScreenProps = {
+  setStage: (stage: "finalChat") => void;
+}
+
+// 2. تعريف أنواع الخطوات لتكون أكثر تنظيمًا
+type StepStatus = "pending" | "active" | "completed"
+interface Step {
+  id: number;
+  icon: React.ReactNode;
+  text: string;
+  status: StepStatus;
+}
+
+
+--------- (آخر 20 سطرًا) ----------
+                {step.text}
+              </p>
+
+              {/* مؤشر الحالة (تحميل أو اكتمال) */}
+              <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                {step.status === "active" && <Loader2 className="w-6 h-6 text-[var(--color-primary)] animate-spin" />}
+                {step.status === "completed" && (
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-scale-in">
+                    <Check className="w-5 h-5 text-white" strokeWidth={3} />
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+=======================================
+الملف: components/interactive-demo/CustomizationForm.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+"use client"
+
+import { useState } from "react"
+import { config } from "@/src/config/landingPageConfig"
+
+// 1. تعريف أنواع Props (تبقى كما هي)
+type CustomizationFormProps = {
+  setStage: (stage: "building" | "scenarioSelection") => void;
+  updateUserSelection: (key: string, value: string) => void;
+}
+
+// 2. تعديل اسم المكون واستقبال الـ props
+export function CustomizationForm({ setStage, updateUserSelection }: CustomizationFormProps) {
+  // 3. قراءة البيانات من ملف الإعدادات المركزي (أصبح الآن المصدر الوحيد للحقيقة)
+  const formConfig = config.interactiveDemo.stageTwo.form
+  const agentRoles = formConfig.agentRoles.filter(role => role.enabled)
+  const colors = formConfig.colors // <-- نقرأ الألوان من config الآن
+
+  // 4. إدارة حالة النموذج
+  const [businessName, setBusinessName] = useState("")
+
+--------- (آخر 20 سطرًا) ----------
+          <div className="flex flex-col-reverse sm:flex-row gap-4 pt-4">
+            <button
+              onClick={handleBack}
+              className="w-full sm:w-auto px-8 py-3 text-lg font-semibold border-2 border-gray-300 rounded-lg hover:bg-gray-100 bg-transparent transition-colors"
+            >
+              {formConfig.backButton}
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={!businessName || !selectedRole || !selectedColor} // تعطيل الزر إذا كانت الحقول المطلوبة فارغة
+              className="w-full sm:flex-1 px-8 py-3 text-lg font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-white rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {formConfig.nextButton}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+=======================================
+الملف: components/HeroSection.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+"use client"
+
+// 1. حذف `useState` الذي لم نعد بحاجة إليه
+import { VisualPlaceholder } from "./VisualPlaceholder"
+import { config } from "@/src/config/landingPageConfig"
+import Image from "next/image"
+// 2. استيراد `Link` من `next/link`
+import Link from "next/link"
+
+export function HeroSection() {
+  // 3. حذف جميع الحالات (states) المتعلقة بالنافذة المنبثقة
+  // const [showPopup, setShowPopup] = useState(false)
+  // const [formData, setFormData] = useState({ name: "", whatsapp: "" })
+  // ...الخ
+
+  const activeTitle = config.hero.title[config.hero.title.active]
+
+  return (
+    <section className="relative bg-gray-50">
+      {/* الخلفية */}
+
+--------- (آخر 20 سطرًا) ----------
+            {/* --- بداية التعديل الرئيسي --- */}
+            {/* 4. لف الزر بمكون Link وتوجيهه إلى /order */}
+            <Link href="/order" passHref>
+              <button
+                className="px-8 py-4 bg-[var(--color-accent)] text-[var(--color-text-main)] rounded-xl font-bold text-lg transition-transform duration-300 shadow-lg animate-pulse-shadow hover:scale-105"
+              >
+                {config.hero.ctaButton.text}
+              </button>
+            </Link>
+            {/* --- نهاية التعديل الرئيسي --- */}
+
+          </div>
+        </div>
+      </div>
+
+      {/* 5. حذف كود النافذة المنبثقة بالكامل */}
+      {/* {showPopup && ( ... )} */}
+    </section>
+  )
+}
+
+=======================================
+الملف: components/SmartAmbassador.tsx
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+"use client"
+
+import { useState, useRef, useEffect } from "react"
+import { X, Volume2, VolumeX, RotateCcw, Send, LoaderCircle } from "lucide-react" // تم إضافة LoaderCircle
+import { config } from "@/src/config/landingPageConfig"
+import Image from "next/image"
+
+interface Message {
+  type: "user" | "bot"
+  text: string
+  timestamp: Date
+}
+
+export function SmartAmbassador() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [messages, setMessages] = useState<Message[]>([
+    { type: "bot", text: config.smartAmbassador.welcomeMessage, timestamp: new Date() },
+  ])
+  const [inputValue, setInputValue] = useState("")
+  const [isMuted, setIsMuted] = useState(false)
+
+--------- (آخر 20 سطرًا) ----------
+                  placeholder={config.smartAmbassador.placeholder}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] text-right"
+                  disabled={isLoading} // تعطيل الإدخال أثناء التحميل
+                />
+                <button
+                  onClick={handleWebhookTrigger}
+                  disabled={!inputValue.trim() || isLoading}
+                  className="px-6 py-3 bg-[var(--color-primary)] text-white rounded-xl hover:bg-[var(--color-primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
+                  aria-label={config.smartAmbassador.sendButton}
+                >
+                  {isLoading ? <LoaderCircle size={20} className="animate-spin" /> : <Send size={20} />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </>
+  )
+}
+
+=======================================
+الملف: src/config/knowledgeBase.ts
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+// src/config/knowledgeBase.ts
+
+// تعريف أنواع البيانات لضمان عدم الوقوع في أخطاء
+type Node = {
+  id: string;
+  message: string;
+  options: Option[];
+};
+
+type Option = {
+  text: string;
+  nextId: string; // ID العقدة التالية التي سينتقل إليها
+};
+
+// قاعدة المعرفة الرئيسية
+export const knowledgeBase: Record<string, Node> = {
+  // --- العقدة الجذر (البداية) ---
+  root: {
+    id: "root",
+    message: "أهلاً بك في AI-Uncode! سم طال عمرك، كيف نقدر نخدمك اليوم؟",
+
+--------- (آخر 20 سطرًا) ----------
+        { text: "رجعني للقائمة الرئيسية", nextId: "root" },
+    ],
+  },
+  
+  // --- باقي الفروع ---
+  testimonials: {
+    id: "testimonials",
+    message: "شركاؤنا في النجاح هم أكبر فخر لنا. قصصهم موجودة في صفحتنا الرئيسية وتشرح لك كيف استفادوا من خدماتنا.",
+    options: [
+        { text: "رجعني للقائمة الرئيسية", nextId: "root" },
+    ],
+  },
+  faq: {
+    id: "faq",
+    message: "عندنا قسم كامل للأسئلة الشايعة في صفحتنا الرئيسية. إذا ما لقيت جوابك هناك، فريقنا حاضر لمساعدتك. تبي شي ثاني؟",
+    options: [
+        { text: "رجعني للقائمة الرئيسية", nextId: "root" },
+    ],
+  },
+};
+
+=======================================
+الملف: src/config/landingPageConfig.ts
+=======================================
+
+--------- (أول 20 سطرًا) ---------
+// src/config/landingPageConfig.ts
+
+// ملف الإعدادات المركزي لصفحة الهبوط
+// تم التحديث ليعكس البنية الصحيحة للملفات ويضيف جميع القطاعات
+
+// =================================================================
+// == استيراد بيانات السيناريوهات من ملفات خارجية (بنية محدثة)   ==
+// =================================================================
+import datesShopChat from '../data/chat-scenarios/dates-shop-chat';
+import hotelChat from '../data/chat-scenarios/hotel-chat';
+import clinicChat from '../data/chat-scenarios/clinic-chat';
+import realEstateChat from '../data/chat-scenarios/real-estate-chat';
+import restaurantChat from '../data/chat-scenarios/restaurant-chat';
+// -- ملفات جديدة ومنظمة --
+import buildingMaterialsChat from '../data/chat-scenarios/building-materials-chat';
+import barberShopChat from '../data/chat-scenarios/barber-shop-chat';
+import carAgencyChat from '../data/chat-scenarios/car-agency-chat';
+import gymChat from '../data/chat-scenarios/gym-chat';
+
+
+
+--------- (آخر 20 سطرًا) ----------
+      { text: "سياسة الخصوصية", link: "/privacy" },
+      { text: "شروط الاستخدام", link: "/terms" },
+      { text: "إنشاء حساب", link: "/signup" },
+    ],
+    copyrightText: "© 2025 AI-Uncode. جميع الحقوق محفوظة.",
+  },
+  
+  // --- هذا هو التعديل الوحيد والمقصود في هذا الملف ---
+  smartAmbassador: {
+    enabled: true,
+    activeAmbassador: 'guided' as 'guided' | 'n8n',
+    
+    buttonLabel: "تحدث معنا",
+    chatTitle: "السفير الذكي",
+    placeholder: "اكتب رسالتك هنا...",
+    sendButton: "إرسال",
+    welcomeMessage: "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+    defaultResponse: "شكرًا لتواصلك! كيف يمكنني مساعدتك اليوم؟",
+  },
+};
+
+##############################################################################
+# انتهى التقرير
+##############################################################################
+
