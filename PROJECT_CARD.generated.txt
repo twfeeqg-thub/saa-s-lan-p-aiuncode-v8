@@ -1,0 +1,94 @@
+🧱 AI-Uncode – Project Card (AUTO-GENERATED)
+==========================================
+
+1️⃣ Identity
+Project Name: saa-s-lan-p-aiuncode-v8
+Monorepo Package: N/A (standalone project)
+Detected Type:
+- Web App / Template
+
+2️⃣ Purpose (Auto-Inferred)
+From README.md:
+# AI-Uncode Landing Page
+
+صفحة هبوط عصرية ومتجاوبة بالكامل لشركة SaaS باسم "AI-Uncode" مبنية باستخدام Next.js 16 و Tailwind CSS مع دعم كامل للغة العربية واتجاه RTL.
+
+## 🏗️ البنية المعمارية
+
+تم بناء هذا المشروع وفقًا لمبادئ معمارية صارمة لضمان سهولة الصيانة والتوسع:
+
+### 1. فصل الاهتمامات والتحكم المركزي
+
+**ملف الإعدادات المركزي:** `src/config/landingPageConfig.ts`
+
+- يحتوي على **جميع** محتوى وبيانات الصفحة
+- يدعم متغيرات A/B Testing للعناوين الرئيسية
+- يتحكم في إظهار/إخفاء الأقسام عبر مؤشرات boolean
+- المكونات stateless تقرأ فقط من هذا الملف
+
+**مثال على تغيير المحتوى:**
+
+\`\`\`typescript
+
+3️⃣ Responsibilities (Observed)
+- Handles UI rendering
+- Manages authentication logic
+
+4️⃣ Dependencies
+Dependencies (top-level):
+"@hookform/resolvers"
+"@radix-ui/react-accordion"
+"@radix-ui/react-alert-dialog"
+"@radix-ui/react-aspect-ratio"
+"@radix-ui/react-avatar"
+"@radix-ui/react-checkbox"
+"@radix-ui/react-collapsible"
+"@radix-ui/react-context-menu"
+"@radix-ui/react-dialog"
+"@radix-ui/react-dropdown-menu"
+"@radix-ui/react-hover-card"
+"@radix-ui/react-label"
+"@radix-ui/react-menubar"
+"@radix-ui/react-navigation-menu"
+"@radix-ui/react-popover"
+"@radix-ui/react-progress"
+"@radix-ui/react-radio-group"
+"@radix-ui/react-scroll-area"
+"@radix-ui/react-select"
+"@radix-ui/react-separator"
+"@radix-ui/react-slider"
+"@radix-ui/react-slot"
+"@radix-ui/react-switch"
+"@radix-ui/react-tabs"
+"@radix-ui/react-toast"
+"@radix-ui/react-toggle"
+"@radix-ui/react-toggle-group"
+"@radix-ui/react-tooltip"
+"@vercel/analytics"
+"autoprefixer"
+"class-variance-authority"
+"clsx"
+"cmdk"
+"date-fns"
+"embla-carousel-react"
+"framer-motion"
+"input-otp"
+"lucide-react"
+"next"
+"next-themes"
+"react"
+"react-colorful"
+"react-confetti"
+"react-day-picker"
+"react-dom"
+"react-hook-form"
+"react-icons"
+"react-resizable-panels"
+"recharts"
+"sonner"
+"tailwind-merge"
+"tailwindcss-animate"
+"vaul"
+"zod"
+
+5️⃣ Data & Config
