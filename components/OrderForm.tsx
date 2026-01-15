@@ -13,8 +13,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { User, Mail, Sparkles, Briefcase, MessageCircle, Loader2 } from "lucide-react"
 import { orderFormContent, type OrderFormContent } from "@/src/config/orderFormConfig"
 import { CelebrationOverlay } from "./CelebrationOverlay"
-// استيراد supabase من المسار الخاص بك
-import { supabase } from "@/lib/supabaseClient"
+
+// --- التعديل هنا ليتوافق مع الملف الجديد الذي ستنشئه في lib ---
+import { supabase } from "@/lib/supabase" 
 
 interface FormData {
   site_name: string
@@ -96,11 +97,9 @@ function OrderForm() {
     }
   }
 
-  // --- التعديل الجراحي هنا: منطق الإرسال لـ Supabase ---
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
-    // تجميع البيانات في الهيكل الذي يفهمه n8n
     const submissionData = {
       site_name: data.site_name,
       sector_id: data.sector_id,
@@ -311,4 +310,3 @@ function OrderForm() {
     </>
   )
 }
-
