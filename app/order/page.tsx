@@ -1,17 +1,14 @@
-// app/order/page.tsx
+'use client'
 
-import OrderForm from "@/components/OrderForm";
-// --- بداية التعديل ---
-// تم تغيير مسار الاستيراد من shadcn/ui إلى sonner
-import { Toaster } from "sonner";
-// --- نهاية التعديل ---
+import { FormProvider } from "@/lib/context/FormContext"
+import FormContainer from "@/components/generator/FormContainer"
 
 export default function OrderPage() {
   return (
-    <main>
-      <OrderForm />
-      {/* الآن هذا المكون يستخدم مكتبة sonner مباشرة */}
-      <Toaster richColors />
+    <main className="min-h-screen bg-gray-50">
+      <FormProvider>
+        <FormContainer />
+      </FormProvider>
     </main>
-  );
+  )
 }

@@ -1,0 +1,63 @@
+]633;E;echo "=== AIUNCODE BUILD INTEGRITY REPORT ===";4b0e31f3-54b3-44fc-841f-d6ad55ca2796]633;C=== AIUNCODE BUILD INTEGRITY REPORT ===
+Generated on: Thu Jan 22 05:11:17 UTC 2026
+
+--- 1. FILE EXISTENCE CHECK ---
+✅ FOUND: lib/context/FormContext.tsx
+✅ FOUND: components/generator/FormContainer.tsx
+✅ FOUND: app/order/page.tsx
+✅ FOUND: components/generator/steps/WelcomeStep.tsx
+✅ FOUND: components/generator/steps/SectorSelectionStep.tsx
+✅ FOUND: components/generator/steps/ContactInfoStep.tsx
+✅ FOUND: components/generator/steps/ReviewSubmitStep.tsx
+
+--- 2. TYPESCRIPT & IMPORT CHECK (tsc) ---
+Running type check... (This may take a moment)
+components/FakeScenarioChat.tsx(101,51): error TS7006: Parameter 'role' implicitly has an 'any' type.
+components/FakeScenarioChat.tsx(109,55): error TS7006: Parameter 'role' implicitly has an 'any' type.
+components/FakeScenarioChat.tsx(229,30): error TS7006: Parameter 'role' implicitly has an 'any' type.
+components/FinalCtaSection.tsx(22,47): error TS7006: Parameter 'plan' implicitly has an 'any' type.
+components/FinalCtaSection.tsx(22,53): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/FinalCtaSection.tsx(33,37): error TS7006: Parameter 'feature' implicitly has an 'any' type.
+components/FinalCtaSection.tsx(33,46): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+components/Footer.tsx(53,46): error TS7006: Parameter 'link' implicitly has an 'any' type.
+components/Footer.tsx(53,52): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/PainPointsSection.tsx(29,42): error TS7006: Parameter 'point' implicitly has an 'any' type.
+components/PainPointsSection.tsx(29,49): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/SmartAgentScenarios.tsx(23,45): error TS7006: Parameter 'scenario' implicitly has an 'any' type.
+components/SmartAgentScenarios.tsx(58,34): error TS7006: Parameter 'scenario' implicitly has an 'any' type.
+components/SmartFAQSection.tsx(38,40): error TS7006: Parameter 'item' implicitly has an 'any' type.
+components/SmartFAQSection.tsx(38,46): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/SolutionSection.tsx(15,39): error TS7006: Parameter 'step' implicitly has an 'any' type.
+components/SolutionSection.tsx(15,45): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/SolutionSection.tsx(38,46): error TS7006: Parameter 'testimonial' implicitly has an 'any' type.
+components/SolutionSection.tsx(38,59): error TS7006: Parameter 'index' implicitly has an 'any' type.
+components/TimeLossAnimation.tsx(67,68): error TS2532: Object is possibly 'undefined'.
+components/TimeLossAnimation.tsx(91,136): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+components/TimeLossAnimation.tsx(106,86): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+components/TimeLossAnimation.tsx(107,14): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+  No index signature with a parameter of type 'string' was found on type '{ question: { icon: Element; color: string; }; dollar: { icon: Element; color: string; }; truck: { icon: Element; color: string; }; calendar: { icon: Element; color: string; }; }'.
+components/generator/FinaleScreen.tsx(4,22): error TS2307: Cannot find module '@/components/ui/card' or its corresponding type declarations.
+components/generator/FormContainer.tsx(6,36): error TS2307: Cannot find module './steps/medical/MedicalLandingPageStep' or its corresponding type declarations.
+components/generator/FormContainer.tsx(7,36): error TS2307: Cannot find module './steps/medical/MedicalAiAssistantStep' or its corresponding type declarations.
+components/generator/FormContainer.tsx(8,28): error TS2307: Cannot find module './steps/medical/MedicalPwaStep' or its corresponding type declarations.
+components/generator/FormContainer.tsx(9,34): error TS2307: Cannot find module './steps/juice/JuiceLandingPageStep' or its corresponding type declarations.
+components/generator/FormContainer.tsx(10,34): error TS2307: Cannot find module './steps/juice/JuiceAiAssistantStep' or its corresponding type declarations.
+components/generator/FormContainer.tsx(11,26): error TS2307: Cannot find module './steps/juice/JuicePwaStep' or its corresponding type declarations.
+components/generator/PathSelectionScreen.tsx(4,22): error TS2307: Cannot find module '@/components/ui/card' or its corresponding type declarations.
+components/generator/PathSelectionScreen.tsx(5,27): error TS2307: Cannot find module '@/components/ui/separator' or its corresponding type declarations.
+components/interactive-demo/BuildingScreen.tsx(24,50): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/CustomizationForm.tsx(15,29): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/CustomizationForm.tsx(16,51): error TS7006: Parameter 'role' implicitly has an 'any' type.
+components/interactive-demo/CustomizationForm.tsx(43,17): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/CustomizationForm.tsx(67,32): error TS7006: Parameter 'role' implicitly has an 'any' type.
+components/interactive-demo/CustomizationForm.tsx(88,28): error TS7006: Parameter 'color' implicitly has an 'any' type.
+components/interactive-demo/FakeConversation.tsx(21,47): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/ScenarioSelector.tsx(16,24): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/ScenarioSelector.tsx(17,28): error TS2339: Property 'interactiveDemo' does not exist on type 'ConfigType'.
+components/interactive-demo/ScenarioSelector.tsx(17,70): error TS7006: Parameter 's' implicitly has an 'any' type.
+components/interactive-demo/ScenarioSelector.tsx(39,25): error TS7006: Parameter 'scenario' implicitly has an 'any' type.
+
+--- 3. UNRESOLVED MODULES CHECK ---
+UI Components References Found.
