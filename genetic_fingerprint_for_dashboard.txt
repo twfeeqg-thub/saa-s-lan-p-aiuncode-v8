@@ -1,0 +1,158 @@
+====================================================
+   GENETIC FINGERPRINT REPORT
+   For Dashboard Architecture Decision
+====================================================
+
+Generated at: Mon Feb  9 12:46:33 UTC 2026
+
+🖥️ SYSTEM INFORMATION
+----------------------------------------------------
+Linux codespaces-cb0159 6.8.0-1030-azure #35~22.04.1-Ubuntu SMP Mon May 26 18:08:30 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+
+v24.11.1
+11.6.2
+10.23.0
+1.22.22
+
+🔧 GIT REPOSITORY INFORMATION
+----------------------------------------------------
+origin	https://github.com/twfeeqg-thub/saa-s-lan-p-aiuncode-v8 (fetch)
+origin	https://github.com/twfeeqg-thub/saa-s-lan-p-aiuncode-v8 (push)
+Current branch:
+main
+Last commit:
+f724272 Build: Bypass TS/ESLint errors for rapid deployment
+
+📁 PROJECT STRUCTURE (TOP LEVEL)
+----------------------------------------------------
+total 492
+drwxrwxrwx+  11 codespace root        4096 Feb  9 12:46 .
+drwxr-xrwx+   5 codespace root        4096 Jan 23 07:32 ..
+drwxrwxrwx+   8 codespace root        4096 Jan 24 12:00 .git
+-rw-rw-rw-    1 codespace root         314 Jan 19 17:56 .gitignore
+drwxrwxrwx+   3 codespace codespace   4096 Jan 22 05:15 .next
+-rw-rw-rw-    1 codespace root        2825 Jan 19 17:56 PROJECT_CARD.generated.txt
+-rw-rw-rw-    1 codespace root        9357 Jan 19 17:56 README.md
+drwxrwxrwx+   3 codespace root        4096 Jan 19 17:56 app
+-rw-rw-rw-    1 codespace codespace   7302 Jan 22 05:11 build_integrity_report.txt
+drwxrwxrwx+   5 codespace root        4096 Jan 19 17:56 components
+-rw-rw-rw-    1 codespace root         427 Jan 19 17:56 components.json
+-rwxrwxrwx    1 codespace root        3475 Jan 19 17:56 create_landing_page_profile.sh
+-rw-rw-rw-    1 codespace root         305 Jan 19 17:56 env.local
+-rwxrwxrwx    1 codespace root        2095 Jan 19 17:56 generate_project_card.sh
+-rw-rw-rw-    1 codespace codespace    867 Feb  9 12:46 genetic_fingerprint_for_dashboard.txt
+-rw-rw-rw-    1 codespace codespace  41982 Jan 22 04:21 landing_discovery.txt
+-rw-rw-rw-    1 codespace codespace   3448 Jan 22 02:21 landing_hero_report.txt
+-rw-rw-rw-    1 codespace root       26765 Jan 19 17:56 landing_page_profile.txt
+drwxrwxrwx+   3 codespace root        4096 Jan 22 04:28 lib
+-rw-rw-rw-    1 codespace codespace    251 Jan 22 05:15 next-env.d.ts
+-rw-rw-rw-    1 codespace codespace    190 Jan 24 12:00 next.config.mjs
+drwxrwxrwx+ 120 codespace codespace   4096 Jan 24 11:57 node_modules
+-rw-rw-rw-    1 codespace codespace 151524 Jan 24 11:57 package-lock.json
+-rw-rw-rw-    1 codespace root        2484 Jan 24 11:57 package.json
+-rw-rw-rw-    1 codespace root         144 Jan 19 17:56 postcss.config.mjs
+-rw-rw-rw-    1 codespace root       21713 Jan 19 17:56 project_profile.txt
+-rw-rw-rw-    1 codespace codespace   2879 Jan 20 00:46 project_recon_report.txt
+drwxrwxrwx+   4 codespace root        4096 Jan 19 17:56 public
+drwxrwxrwx+   4 codespace root        4096 Jan 19 17:56 src
+drwxrwxrwx+   2 codespace root        4096 Jan 19 17:56 styles
+-rw-rw-rw-    1 codespace root         695 Jan 22 05:15 tsconfig.json
+-rw-rw-rw-    1 codespace codespace 130005 Jan 22 05:08 tsconfig.tsbuildinfo
+
+🧠 FRAMEWORK DETECTION
+----------------------------------------------------
+Framework detected: Next.js
+
+📦 NPM SCRIPTS
+----------------------------------------------------
+{
+  "build": "next build",
+  "dev": "next dev",
+  "lint": "eslint .",
+  "start": "next start"
+}
+
+📦 DEPENDENCIES (KEY LIST)
+----------------------------------------------------
+[
+  "@hookform/resolvers",
+  "@radix-ui/react-accordion",
+  "@radix-ui/react-alert-dialog",
+  "@radix-ui/react-aspect-ratio",
+  "@radix-ui/react-avatar",
+  "@radix-ui/react-checkbox",
+  "@radix-ui/react-collapsible",
+  "@radix-ui/react-context-menu",
+  "@radix-ui/react-dialog",
+  "@radix-ui/react-dropdown-menu",
+  "@radix-ui/react-hover-card",
+  "@radix-ui/react-label",
+  "@radix-ui/react-menubar",
+  "@radix-ui/react-navigation-menu",
+  "@radix-ui/react-popover",
+  "@radix-ui/react-progress",
+  "@radix-ui/react-radio-group",
+  "@radix-ui/react-scroll-area",
+  "@radix-ui/react-select",
+  "@radix-ui/react-separator",
+  "@radix-ui/react-slider",
+  "@radix-ui/react-slot",
+  "@radix-ui/react-switch",
+  "@radix-ui/react-tabs",
+  "@radix-ui/react-toast",
+  "@radix-ui/react-toggle",
+  "@radix-ui/react-toggle-group",
+  "@radix-ui/react-tooltip",
+  "@supabase/supabase-js",
+  "@vercel/analytics",
+  "autoprefixer",
+  "class-variance-authority",
+  "clsx",
+  "cmdk",
+  "date-fns",
+  "embla-carousel-react",
+  "framer-motion",
+  "input-otp",
+  "lucide-react",
+  "next",
+  "next-themes",
+  "react",
+  "react-colorful",
+  "react-confetti",
+  "react-day-picker",
+  "react-dom",
+  "react-hook-form",
+  "react-icons",
+  "react-resizable-panels",
+  "recharts",
+  "sonner",
+  "tailwind-merge",
+  "tailwindcss-animate",
+  "vaul",
+  "zod"
+]
+
+🚀 DEPLOYMENT CONFIGURATION
+----------------------------------------------------
+No vercel.json found
+
+🔐 ENVIRONMENT VARIABLES (NAMES ONLY)
+----------------------------------------------------
+No .env file found
+
+🔌 BACKEND / API DETECTION
+----------------------------------------------------
+
+🧬 AUTOMATIC ARCHITECTURAL HINTS
+----------------------------------------------------
+- Report generated in READ-ONLY mode
+- Safe for architecture & dashboard planning
+- Suitable for separating Config / Data layer
+- No build or deploy command was executed
+
+====================================================
+   END OF GENETIC FINGERPRINT REPORT
+====================================================
+
+📄 Report saved to: genetic_fingerprint_for_dashboard.txt
+]633;D;0]633;P;Cwd=/workspaces/saa-s-lan-p-aiuncode-v8[?2004h]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B[K]633;A[0;32m@twfeeqg-thub [0m➜ [1;34m/workspaces/saa-s-lan-p-aiuncode-v8 [0;36m([1;31mmain[0;36m) [0m$ ]633;B
